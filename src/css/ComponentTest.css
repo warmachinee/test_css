@@ -1,0 +1,183 @@
+/*-------------Button------------*/
+.btn {
+  border: none;
+  border-radius: 0.25rem;
+  background-color: #1b95fc;
+  color: white;
+  padding: 1rem 1.75rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color .2s;
+}
+.btn:hover{
+  background-color: #037be1;
+}
+.btn:active{
+  background-color: #1b95fc;
+}
+/*-------------Flat Button------------*/
+.btn-flat{
+  border: none;
+  border-radius: 0.25rem;
+  background-color: inherit;
+  padding: 1rem 1.75rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color .2s, color .2s;
+  display: inline-block;
+}
+.btn-flat:hover{
+  background-color: #1b95fc;
+  color: white;
+}
+/*-------------Radio Button------------*/
+/*-------------Example-----------------
+<label class="radio">One
+  <input type="radio" name="radio"></input>
+  <span class="checkmark"></span>
+</label>
+*/
+.radio {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.radio input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 1.75rem;
+    width: 1.75rem;
+    background-color: #eeeeee;
+    border-radius: 50%;
+}
+.radio:hover input ~ .checkmark {
+    background-color: #cccccc;
+}
+.radio input:checked ~ .checkmark {
+    background-color: #1b95fc;
+}
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+.radio input:checked ~ .checkmark:after {
+    display: block;
+}
+.radio .checkmark:after {
+ 	top: 0.625rem;
+	left: 0.625rem;
+	width: 0.5rem;
+	height: 0.5rem;
+	border-radius: 50%;
+	background: white;
+}
+/*----------------------------Switch--------------------*/
+/*----------------------------Example--------------------
+<label class="switch">
+  <input type="checkbox"/>
+  <span class="slider round"></span>
+</label>
+*/
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {display:none;}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+/*---------------------------Edittext-----------------------
+-----------------------------Example-----------------------
+<hr/>
+  <label for="email"><b>Email</b></label>
+  <input type="text" placeholder="Enter Email" name="email" required/>
+<hr/>
+*/
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+}
+
+input[type=text]:focus, input[type=password]:focus {
+    background-color: #ddd;
+    outline: none;
+}hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
+}
+/*--------------------------Card----------------------------*/
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: 40%;
+    border-radius: 5px;
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
