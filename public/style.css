@@ -1,0 +1,195 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+body{
+  font-family: 'Roboto', sans-serif;
+}
+.main{
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  flex-direction: column;
+}
+.topnav{
+  background: #2a4d69;
+  width: 100%;
+  height: 4rem;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+  align-items: center;
+}
+.topnav .topnav-logo{
+  width: 10rem;
+  height: 4rem;
+  padding: .75rem;
+}
+.topnav .topnav-login{
+  display: none;
+}
+.topnav .topnav-login-btn{
+  display: none;
+}
+.topnav .topnav-regis{
+  width: 7rem;
+}
+.topnav .topnav-regis ul{
+  list-style: none;
+}
+.topnav a{
+  text-decoration: none;
+  font-weight: bolder;
+  color: white;
+  font-size: 1.25rem;
+}
+.form{
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  -moz-flex: 1;
+  flex: 1;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  flex-direction: row;
+}
+.spacer{
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  -moz-flex: 1;
+  flex: 1;
+}
+.form .form-grid{
+  width: 60%;
+  max-width: 30rem;
+  max-height: 40rem;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  flex-direction: column;
+}
+.form-grid .login{
+  height: 15rem;
+  background: #eee;
+}
+.login label{
+  margin: 15rem 5%;
+}
+.login .login-input{
+  display: block;
+  width: 90%;
+  height: 5rem;
+  margin: 0 5%;
+}
+.login-input input[type=text],
+.login-input input[type=password] {
+    width: 100%;
+    height: 2.5rem;
+    padding: .75rem;
+    display: inline-block;
+    margin: 1.5rem 0;
+    border: none;
+    background: #ccc;
+}
+.login-input input[type=text]:focus,
+.login-input input[type=password]:focus {
+    background-color: white;
+    outline: none;
+}
+
+.register-box{
+  border: 1px black solid;
+  width: 100%;
+  height: 7rem;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+}
+.register-box .reg-normal{
+  width: 7rem;
+  background: grey;
+}
+.register-box .reg-caddy{
+  width: 7rem;
+  background: yellow;
+}
+.register-box .reg-court{
+  width: 7rem;
+  background: green;
+}
+
+@media screen and (min-width: 768px) {
+  .topnav{height: 5rem;}
+  .topnav .topnav-logo{
+    width: 10rem;
+    height: 5rem;
+    padding: .75rem;
+  }
+  .topnav .topnav-login{
+    display: block;
+    width: 10rem;
+    height: 100%;
+  }
+  .topnav-login input[type=text],
+  .topnav-login input[type=password] {
+      width: 8rem;
+      height: 2.5rem;
+      padding: .75rem;
+      display: inline-block;
+      margin: 1.5rem 0;
+      border: none;
+      background: #ccc;
+  }
+  .topnav-login input[type=text]:focus,
+  .topnav-login input[type=password]:focus {
+      background-color: white;
+      outline: none;
+  }
+  .topnav .topnav-login-btn{
+    display: block;
+    width: 8rem;
+    height: 100%;
+  }
+  .topnav-login-btn .btn {
+    border: none;
+    border-radius: 0.25rem;
+    background-color: #1b95fc;
+    color: white;
+    width: 7rem;
+    padding: .5rem 0;
+    margin: 1.5rem 0;
+    font-size: 1.25rem;
+    font-weight: bolder;
+    cursor: pointer;
+    transition: background-color .2s;
+  }
+  .topnav-login-btn .btn:hover{
+    background-color: #037be1;
+  }
+  .topnav-login-btn .btn:active{
+    background-color: #1b95fc;
+  }
+  .form-login{
+    background: red;
+    width: 100%;
+    height: 30rem;
+  }
+  .register-box{
+    display: none;
+  }

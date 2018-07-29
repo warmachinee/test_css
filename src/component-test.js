@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Grid, Row, Col } from 'react-flexbox-grid';
 import TopNav from './component/TopNav/TopNav'
 import SideNav from './component/SideNav/SideNav'
 import BackDrop from './component/BackDrop/BackDrop'
@@ -21,6 +20,7 @@ class ComponentTest extends Component {
 
   render() {
     let backDrop;
+    let privateStatus = true
     if(this.state.sideDrawerOpen){
       backDrop = <BackDrop click={this.backdropClickHander}/>;
     }
@@ -31,7 +31,12 @@ class ComponentTest extends Component {
         <SideNav show={this.state.sideDrawerOpen}/>
         {backDrop}
         <div className="maincontent">
-          <Card />
+          <Card
+            cardMatchName="test"
+            cardLocation="Location12345"
+            cardDate="26/05/2018"
+            cardPrivate={privateStatus}
+            />
           <Card />
           <Card />
           <Card />

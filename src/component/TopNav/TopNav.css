@@ -26,7 +26,7 @@
   position: fixed;
   right: 0;
   top: 0;
-  height: 5rem;
+  height: 4rem;
   width: 5rem;
 
   -webkit-transition: display .3s ease-out;
@@ -55,7 +55,6 @@
     padding: 0.5rem 1rem;
     margin-left: 1rem;
     left: 15rem;
-    top: -.5rem;
   }
   .topnav__items ul{
     display: -webkit-flex;
