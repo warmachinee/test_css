@@ -155,6 +155,8 @@
 }
 .card-add-detail .card-add{
   padding: 1rem 1.5rem;
+  width: 5rem;
+  height: 5rem;
 
   -webkit-transition: -webkit-transform .3s ease-out;
   -moz-transition: -moz-transform .3s ease-out;

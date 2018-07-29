@@ -7,6 +7,9 @@
 body{
   font-family: 'Roboto', sans-serif;
 }
+.font-roboto{
+  font-family: 'Roboto', sans-serif;
+}
 .maincontent{
   position: fixed;
   width: 100%;

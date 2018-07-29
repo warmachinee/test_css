@@ -26,6 +26,8 @@
   position: fixed;
   right: 0;
   top: 0;
+  height: 5rem;
+  width: 5rem;
 
   -webkit-transition: display .3s ease-out;
   -moz-transition: display .3s ease-out;
@@ -42,11 +44,7 @@
   list-style: none;
   display: none;
 }
-.topnav__items a{
-  color: #333;
-  text-decoration: none;
-  padding: 0 1rem;
-}
+
 @media (min-width: 768px){
   .topnav{
     left:15rem;
@@ -57,8 +55,12 @@
     padding: 0.5rem 1rem;
     margin-left: 1rem;
     left: 15rem;
+    top: -.5rem;
   }
   .topnav__items ul{
+    display: -webkit-flex;
+    display: -ms-flex;
+    display: -moz-flex;
     display: flex;
 
     -webkit-transform: translateX(-15rem);
@@ -66,5 +68,14 @@
     -moz-transform: translateX(-15rem);
     -o-transform: translateX(-15rem);
     transform: translateX(-15rem);
+  }
+  .topnav__items a{
+    color: #333;
+    text-decoration: none;
+  }
+  .topnav__items a img{
+    padding: 0 1rem;
+    height: 5rem;
+    width: 5rem;
   }
 }
