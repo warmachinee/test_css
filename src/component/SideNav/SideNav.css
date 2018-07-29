@@ -1,18 +1,38 @@
 .sidenav {
     height: 100%;
+    min-height: 23.75rem;
     width: 15rem;
     position: fixed;
-    z-index: 1;
     top:0;
+
+    -webkit-box-shadow: 0.125rem 0rem 0.3125rem rgba(0,0,0,0.5);
+    -moz-box-shadow: 0.125rem 0rem 0.3125rem rgba(0,0,0,0.5);
     box-shadow: 0.125rem 0rem 0.3125rem rgba(0,0,0,0.5);
+
     background-color: #2a4d69;
+
+    -ms-overflow-x: hidden;
     overflow-x: hidden;
+
     padding-top: 2rem;
     z-index: 200;
+
+    -webkit-transform: translateX(-105%);
+    -ms-transform: translateX(-105%);
+    -moz-transform: translateX(-105%);
+    -o-transform: translateX(-105%);
     transform: translateX(-105%);
+
+    -webkit-transition: -webkit-transform .3s ease-out;
+    -moz-transition: -moz-transform .3s ease-out;
+    -o-transition: -o-transform .3s ease-out;
     transition: transform .3s ease-out;
 }
 .sidenav.open {
+  -webkit-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -o-transform: translateX(0);
   transform: translateX(0);
 }
 .sidenav .space{
@@ -22,8 +42,16 @@
   width: 6rem;
   height: 6rem;
   border: 0.25rem solid white;
+
+  -webkit-border-radius: 4rem;
+  -moz-border-radius: 4rem;
   border-radius: 4rem;
+
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
   transition: 0.2s;
+
   position: fixed;
   left: 4.25rem;
   top: 3.5rem;
@@ -53,6 +81,10 @@
     font-weight: bolder;
     color: white;
     padding: 1.25rem 5rem;
+
+    -webkit-transition: color .2s;
+    -moz-transition: color .2s;
+    -o-transition: color .2s;
     transition: color .2s;
 }
 .sidenav a:hover,a.active{
@@ -61,6 +93,24 @@
 .sidenav a:active{
     color: white;
 }
+.btn {
+    font-weight: bolder;
+    letter-spacing: .15rem;
+    color: white;
+    border: none;
+    background-color: inherit;
+    padding: 14px 28px;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-block;
+
+    -webkit-transition: color .2s;
+    -moz-transition: color .2s;
+    -o-transition: color .2s;
+    transition: color .2s;
+}
+.btn:hover {color: red;}
+.btn:active {color: #036ec8;}
 .sidenav a img{
   padding: 0;
   margin: 0;
@@ -75,7 +125,15 @@
   }
   .sidenav{
     box-shadow: none;
+
+    -webkit-flex-direction: row;
+    -moz-flex-direction: row;
     flex-direction: row;
+
+    -webkit-transform: translateX(0);
+    -ms-transform: translateX(0);
+    -moz-transform: translateX(0);
+    -o-transform: translateX(0);
     transform: translateX(0);
   }
 }

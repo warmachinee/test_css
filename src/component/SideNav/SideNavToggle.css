@@ -1,12 +1,26 @@
 .toggle-btn{
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
   display: flex;
+
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
   flex-direction: column;
+
+  -webkit-justify-content: space-around;
+  -moz-justify-content: space-around;
   justify-content: space-around;
+
   height: 2rem;
   width: 2rem;
   background: transparent;
   border: none;
   cursor: pointer;
+  
+  -webkit-transition: display .3s ease-out;
+  -moz-transition: display .3s ease-out;
+  -o-transition: display .3s ease-out;
   transition: display .3s ease-out;
 }
 .toggle-btn:focus{

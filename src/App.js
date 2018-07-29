@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import logo from './img/logo.svg'
 import './css/App.css'
 class App extends Component {
   render() {
     return (
       <div>
         <div class="sidenav">
-          <img class="logo" src={logo}></img>
           <a href="#about" class="active">DASHBOARD</a>
           <a href="#services">HISTORY</a>
           <a href="#clients">BLOG</a>

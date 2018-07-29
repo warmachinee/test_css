@@ -8,8 +8,13 @@
   background-color: #eaeaea;
 }
 .topnav__nav{
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
   display: flex;
+
   height: 100%;
+  -webkit-align-items: center;
   align-items: center;
   padding: 0 1rem;
 }
@@ -21,9 +26,16 @@
   position: fixed;
   right: 0;
   top: 0;
-  transition: .3s;
+
+  -webkit-transition: display .3s ease-out;
+  -moz-transition: display .3s ease-out;
+  -o-transition: display .3s ease-out;
+  transition: display .3s ease-out;
 }
 .spacer{
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  -moz-flex: 1;
   flex: 1;
 }
 .topnav__items ul{
@@ -48,6 +60,11 @@
   }
   .topnav__items ul{
     display: flex;
+
+    -webkit-transform: translateX(-15rem);
+    -ms-transform: translateX(-15rem);
+    -moz-transform: translateX(-15rem);
+    -o-transform: translateX(-15rem);
     transform: translateX(-15rem);
   }
 }
