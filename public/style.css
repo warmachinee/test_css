@@ -300,5 +300,15 @@ body{
     height: 30rem;
   }
   .register-box{
-    display: none;
+    width: 20%;
+    height: 60%;
+    position: absolute;
+    top: 5rem;
+    display: -webkit-flex;
+    display: -ms-flex;
+    display: -moz-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    -moz-flex-direction: column;
+    flex-direction: column;
   }
