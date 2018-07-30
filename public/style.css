@@ -18,6 +18,7 @@ body{
   -webkit-flex-direction: column;
   -moz-flex-direction: column;
   flex-direction: column;
+  overflow: scroll;
 }
 .topnav{
   background: #2a4d69;
@@ -46,12 +47,18 @@ body{
 .topnav .topnav-regis ul{
   list-style: none;
 }
-.topnav a{
+.topnav a,
+.topnav a:active{
   text-decoration: none;
   font-weight: bolder;
   color: white;
   font-size: 1.25rem;
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
 }
+.topnav a:hover{color:#1b95fc;}
 .form{
   -webkit-flex: 1;
   -ms-flex: 1;
@@ -73,8 +80,9 @@ body{
 }
 .form .form-grid{
   width: 60%;
+  min-width: 20rem;
   max-width: 30rem;
-  max-height: 40rem;
+  height: 100%;
   display: -webkit-flex;
   display: -ms-flex;
   display: -moz-flex;
@@ -84,17 +92,21 @@ body{
   flex-direction: column;
 }
 .form-grid .login{
-  height: 15rem;
+  height: 60%;
+  min-height: 25rem;
+  max-height: 25rem;
   background: #eee;
+  padding: 2rem 0;
 }
-.login label{
-  margin: 15rem 5%;
+.login .login-text{
+  font-size: .75rem;
+  margin: 5% 0 0 5%;
 }
 .login .login-input{
   display: block;
-  width: 90%;
+  width: 80%;
   height: 5rem;
-  margin: 0 5%;
+  margin: 0 10%;
 }
 .login-input input[type=text],
 .login-input input[type=password] {
@@ -112,26 +124,123 @@ body{
     outline: none;
 }
 
+.form-grid .signup{
+  height: 90%;
+  min-height: 25rem;
+  max-height: 35rem;
+  background: #eee;
+  padding: 2rem 0;
+}
+.signup .signup-text{
+  font-size: .75rem;
+  margin: 5% 0 0 5%;
+}
+.signup .signup-input{
+  display: block;
+  width: 80%;
+  height: 3rem;
+  margin: 0 10%;
+}
+.signup-input input[type=text],
+.signup-input input[type=password] {
+    width: 100%;
+    height: 2rem;
+    padding: .5rem;
+    display: inline-block;
+    margin: 1rem 0;
+    border: none;
+    background: #ccc;
+}
+.signup-input input[type=text]:focus,
+.signup-input input[type=password]:focus {
+    background-color: white;
+    outline: none;
+}
+
+
+.login .btn ,
+.signup .btn{
+  border: none;
+  border-radius: 20rem;
+  background-color: #1b95fc;
+  color: white;
+  width: 80%;
+  padding: .75rem 0;
+  margin: 1.5rem 10%;
+  font-size: 1.25rem;
+  font-weight: bolder;
+  cursor: pointer;
+  transition: background-color .2s;
+}
+.login .btn:hover,
+.signup .btn:hover{
+  background-color: #037be1;
+}
+.login .btn:active,
+.signup .btn:active{
+  background-color: #1b95fc;
+}
+
 .register-box{
-  border: 1px black solid;
   width: 100%;
-  height: 7rem;
+  height: 4rem;
   display: -webkit-flex;
   display: -ms-flex;
   display: -moz-flex;
   display: flex;
+  align-items: center;
+}
+.register-box a{
+  text-decoration: none;
+  text-align: center;
+  font-size: 1.25rem;
+  letter-spacing: .1rem;
+  font-weight: bolder;
+  color: #2a4d69;
+}
+.register-box .reg-normal,
+.register-box .reg-caddy,
+.register-box .reg-court{
+  padding: 1.5rem 10%;
+}
+.register-box .reg-normal:hover,
+.register-box .reg-caddy:hover,
+.register-box .reg-court:hover{
+  background: #aaa;
 }
 .register-box .reg-normal{
-  width: 7rem;
-  background: grey;
+  height: 100%;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  -moz-flex: 1;
+  flex: 1;
+  background: #e7eff6;
+  opacity: .9;
+}
+.reg-normal a{
+  color: #2a4d69;
+  margin-top: 2rem;
+}
+.register-box .reg-normal a:hover{
+  opacity: .9;
 }
 .register-box .reg-caddy{
-  width: 7rem;
-  background: yellow;
+  height: 100%;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  -moz-flex: 1;
+  flex: 1;
+  background: #adcbe3;
+  opacity: .9;
 }
 .register-box .reg-court{
-  width: 7rem;
-  background: green;
+  height: 100%;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  -moz-flex: 1;
+  flex: 1;
+  background: #63ace5;
+  opacity: .9;
 }
 
 @media screen and (min-width: 768px) {

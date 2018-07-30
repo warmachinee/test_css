@@ -17,7 +17,7 @@
   background: transparent;
   border: none;
   cursor: pointer;
-  
+
   -webkit-transition: display .3s ease-out;
   -moz-transition: display .3s ease-out;
   -o-transition: display .3s ease-out;
@@ -25,6 +25,12 @@
 }
 .toggle-btn:focus{
   outline: none;
+}
+.spacer{
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  -moz-flex: 1;
+  flex: 1;
 }
 .toggle-btn__line{
   width: 2rem;

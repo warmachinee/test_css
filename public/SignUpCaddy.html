@@ -9,27 +9,16 @@
     <link rel="stylesheet" type="text/css" href="/reset.css">
     <link rel="stylesheet" type="text/css" href="/style.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-    <title>TeeGolf</title>
+    <title>Sign up</title>
   </head>
   <body>
     <div class="main">
       <div class="topnav">
         <div><img class="topnav-logo" src="pic/logo.svg"/></div>
         <div class="spacer"></div>
-        <div class="topnav-login">
-          <input type="text" placeholder="Enter Email" name="email" required autofocus/>
-        </div>
-        <div class="topnav-login">
-          <input type="password" placeholder="Password" name="password" required/>
-        </div>
-        <div class="topnav-login-btn">
-          <form action="/index.html">
-            <button class="btn">Sign in</button>
-          </form>
-        </div>
         <div class="topnav-regis">
           <ul>
-            <li><a href="/SignUp.html">Sign up</a></li>
+            <li><a href="/">Sign in</a></li>
           </ul>
         </div>
       </div>
@@ -37,17 +26,29 @@
         <div class="spacer"></div>
         <div class="form-grid">
           <div class="spacer"></div>
-          <div class="login">
-            <div class="login-text">Email</div>
-            <div class="login-input">
+          <div class="signup">
+            <div class="signup-text">Username</div>
+            <div class="signup-input">
+              <input type="text" placeholder="Username" name="email" required autofocus/>
+            </div>
+            <div class="signup-text">Email</div>
+            <div class="signup-input">
               <input type="text" placeholder="Enter Email" name="email" required autofocus/>
             </div>
-            <div class="login-text">Password</div>
-            <div class="login-input">
+            <div class="signup-text">Password</div>
+            <div class="signup-input">
               <input type="password" placeholder="Password" name="password" required/>
             </div>
-            <form action="/index.html">
-              <button class="btn">Sign in</button>
+            <div class="signup-text">Confirm password</div>
+            <div class="signup-input">
+              <input type="password" placeholder="Confirm password" name="password" required/>
+            </div>
+            <div class="signup-text">Phone number</div>
+            <div class="signup-input">
+              <input type="text" placeholder="Enter Email" name="email" required autofocus/>
+            </div>
+            <form action="/TeeGolf.html">
+              <button class="btn">Sign up</button>
             </form>
           </div>
           <div class="spacer"></div>
@@ -56,7 +57,7 @@
       </div>
       <div class="register-box">
         <div class="reg-normal"><a href="/SignUp.html">Register</a></div>
-        <div class="reg-caddy"><a href="/SignUpCaddy.html">Caddy</a></div>
+        <div class="reg-caddy"><a>Caddy</a></div>
         <div class="reg-court"><a href="/SignUpCourt.html">Court</a></div>
       </div>
     </div>
