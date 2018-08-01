@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
-import TopNav from './component/TopNav/TopNav'
-import SideNav from './component/SideNav/SideNav'
-import BackDrop from './component/BackDrop/BackDrop'
-import Card from './component/Card/Card'
+import '../css/App.css'
 
-class ComponentTest extends Component {
+import TopNav from '../component/TopNav/TopNav'
+import SideNav from '../component/SideNav/SideNav'
+import BackDrop from '../component/BackDrop/BackDrop'
+import Card from '../component/Card/Card'
+
+const pageClickState = props =>{
+  return (props.pageDashboardClick);
+}
+class Dashboard extends Component {
   state = {
     sideDrawerOpen: false
   };
@@ -20,7 +25,7 @@ class ComponentTest extends Component {
 
   render() {
     let backDrop;
-    let privateStatus = true
+    let privateStatus = false
     if(this.state.sideDrawerOpen){
       backDrop = <BackDrop click={this.backdropClickHander}/>;
     }
@@ -28,7 +33,7 @@ class ComponentTest extends Component {
     return (
       <div>
         <TopNav drawerClickHandler={this.drawerToggleClickHandler}/>
-        <SideNav show={this.state.sideDrawerOpen}/>
+        <SideNav show={this.state.sideDrawerOpen} click={pageClickState}/>
         {backDrop}
         <div className="maincontent">
           <Card
@@ -39,17 +44,10 @@ class ComponentTest extends Component {
             />
           <Card />
           <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
         </div>
       </div>
     );
   }
 }
 
-export default ComponentTest;
+export default Dashboard;

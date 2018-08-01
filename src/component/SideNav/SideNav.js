@@ -45,7 +45,7 @@ const sideNav = props =>{
             <div className="text">HISTORY</div>
           </a>
         </li>
-        <form action="/TeeGolf.html">
+        <form action={props.click}>
           <li style={{position: 'fixed',bottom: '3rem',left: '10rem'}}>
             <button className="btn" style={{position: 'fixed',left: '3rem'}}>Log Out
             </button>

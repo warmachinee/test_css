@@ -19,6 +19,15 @@ body{
   -ms-overflow-y: scroll;
   overflow-y: scroll;
 }
+.maincontentlogin{
+  position: fixed;
+  width: 100%;
+  height: 90%;
+  top: 5rem;
+
+  -ms-overflow-y: scroll;
+  overflow-y: scroll;
+}
 .mainspacer{
   position: fixed;
   width:100%;

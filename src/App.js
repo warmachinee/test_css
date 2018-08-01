@@ -1,58 +1,32 @@
 import React, { Component } from 'react';
 import './css/App.css'
+
+import Dashboard from './page/Dashboard'
+import Login from './page/Login'
 class App extends Component {
+  state = {
+    pageLogin: true,
+    pageDashboard: false
+  };
+  goToAnotherPage = () =>{
+    this.setState( (pageState)=>{
+      return {
+        pageLogin: !pageState.pageLogin,
+        pageDashboard: !pageState.pageDashboard
+      };
+    });
+  };
   render() {
-    return (
-      <div>
-        <div class="sidenav">
-          <a href="#about" class="active">DASHBOARD</a>
-          <a href="#services">HISTORY</a>
-          <a href="#clients">BLOG</a>
-          <a href="#contact">CONTACT</a>
-        </div>
-        <div class="main">
-          <div class="topnav">
-            <a href="#home">Home</a>
-          </div>
-          <div class="main-item">
-            <div class="card">
-              <div class="card-item-large">1</div>
-              <div class="card-item-small">1</div>
-            </div>
-          </div>
-          <div class="main-item">
-            <div class="card">
-              <div class="card-item-large">2</div>
-              <div class="card-item-small">2</div>
-            </div>
-          </div>
-          <div class="main-item">
-            <div class="card">
-              <div class="card-item-large">3</div>
-              <div class="card-item-small">3</div>
-            </div>
-          </div>
-          <div class="main-item">
-            <div class="card">
-              <div class="card-item-large">4</div>
-              <div class="card-item-small">4</div>
-            </div>
-          </div>
-          <div class="main-item">
-            <div class="card">
-              <div class="card-item-large">5</div>
-              <div class="card-item-small">5</div>
-            </div>
-          </div>
-          <div class="main-item">
-            <div class="card">
-              <div class="card-item-large">6</div>
-              <div class="card-item-small">6</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    if(this.state.pageLogin){
+      return (
+        <Login pageLoginClick={this.goToAnotherPage}/>
+      );
+    }else if (this.state.pageDashboard) {
+      return(
+        <Dashboard pageDashboardClick={this.goToAnotherPage}/>
+      );
+    }
+
   }
 }
 
