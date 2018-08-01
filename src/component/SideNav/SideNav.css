@@ -93,7 +93,7 @@
 .sidenav a:active{
     color: white;
 }
-.btn {
+.sidenav-btn {
     font-weight: bolder;
     letter-spacing: .15rem;
     color: white;
@@ -109,8 +109,8 @@
     -o-transition: color .2s;
     transition: color .2s;
 }
-.btn:hover {color: red;}
-.btn:active {color: #036ec8;}
+.sidenav-btn:hover {color: red;}
+.sidenav-btn:active {color: #036ec8;}
 .sidenav a img{
   padding: 0;
   margin: 0;

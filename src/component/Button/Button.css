@@ -1,0 +1,26 @@
+.btn{
+  border: none;
+  width: 100%;
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
+
+  -webkit-border-radius: 15rem;
+  -moz-border-radius: 15rem;
+  border-radius: 15rem;
+
+  font-size: 1.25rem;
+
+  font-weight: bolder;
+  letter-spacing: .1rem;
+  background: #036ec8;
+  color: #f1f9ff;
+  margin-top: .5rem; 
+  padding: 1rem 1rem;
+
+  cursor: pointer;
+}
+.btn:hover{
+
+}

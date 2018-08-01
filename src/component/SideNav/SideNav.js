@@ -47,7 +47,7 @@ const sideNav = props =>{
         </li>
         <form action={props.click}>
           <li style={{position: 'fixed',bottom: '3rem',left: '10rem'}}>
-            <button className="btn" style={{position: 'fixed',left: '3rem'}}>Log Out
+            <button className="sidenav-btn" style={{position: 'fixed',left: '3rem'}}>Log Out
             </button>
           </li>
         </form>

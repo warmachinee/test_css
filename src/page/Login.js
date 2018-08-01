@@ -9,8 +9,7 @@ const Login = props =>{
     <div>
       <TopNavLogin logoClick={props.pageLoginClick}/>
       <div className="maincontentlogin">
-        <LoginForm />
-        <button onClick={props.pageLoginClick}>Click</button>
+        <LoginForm loginClick={props.pageLoginClick}/>
       </div>
     </div>
   );
