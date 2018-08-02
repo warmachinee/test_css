@@ -40,6 +40,9 @@
 
   margin: 2rem 0;
 }
+.card a{
+  cursor: pointer;
+}
 .card-item-small{
   width: 25%;
   max-width: 6rem;
@@ -63,6 +66,7 @@
 .card-item-small .card-edit,
 .card-item-small .card-games,
 .card-item-small .card-calculator{
+  cursor: pointer;
   width: 100%;
   max-width: 2.5rem;
 

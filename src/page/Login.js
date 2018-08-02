@@ -10,12 +10,24 @@ class Login extends Component{
     super(props);
     this.pageClick = props.pageLoginClick
   }
+  state = {
+    pageRegisCard: false
+  }
+  goToRegisCard=()=>{
+    this.setState((prevState)=>{
+      return {pageRegisCard: !prevState.pageRegisCard};
+    });
+  };
   render(){
     return(
       <div>
-        <TopNavLogin logoClick={this.pageClick}/>
+        <TopNavLogin
+          regisPageClick = {this.goToRegisCard}
+          regisCardState = {this.state.pageRegisCard}/>
         <div className="maincontentlogin">
-          <LoginForm loginClick={this.pageClick}/>
+          <LoginForm
+            loginClick = {this.pageClick}
+            afterRegis = {this.props.pageRegisCard}/>
         </div>
       </div>
     );

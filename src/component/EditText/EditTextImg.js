@@ -64,4 +64,4 @@ const EditTextImg = props => {
 
 };
 
-export default EditTextImg
+export default EditTextImg;

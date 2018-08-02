@@ -9,12 +9,11 @@ class TopNavLogin extends React.Component{
   constructor(props){
     super(props);
   }
-
-  regisToggle=()=>{
-    this.props.reload();
-  }
-
   render(){
+    let ahref = ""
+    if(this.props.regisCardState){
+      ahref = "#registerCard"
+    }
     return(
       <div>
         <header className="topnavlogin">
@@ -33,7 +32,7 @@ class TopNavLogin extends React.Component{
               </form>
             </div>
             <div className="topnavlogin__signup">
-              <button className="signupbtn" onClick={this.regisToggle}>Sign up</button>
+              <a href={ahref} className="signupbtn" onClick={this.props.regisPageClick}>Sign up</a>
             </div>
           </nav>
         </header>

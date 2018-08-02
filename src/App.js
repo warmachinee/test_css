@@ -5,8 +5,8 @@ import Dashboard from './page/Dashboard'
 import Login from './page/Login'
 class App extends Component {
   state = {
-    pageLogin: true,
-    pageDashboard: false
+    pageLogin: false,
+    pageDashboard: true
   };
   goToAnotherPage = () =>{
     this.setState( (pageState)=>{
@@ -19,11 +19,12 @@ class App extends Component {
   render() {
     if(this.state.pageLogin){
       return (
-        <Login pageLoginClick={this.goToAnotherPage}/>
+        <Login
+          pageLoginClick = {this.goToAnotherPage}/>
       );
     }else if (this.state.pageDashboard) {
       return(
-        <Dashboard pageDashboardClick={this.goToAnotherPage}/>
+        <Dashboard pageDashboardClick = {this.goToAnotherPage}/>
       );
     }
 

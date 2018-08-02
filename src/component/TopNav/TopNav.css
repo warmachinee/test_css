@@ -18,7 +18,9 @@
   align-items: center;
   padding: 0 1rem;
 }
-
+.topnav__button a{
+  cursor: pointer;
+}
 .topnav__button img{
   color: #333;
   text-decoration: none;

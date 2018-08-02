@@ -59,6 +59,10 @@
   -moz-flex-direction: column;
   flex-direction: column;
 }
+.form__card .form__card__switch{
+  position: relative;
+  margin: 1rem 0 0 80%; 
+}
 .form__card .form__card__profilelogo{
   display: -webkit-flex;
   display: -ms-flex;
@@ -66,7 +70,7 @@
   display: flex;
 }
 .form__card__profilelogo img{
-  margin: 2rem 0 1rem 0 ;
+  margin: 0 0 1rem 0 ;
   height: 8rem;
   width: 8rem;
 }
