@@ -58,6 +58,7 @@
 }
 .topnavlogin__signin button{
   border: none;
+  cursor: pointer;
 
   -webkit-box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
   -moz-box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
@@ -76,27 +77,29 @@
 }
 .topnavlogin__signin button:hover{
   -webkit-transform: scale(1.05);
-  -ms-transform: scale(1.05);
-  -moz-transform: scale(1.05);
-  -o-transform: scale(1.05);
-  transform: scale(1.05);
+  -ms-transform: scale(1.1);
+  -moz-transform: scale(1.1);
+  -o-transform: scale(1.1);
+  transform: scale(1.1);
 }
 .topnavlogin__nav .topnavlogin__signup{
   margin: 1.75rem 1rem;
 }
-.topnavlogin__nav .topnavlogin__signup a,
-.topnavlogin__nav .topnavlogin__signup a:active{
+.topnavlogin__nav .topnavlogin__signup .signupbtn,
+.topnavlogin__nav .topnavlogin__signup .signupbtn:active{
   text-decoration: none;
   color: white;
   font-size: 1.25rem;
   font-weight: bolder;
-
+  border: none;
+  background: inherit;
+  cursor: pointer;
   -webkit-transition: 0.2s;
   -moz-transition: 0.2s;
   -o-transition: 0.2s;
   transition: 0.2s;
 }
-.topnavlogin__signup a:hover{
+.topnavlogin__signup .signupbtn:hover{
   color: #1b95fc;
 }
 @media (min-width: 768px){
@@ -133,5 +136,8 @@
   .topnavlogin__nav .topnavlogin__signin{
     display: block;
     margin: 1.75rem 1rem;
+  }
+  .topnavlogin__nav .topnavlogin__signup{
+    display: none;
   }
 }

@@ -19,3 +19,15 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+src/page/Login.js
+src/component/TopNav/TopNavLogin.js
+src/component/TopNav/TopNavLogin.css
+src/component/img/golf-bag-equipment-with-sticks-set.svg
+src/component/img/baseline-account_circle-24px-login.svg
+src/component/Form/RegisCard.js
+src/component/Form/LoginForm.js
+src/component/Form/LoginForm.css
+src/component/Form/LoginCard.js
+src/component/EditText/EditTextImg.js
+src/component/EditText/EditTextImg.css
+src/component/Button/Button.css

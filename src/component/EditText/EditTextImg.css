@@ -12,12 +12,12 @@
     padding: .75rem;
     display: inline-block;
     border: .2rem #036ec8 solid;
-    background: #f1f1f1;
+    background: white;
 }
 .edittextimg__grid input[type=text]:focus,
 .edittextimg__grid input[type=password]:focus,
 .edittextimg__grid input[type=email]:focus {
-    background-color: #ddd;
+    background-color: #f1f1f1;
     outline: none;
 }
 .edittextimg__grid img{

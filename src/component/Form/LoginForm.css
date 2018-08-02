@@ -1,9 +1,9 @@
-
 .form__grid{
   display: -webkit-flex;
   display: -ms-flex;
   display: -moz-flex;
   display: flex;
+  height: 100%;
 }
 .spacer{
   -webkit-flex: 1;
@@ -13,7 +13,7 @@
 }
 .form__card{
   background: #f1f9ff;
-  margin: 2rem 0;
+  margin: 3rem 0;
   -webkit-box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
   -moz-box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
   box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
@@ -26,7 +26,8 @@
   width: 100%;
   min-width: 12.5rem;
   max-width: 24rem;
-  max-height: 100%;
+  height: 100%;
+  max-height: 26rem;
   min-height: 25rem;
 
   padding: 0 0 2rem 0;
@@ -62,4 +63,24 @@
 .form__card__items img{
   width: 3rem;
   height: 3rem;
+}
+.form__card.dis{
+  display: none;
+}
+@media (min-width: 768px) {
+  .form__card{
+    display: none;
+  }
+  .form__card.dis{
+    display: -webkit-flex;
+    display: -ms-flex;
+    display: -moz-flex;
+    display: flex;
+    min-height: 35rem;
+  }
+  .form__card__profilelogo img{
+    margin: 1rem 0 1rem 0 ;
+    height: 4em;
+    width: 4rem;
+  }
 }

@@ -16,11 +16,11 @@
   letter-spacing: .1rem;
   background: #036ec8;
   color: #f1f9ff;
-  margin-top: .5rem; 
+  margin-top: .5rem;
   padding: 1rem 1rem;
 
   cursor: pointer;
 }
 .btn:hover{
-
+  background: #025296;
 }
