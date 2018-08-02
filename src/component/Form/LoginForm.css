@@ -5,6 +5,21 @@
   display: flex;
   height: 100%;
 }
+.form__middle__card{
+  height: 100%;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  flex-direction: column;
+
+  width: 100%;
+  min-width: 12.5rem;
+  max-width: 24rem;
+}
 .spacer{
   -webkit-flex: 1;
   -ms-flex: 1;
@@ -67,8 +82,20 @@
 .form__card.dis{
   display: none;
 }
+.form__card.regisinlogin{
+  min-height: 35rem;
+  margin-top: 0;
+}
+.form__card.regisinlogin .form__card__profilelogo img{
+  margin: 1rem 0 1rem 0 ;
+  height: 4em;
+  width: 4rem;
+}
 @media (min-width: 768px) {
   .form__card{
+    display: none;
+  }
+  .form__card.regisinlogin{
     display: none;
   }
   .form__card.dis{

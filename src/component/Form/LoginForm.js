@@ -16,51 +16,86 @@ class LoginForm extends React.Component{
     return(
       <div className="form__grid" >
         <div className="spacer"></div>
-          <div className="form__card">
-            <div className="form__card__profilelogo">
-              <div className="spacer"></div>
-              <img src={ProfileLogin}></img>
-              <div className="spacer"></div>
-            </div>
-            <div className="form__card__items">
-              <EditTextImg type="text" placeholder="Enter Username" formType="username"/>
-            </div>
-            <div className="form__card__items">
-              <EditTextImg type="password" placeholder="Password" formType="password"/>
-            </div>
-            <div className="form__card__items">
-              <Button btnLabel="Sign in" btnOnClick={this.props.loginClick}/>
-            </div>
-          </div>
 
-          <div className="form__card dis">
-            <div className="form__card__profilelogo">
-              <div className="spacer"></div>
-              <img src={ProfileLogin}></img>
-              <div className="spacer"></div>
+        <div className="form__middle__card">
+          <div className="spacer"></div>
+            <div className="form__card">
+              <div className="form__card__profilelogo">
+                <div className="spacer"></div>
+                <img src={ProfileLogin}></img>
+                <div className="spacer"></div>
+              </div>
+              <div className="form__card__items">
+                <EditTextImg type="text" placeholder="Enter Username" formType="username"/>
+              </div>
+              <div className="form__card__items">
+                <EditTextImg type="password" placeholder="Password" formType="password"/>
+              </div>
+              <div className="form__card__items">
+                <Button btnLabel="Sign in" btnOnClick={this.props.loginClick}/>
+              </div>
             </div>
-            <div className="form__card__items">
-              <EditTextImg type="text" placeholder="Enter Username" formType="username"/>
+
+            <div className="form__card dis">
+              <div className="form__card__profilelogo">
+                <div className="spacer"></div>
+                <img src={ProfileLogin}></img>
+                <div className="spacer"></div>
+              </div>
+              <div className="form__card__items">
+                <EditTextImg type="text" placeholder="Enter Username" formType="username"/>
+              </div>
+              <div className="form__card__items">
+                <EditTextImg type="password" placeholder="Password" formType="password"/>
+              </div>
+              <div className="form__card__items">
+                <EditTextImg type="password" placeholder="Confirm Password" formType="password"/>
+              </div>
+              <div className="form__card__items">
+                <EditTextImg type="text" placeholder="Phone number" formType="phone"/>
+              </div>
+              <div className="form__card__items">
+                <EditTextImg type="text" placeholder="Department" formType="department"/>
+              </div>
+              <div className="form__card__items">
+                <EditTextImg type="text" placeholder="Your racket" formType="racket"/>
+              </div>
+              <div className="form__card__items">
+                <Button btnLabel="Sign up" btnOnClick={this.props.loginClick}/>
+              </div>
             </div>
-            <div className="form__card__items">
-              <EditTextImg type="password" placeholder="Password" formType="password"/>
+
+            <div className="form__card regisinlogin">
+              <div className="form__card__profilelogo">
+                <div className="spacer"></div>
+                <img src={ProfileLogin}></img>
+                <div className="spacer"></div>
+              </div>
+              <div className="form__card__items">
+                <EditTextImg type="text" placeholder="Enter Username" formType="username"/>
+              </div>
+              <div className="form__card__items">
+                <EditTextImg type="password" placeholder="Password" formType="password"/>
+              </div>
+              <div className="form__card__items">
+                <EditTextImg type="password" placeholder="Confirm Password" formType="password"/>
+              </div>
+              <div className="form__card__items">
+                <EditTextImg type="text" placeholder="Phone number" formType="phone"/>
+              </div>
+              <div className="form__card__items">
+                <EditTextImg type="text" placeholder="Department" formType="department"/>
+              </div>
+              <div className="form__card__items">
+                <EditTextImg type="text" placeholder="Your racket" formType="racket"/>
+              </div>
+              <div className="form__card__items">
+                <Button btnLabel="Sign up" btnOnClick={this.props.loginClick}/>
+              </div>
             </div>
-            <div className="form__card__items">
-              <EditTextImg type="password" placeholder="Confirm Password" formType="password"/>
-            </div>
-            <div className="form__card__items">
-              <EditTextImg type="text" placeholder="Phone number" formType="phone"/>
-            </div>
-            <div className="form__card__items">
-              <EditTextImg type="text" placeholder="Department" formType="department"/>
-            </div>
-            <div className="form__card__items">
-              <EditTextImg type="text" placeholder="Your racket" formType="racket"/>
-            </div>
-            <div className="form__card__items">
-              <Button btnLabel="Sign up" btnOnClick={this.props.loginClick}/>
-            </div>
-          </div>
+          <div className="spacer"></div>
+        </div>
+
         <div className="spacer"></div>
       </div>
     );
