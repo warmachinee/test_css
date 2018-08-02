@@ -11,14 +11,19 @@ const pageClickState = props =>{
 }
 class Dashboard extends Component {
   state = {
-    sideDrawerOpen: false
+    sideDrawerOpen: false,
+    languageState: false
   };
   drawerToggleClickHandler = () =>{
     this.setState((prevState)=>{
       return {sideDrawerOpen: !prevState.sideDrawerOpen};
     });
   };
-
+  languageToggle = () =>{
+    this.setState((state)=>{
+      return {languageState: !state.languageState}
+    });
+  };
   backdropClickHander = () =>{
     this.setState({sideDrawerOpen: false});
   };
@@ -33,7 +38,11 @@ class Dashboard extends Component {
     return (
       <div>
         <TopNav drawerClickHandler={this.drawerToggleClickHandler}/>
-        <SideNav show={this.state.sideDrawerOpen} click={pageClickState}/>
+        <SideNav
+          show={this.state.sideDrawerOpen}
+          click={pageClickState}
+          lang={this.state.languageState}
+          langClick={this.languageToggle}/>
         {backDrop}
         <div className="maincontent">
           <Card

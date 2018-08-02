@@ -8,27 +8,50 @@ import ic_noti from '../img/baseline-notifications-24px.svg'
 import ic_noti_side from '../img/baseline-notifications-24px-white.svg'
 import ic_dashboard from '../img/baseline-dashboard-24px-white.svg'
 import ic_history from '../img/baseline-history-24px-white.svg'
+import ic_language from '../img/baseline-language-24px.svg'
+
+import Switch from '../Switch/Switch'
+
+const menu ={
+  Notifications: ['Notifications','การแจ้งเตือน'],
+  Profile: ['Profile','โปรไฟล์'],
+  Dashboard: ['DASHBOARD','แดชบอร์ด'],
+  History: ['HISTORY','ประวัติ'],
+  Logout: ['Log out','ออกจากระบบ'],
+  LogOutBtnClass: ['sidenav-btn','sidenav-btn thailang']
+}
 
 const sideNav = props =>{
+  let i = 0;
+  if(props.lang){
+    i = 1
+  }
   let drawerClasses = 'sidenav';
   if(props.show){
     drawerClasses = 'sidenav open';
   }
   return (
     <nav className={drawerClasses}>
-      <img className="sideimg" src={logo}></img>
+      <div className="change__lang">
+        <Switch
+          switchClick={props.langClick}
+          switchLang={props.lang}/>
+      </div>
+      <div className="sideimg">
+        <img src={logo}></img>
+      </div>
       <div className="space"></div>
       <ul className="fromtopnav">
         <li>
           <a href="/">
             <img className="icon" src={ic_noti_side} />
-            <div className="text">Notifications</div>
+            <div className="text">{menu.Notifications[i]}</div>
           </a>
         </li>
         <li>
           <a href="/">
             <img className="icon" src={ic_profile_side} />
-            <div className="text">Profile</div>
+            <div className="text">{menu.Profile[i]}</div>
           </a>
         </li>
       </ul>
@@ -36,18 +59,18 @@ const sideNav = props =>{
         <li>
           <a href="/">
             <img className="icon" src={ic_dashboard} />
-            <div className="text">DASHBOARD</div>
+            <div className="text">{menu.Dashboard[i]}</div>
           </a>
         </li>
         <li>
           <a href="/">
             <img className="icon" src={ic_history} />
-            <div className="text">HISTORY</div>
+            <div className="text">{menu.History[i]}</div>
           </a>
         </li>
         <form action={props.click}>
           <li style={{position: 'fixed',bottom: '3rem',left: '10rem'}}>
-            <button className="sidenav-btn" style={{position: 'fixed',left: '3rem'}}>Log Out
+            <button className={menu.LogOutBtnClass[i]} style={{position: 'fixed',left: '3rem'}}>{menu.Logout[i]}
             </button>
           </li>
         </form>

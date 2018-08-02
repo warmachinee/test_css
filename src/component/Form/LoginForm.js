@@ -58,7 +58,7 @@ class LoginForm extends React.Component{
               <EditTextImg type="text" placeholder="Your racket" formType="racket"/>
             </div>
             <div className="form__card__items">
-              <Button btnLabel="Sign up" btnOnClick=""/>
+              <Button btnLabel="Sign up" btnOnClick={this.props.loginClick}/>
             </div>
           </div>
         <div className="spacer"></div>

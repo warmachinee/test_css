@@ -1,0 +1,58 @@
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 3.5rem;
+  height: 2rem;
+}
+
+.switch input {display:none;}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #bce0fd;
+  border: .25rem #2196F3 solid;
+}
+.slider .switch__img{
+  width: 1.25rem;
+  height: 1.25rem;
+  position: absolute;
+  top: 0.125rem;
+  left: 0.25rem;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+.slider .switch__text{
+  position: absolute;
+  top: 0.3rem;
+  left: 0.35rem;
+  font-size: .95rem;
+  font-weight: bolder;
+  color: #2a4d69;
+  -webkit-transition: transform .2s;
+  transition: transform .2s;
+  -webkit-transform: translateX(1.2rem);
+  -ms-transform: translateX(1.2rem);
+  transform: translateX(1.2rem);
+}
+input:checked + .slider .switch__img{
+  -webkit-transform: translateX(1.4rem);
+  -ms-transform: translateX(1.4rem);
+  transform: translateX(1.4rem);
+}
+input:checked + .slider .switch__text{
+  -webkit-transform: translateX(0);
+  -ms-transform: translateX(0);
+  transform: translateX(0);
+}
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+.slider.round:before {
+  border-radius: 50%;
+}
