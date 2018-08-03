@@ -1,0 +1,24 @@
+.modal-addscore{
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+.modal-addscore .modal-addscore__grid{
+  display: flex;
+  flex-direction: column;
+}
+.holefill input{
+  width: 4rem;
+  height: 4rem;
+}
+.modal-addscore__grid .modal-addscore__card{
+
+  background: white;
+  width: 30rem;
+  height: 25rem;
+  z-index: 900;
+}
+.spacer{
+  flex: 1;
+}

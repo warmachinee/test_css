@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDom from 'react-dom';
 import '../css/App.css'
 
 import TopNav from '../component/TopNav/TopNav'
@@ -7,6 +8,7 @@ import BackDrop from '../component/BackDrop/BackDrop'
 import Card from '../component/Card/Card'
 import ModalCreateMatch from '../component/Modal/ModalCreateMatch'
 import ModalAddPeople from '../component/Modal/ModalAddPeople'
+import ModalAddScore from '../component/Modal/ModalAddScore'
 
 const pageClickState = props =>{
   return (props.pageDashboardClick);
@@ -14,13 +16,23 @@ const pageClickState = props =>{
 class Dashboard extends Component {
   constructor(props){
     super(props)
+    this.state = {
+      createModalIsOpen: false,
+      addpeopleModalIsOpen: false,
+      addscoreModalIsOpen: false,
+      sideDrawerOpen: false,
+      languageState: false,
+      matchDetailState: false,
+      data:[],
+      MatchModalData:{
+        MatchID:"",
+        MatchName:"",
+        MatchLocation:"",
+        MatchDate:""
+      }
   }
-  state = {
-    createModalIsOpen: false,
-    addpeopleModalIsOpen: false,
-    sideDrawerOpen: false,
-    languageState: false,
-    matchDetailState: false
+
+
   };
   matchDetailStateToggle = () =>{
     this.setState((prevState)=>{
@@ -50,6 +62,43 @@ class Dashboard extends Component {
       return {addpeopleModalIsOpen: !state.addpeopleModalIsOpen}
     });
   }
+  toggleAddScoreModal = () => {
+    this.setState((state)=>{
+      return {addscoreModalIsOpen: !state.addscoreModalIsOpen}
+    });
+  }
+
+  addMatch = ()=>{
+    console.log("data old :: ",this.state.data);
+    this.state.data.push({
+      MatchID:this.state.data.length+1,
+      MatchName:this.state.MatchModalData.MatchName,
+      MatchLocation:this.state.MatchModalData.MatchLocation,
+      MatchDate:this.state.MatchModalData.MatchDate
+    });
+    console.log("MatchName :",this.state.MatchModalData.MatchName);
+    console.log("MatchLocation :",this.state.MatchModalData.MatchLocation);
+    console.log("MatchDate :",this.state.MatchModalData.MatchDate);
+    console.log("data new :: ",this.state.data);
+    ReactDom.render(<Dashboard />,document.getElementById("root"));
+  }
+
+  setMatchName = (MatchName)=>{
+    this.state.MatchModalData.MatchName = MatchName;
+    console.log(this.state.MatchModalData.MatchName);
+  }
+
+  setMatchLocation = (MatchLocation)=>{
+    this.state.MatchModalData.MatchLocation = MatchLocation;
+  }
+
+  setMatchDate = (MatchDate)=>{
+    this.state.MatchModalData.MatchDate = MatchDate;
+  }
+
+  getMatchID = ()=>{
+     return this.state.data.length;
+  }
 
   render() {
     let backDrop;
@@ -62,7 +111,8 @@ class Dashboard extends Component {
         <div>
           <TopNav
             drawerClickHandler = {this.drawerToggleClickHandler}
-            createMatchClick = {this.toggleCreateModal}/>
+            createMatchClick = {this.toggleCreateModal}
+            />
           <SideNav
             show={this.state.sideDrawerOpen}
             click={pageClickState}
@@ -70,19 +120,29 @@ class Dashboard extends Component {
             langClick={this.languageToggle}/>
           {backDrop}
           <div className="maincontent">
-            <Card
-              cardMatchName="test"
-              cardLocation="Location12345"
-              cardDate="26/05/2018"
-              cardPrivate={privateStatus}
-              matchDetailClick = {this.matchDetailStateToggle}
-              addPeopleClick = {this.toggleAddpeopleModal}
-              />
+            { this.state.data.map((card,i)=><Card
+                data={card}
+                key={i}
+                cardPrivate={privateStatus}
+                matchDetailClick = {this.matchDetailStateToggle}
+                addPeopleClick = {this.toggleAddpeopleModal}
+                addScoreClick = {this.toggleAddScoreModal}
+                />)}
+
           </div>
+          <ModalAddScore
+            modalClick = {this.toggleAddScoreModal}
+            modalState = {this.state.addscoreModalIsOpen} />
           <ModalAddPeople
             modalClick = {this.toggleAddpeopleModal}
             modalState = {this.state.addpeopleModalIsOpen} />
           <ModalCreateMatch
+            addMatch = {this.addMatch}
+            getMatchID = {this.getMatchID}
+            setMatchName = {this.setMatchName}
+            setMatchLocation = {this.setMatchLocation}
+            setMatchDate = {this.setMatchDate}
+            ModalData = {this.state.MatchModalData}
             modalClick = {this.toggleCreateModal}
             modalState = {this.state.createModalIsOpen}/>
         </div>
@@ -101,6 +161,7 @@ class Dashboard extends Component {
             langClick={this.languageToggle}/>
           {backDrop}
           <div className="maincontent">
+
           </div>
           <ModalAddPeople
             modalClick = {this.toggleAddpeopleModal}

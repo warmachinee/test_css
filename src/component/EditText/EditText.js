@@ -1,10 +1,23 @@
 import React from 'react'
 import './EditText.css'
 
-const EditText = props =>(
-  <div>
-    <input type={props.type} placeholder={props.placeholder}/>
-  </div>
-);
+class EditText extends React.Component{
+  constructor(props){
+    super(props);
+  }
+
+  editTextValue=(val)=>{
+    this.props.editTextValue(val);
+  }
+
+
+  render(){
+    return(
+      <div>
+        <input type={this.props.type} placeholder={this.props.placeholder} onChange={(e)=>this.editTextValue(e.target.value)}/>
+      </div>
+    );
+  }
+}
 
 export default EditText
