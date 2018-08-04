@@ -3,6 +3,7 @@ import './ModalCreateMatch.css'
 
 import ModalBackDrop from './ModalBackDrop'
 import EditText from '../EditText/EditText'
+import EditTextImg from '../EditText/EditTextImg'
 import Button from '../Button/Button'
 
 class ModalCreateMatch extends React.Component{
@@ -10,6 +11,7 @@ class ModalCreateMatch extends React.Component{
     super(props)
     this.state={
       MatchID:"",
+      MatchTeamNumber:"",
       MatchName:"",
       MatchLocation:"",
       MatchDate:""
@@ -19,7 +21,9 @@ class ModalCreateMatch extends React.Component{
   setMatchName=(val)=>{
     this.props.setMatchName(val);
   }
-
+  setMatchTeamNumber=(val)=>{
+    this.props.setMatchTeamNumber(val);
+  }
   setMatchLocation=(val)=>{
     this.props.setMatchLocation(val);
   }
@@ -30,8 +34,9 @@ class ModalCreateMatch extends React.Component{
 
   addMatch=()=>{
     this.props.addMatch();
+    this.props.modalClick();
   }
-
+  
   render(){
     if(this.props.modalState){
       return(
@@ -42,15 +47,15 @@ class ModalCreateMatch extends React.Component{
             <div className="spacer"></div>
             <div className="modal-creatematch__card">
               <label>Match name</label>
-              <EditText type="text" placeholder="Match name" editTextValue={this.setMatchName}/>
+              <EditTextImg type="text" placeholder="Match name" formType="username" editTextValue={this.setMatchName}/>
               <label>Team</label>
-              <EditText type="text" placeholder="How many team?"/>
+              <EditTextImg type="text" formType="username" placeholder="How many team?" editTextValue={this.setMatchTeamNumber}/>
               <label>Location</label>
-              <EditText type="text" placeholder="Location" editTextValue={this.setMatchLocation}/>
+              <EditTextImg type="text" placeholder="Location" formType="username" editTextValue={this.setMatchLocation}/>
               <label>Date</label>
-              <EditText type="date" placeholder="Date" editTextValue={this.setMatchDate}/>
+              <EditTextImg type="date" placeholder="Date" formType="username" editTextValue={this.setMatchDate}/>
               <Button btnLabel="Close" btnOnClick = {this.props.modalClick}></Button>
-              <Button btnLabel="Create" btnOnClick={this.addMatch} ></Button>
+              <Button btnLabel="Create" btnOnClick = {this.addMatch}></Button>
             </div>
             <div className="spacer"></div>
           </div>

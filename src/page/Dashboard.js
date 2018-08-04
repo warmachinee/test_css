@@ -26,9 +26,13 @@ class Dashboard extends Component {
       data:[],
       MatchModalData:{
         MatchID:"",
+        MatchTeamNumber:"",
         MatchName:"",
         MatchLocation:"",
         MatchDate:""
+      },
+      PlayerInMatch:{
+        playerName:''
       }
   }
 
@@ -67,42 +71,60 @@ class Dashboard extends Component {
       return {addscoreModalIsOpen: !state.addscoreModalIsOpen}
     });
   }
-
+  showdata = () =>{
+    console.log("MatchID : ",this.state.data.length);
+    console.log("MatchName : ",this.state.MatchModalData.MatchName);
+    console.log("MatchTeamNumber : ",this.state.MatchModalData.MatchTeamNumber);
+    console.log("MatchLocation : ",this.state.MatchModalData.MatchLocation);
+    console.log("MatchDate : ",this.state.MatchModalData.MatchDate);
+    console.log("MatchDate : ",this.state.MatchModalData.MatchDate);
+    console.log("Player : ",this.state.PlayerInMatch.playerName)
+  }
   addMatch = ()=>{
     console.log("data old :: ",this.state.data);
     this.state.data.push({
-      MatchID:this.state.data.length+1,
+      MatchID:this.state.data.length,
       MatchName:this.state.MatchModalData.MatchName,
+      MatchTeamNumber:this.state.MatchModalData.MatchTeamNumber,
       MatchLocation:this.state.MatchModalData.MatchLocation,
       MatchDate:this.state.MatchModalData.MatchDate
     });
-    console.log("MatchName :",this.state.MatchModalData.MatchName);
-    console.log("MatchLocation :",this.state.MatchModalData.MatchLocation);
-    console.log("MatchDate :",this.state.MatchModalData.MatchDate);
     console.log("data new :: ",this.state.data);
     ReactDom.render(<Dashboard />,document.getElementById("root"));
+    setTimeout(this.addMatch,1000);
   }
-
+  addPeople = (PlayerName) =>{
+    this.state.PlayerInMatch.playerName = PlayerName
+  }
   setMatchName = (MatchName)=>{
     this.state.MatchModalData.MatchName = MatchName;
-    console.log(this.state.MatchModalData.MatchName);
   }
-
+  setMatchTeamNumber = (MatchTeamNumber) =>{
+    this.state.MatchModalData.MatchTeamNumber = MatchTeamNumber;
+  }
   setMatchLocation = (MatchLocation)=>{
     this.state.MatchModalData.MatchLocation = MatchLocation;
   }
-
   setMatchDate = (MatchDate)=>{
     this.state.MatchModalData.MatchDate = MatchDate;
   }
-
   getMatchID = ()=>{
      return this.state.data.length;
   }
 
+
+
   render() {
     let backDrop;
-    let privateStatus = false
+    const cardDynamically = this.state.data.map((card,i)=>
+      <Card
+        data={card}
+        key={i}
+        matchDetailClick = {this.matchDetailStateToggle}
+        addPeopleClick = {this.toggleAddpeopleModal}
+        addScoreClick = {this.toggleAddScoreModal}
+        />
+    )
     if(this.state.sideDrawerOpen){
       backDrop = <BackDrop click={this.backdropClickHander}/>;
     }
@@ -120,26 +142,22 @@ class Dashboard extends Component {
             langClick={this.languageToggle}/>
           {backDrop}
           <div className="maincontent">
-            { this.state.data.map((card,i)=><Card
-                data={card}
-                key={i}
-                cardPrivate={privateStatus}
-                matchDetailClick = {this.matchDetailStateToggle}
-                addPeopleClick = {this.toggleAddpeopleModal}
-                addScoreClick = {this.toggleAddScoreModal}
-                />)}
-
+            <button onClick={this.showdata}>Check Data</button>
+            {cardDynamically}
           </div>
           <ModalAddScore
             modalClick = {this.toggleAddScoreModal}
             modalState = {this.state.addscoreModalIsOpen} />
           <ModalAddPeople
+            addPeople = {this.addPeople}
+            matchTeamNumber = {this.state.MatchModalData.MatchTeamNumber}
             modalClick = {this.toggleAddpeopleModal}
             modalState = {this.state.addpeopleModalIsOpen} />
           <ModalCreateMatch
             addMatch = {this.addMatch}
             getMatchID = {this.getMatchID}
             setMatchName = {this.setMatchName}
+            setMatchTeamNumber = {this.setMatchTeamNumber}
             setMatchLocation = {this.setMatchLocation}
             setMatchDate = {this.setMatchDate}
             ModalData = {this.state.MatchModalData}

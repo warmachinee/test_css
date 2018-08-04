@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import '../css/App.css'
+import $ from 'jquery';
 
 import TopNavLogin from '../component/TopNav/TopNavLogin'
 import LoginForm from '../component/Form/LoginForm'
@@ -9,25 +10,85 @@ class Login extends Component{
   constructor(props){
     super(props);
     this.pageClick = props.pageLoginClick
+    this.state = {
+      pageRegisCard: false,
+      userData:{
+        username:'',
+        password:''
+      }
+    }
   }
   state = {
-    pageRegisCard: false
+    loginStatus: ''
   }
+
   goToRegisCard=()=>{
     this.setState((prevState)=>{
       return {pageRegisCard: !prevState.pageRegisCard};
     });
   };
+  inputUsernameLogin = (Username) =>{
+    this.state.userData.username = Username;
+  }
+  inputPasswordLogin = (Password) =>{
+    this.state.userData.password = Password;
+  }
+
+  handleSubmit = event => {
+    event.preventDefault();
+    var geturl;
+    geturl = $.ajax({
+      type: "POST",
+     //url: "http://127.0.0.1/php/login.php",
+     url: "http://pds.in.th/phpadmin/login.php",
+     dataType: 'json',
+     data: {
+       "username": this.state.userData.username,
+       "password": this.state.userData.password
+     },
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+       //localStorage.setItem("response",JSON.stringify(data));
+       localStorage['response']=data.status;
+       console.log(data);
+
+     }
+    });
+    if(localStorage['response']){
+      var response = localStorage['response'];
+      this.setState({loginStatus: response});
+    }
+    setTimeout(this.LoginAction,1000);
+
+  }
+
+  LoginAction = () =>{
+    if(this.getResultLogin()==='Success'){
+      console.log(this.getResultLogin());
+      this.props.pageLoginClick();
+    }else{
+      console.log(this.getResultLogin());
+      alert('Login Fail')
+    }
+    localStorage['response']=null;
+  }
+
+  getResultLogin=()=>{
+    var result = localStorage['response'];
+    //alert(result);
+    return result;
+  }
   render(){
     return(
       <div>
         <TopNavLogin
-          regisPageClick = {this.goToRegisCard}
-          regisCardState = {this.state.pageRegisCard}/>
+          regisPageClick = {this.goToRegisCard}/>
         <div className="maincontentlogin">
           <LoginForm
-            loginClick = {this.pageClick}
-            afterRegis = {this.props.pageRegisCard}/>
+            submitLogin = {this.handleSubmit}
+            inputUsername = {this.inputUsernameLogin}
+            inputPassword = {this.inputPasswordLogin}
+            loginClick = {this.props.pageLoginClick}/>
         </div>
       </div>
     );

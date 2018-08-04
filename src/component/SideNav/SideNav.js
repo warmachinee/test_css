@@ -68,9 +68,12 @@ const sideNav = props =>{
             <div className="text">{menu.History[i]}</div>
           </a>
         </li>
-        <form action={props.click}>
+        <form>
           <li style={{position: 'fixed',bottom: '3rem',left: '10rem'}}>
-            <button className={menu.LogOutBtnClass[i]} style={{position: 'fixed',left: '3rem'}}>{menu.Logout[i]}
+            <button
+              className={menu.LogOutBtnClass[i]}
+              style={{position: 'fixed',left: '3rem'}}
+              onClick={props.click}>{menu.Logout[i]}
             </button>
           </li>
         </form>

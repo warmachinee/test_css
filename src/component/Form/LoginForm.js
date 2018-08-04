@@ -11,6 +11,15 @@ class LoginForm extends React.Component{
   constructor(props){
     super(props);
   }
+  inputUsername=(val)=>{
+    this.props.inputUsername(val);
+  }
+  inputPassword=(val)=>{
+    this.props.inputPassword(val);
+  }
+  loginClickStatus=()=>{
+    this.props.loginClick();
+  }
 
   render(){
     return(
@@ -29,13 +38,17 @@ class LoginForm extends React.Component{
                 <div className="spacer"></div>
               </div>
               <div className="form__card__items">
-                <EditTextImg type="text" placeholder="Enter Username" formType="username"/>
+                <EditTextImg type="text" placeholder="Enter Username" formType="username"
+                  editTextValue={this.inputUsername}/>
               </div>
               <div className="form__card__items">
-                <EditTextImg type="password" placeholder="Password" formType="password"/>
+                <EditTextImg type="password" placeholder="Password" formType="password"
+                  editTextValue={this.inputPassword}/>
               </div>
               <div className="form__card__items">
-                <Button btnLabel="Sign in" btnOnClick={this.props.loginClick}/>
+                <form onSubmit={this.props.submitLogin}>
+                  <Button btnLabel="Sign in" type="submit"/>
+                </form>
               </div>
             </div>
 
@@ -99,7 +112,7 @@ class LoginForm extends React.Component{
                 <EditTextImg type="text" placeholder="Your racket" formType="racket"/>
               </div>
               <div className="form__card__items">
-                <Button btnLabel="Sign up" btnOnClick={this.props.pageRegisCard}/>
+                <Button btnLabel="Sign up" />
               </div>
             </div>
           <div className="spacer"></div>

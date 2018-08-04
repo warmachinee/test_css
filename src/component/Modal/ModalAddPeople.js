@@ -2,12 +2,18 @@ import React from 'react'
 import './ModalAddPeople.css'
 
 import ModalBackDrop from './ModalBackDrop'
-import EditText from '../EditText/EditText'
+import EditTextImg from '../EditText/EditTextImg'
 import Button from '../Button/Button'
 
 class ModalAddPeople extends React.Component{
   constructor(props){
     super(props)
+    this.state = {
+      matchPlayer:''
+    }
+  }
+  addPeople = (val) =>{
+    this.props.addPeople(val);
   }
   render(){
     if(this.props.modalState){
@@ -19,15 +25,8 @@ class ModalAddPeople extends React.Component{
             <div className="spacer"></div>
             <div className="modal-addpeople__card">
               <label>Player name</label>
-              <EditText type="text" placeholder="Player name"/>
-              <label>Select team</label>
-              <select>
-                <option value="No team">No team</option>
-                <option value="Team 1">Team 1</option>
-                <option value="Team 2">Team 2</option>
-                <option value="Team 3">Team 3</option>
-                <option value="Team 4">Team 4</option>
-              </select>
+              <EditTextImg type="text" placeholder="Player name" editTextValue={this.addPeople}/>
+              <p>{this.props.matchTeamNumber}</p>
               <Button btnLabel="Close" btnOnClick = {this.props.modalClick}></Button>
               <Button btnLabel="Add"></Button>
             </div>

@@ -5,8 +5,8 @@ import Dashboard from './page/Dashboard'
 import Login from './page/Login'
 class App extends Component {
   state = {
-    pageLogin: false,
-    pageDashboard: true
+    pageLogin: true,
+    pageDashboard: false
   };
   goToAnotherPage = () =>{
     this.setState( (pageState)=>{

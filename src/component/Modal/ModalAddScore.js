@@ -18,14 +18,6 @@ class ModalAddScore extends React.Component{
           <div className="modal-addscore__grid">
             <div className="spacer"></div>
             <div className="modal-addscore__card">
-              <label>Player</label>
-              <select>
-                <option value="No team">Select player</option>
-                <option value="Player 1">Player 1</option>
-                <option value="Player 2">Player 2</option>
-                <option value="Player 3">Player 3</option>
-                <option value="Player 4">Player 4</option>
-              </select>
               <label>Court</label>
               <select>
                 <option value="Court 1">Court 1</option>
