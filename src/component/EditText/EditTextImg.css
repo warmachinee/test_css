@@ -23,4 +23,6 @@
 .edittextimg__grid img{
   background: #036ec8;
   padding: .25rem .5rem;
+  width: 3rem;
+  height: 3rem;
 }

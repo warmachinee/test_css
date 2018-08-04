@@ -59,13 +59,13 @@ class Login extends Component{
       this.setState({loginStatus: response});
     }
     setTimeout(this.LoginAction,1000);
-
   }
 
   LoginAction = () =>{
     if(this.getResultLogin()==='Success'){
       console.log(this.getResultLogin());
       this.props.pageLoginClick();
+      setTimeout(this.props.loadMatch,500);
     }else{
       console.log(this.getResultLogin());
       alert('Login Fail')
@@ -82,7 +82,10 @@ class Login extends Component{
     return(
       <div>
         <TopNavLogin
-          regisPageClick = {this.goToRegisCard}/>
+          submitLogin = {this.handleSubmit}
+          regisPageClick = {this.goToRegisCard}
+          inputUsername = {this.inputUsernameLogin}
+          inputPassword = {this.inputPasswordLogin}/>
         <div className="maincontentlogin">
           <LoginForm
             submitLogin = {this.handleSubmit}

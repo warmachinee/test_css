@@ -35,8 +35,6 @@ class Dashboard extends Component {
         playerName:''
       }
   }
-
-
   };
   matchDetailStateToggle = () =>{
     this.setState((prevState)=>{
@@ -78,7 +76,8 @@ class Dashboard extends Component {
     console.log("MatchLocation : ",this.state.MatchModalData.MatchLocation);
     console.log("MatchDate : ",this.state.MatchModalData.MatchDate);
     console.log("MatchDate : ",this.state.MatchModalData.MatchDate);
-    console.log("Player : ",this.state.PlayerInMatch.playerName)
+    console.log("Player : ",this.state.PlayerInMatch.playerName);
+    console.log("AppLoadMatch : ",this.props.loadMatchData);
   }
   addMatch = ()=>{
     console.log("data old :: ",this.state.data);
@@ -91,7 +90,6 @@ class Dashboard extends Component {
     });
     console.log("data new :: ",this.state.data);
     ReactDom.render(<Dashboard />,document.getElementById("root"));
-    setTimeout(this.addMatch,1000);
   }
   addPeople = (PlayerName) =>{
     this.state.PlayerInMatch.playerName = PlayerName
@@ -116,8 +114,10 @@ class Dashboard extends Component {
 
   render() {
     let backDrop;
+    //console.log("data : ",this.props.loadMatchData);
     const cardDynamically = this.state.data.map((card,i)=>
       <Card
+        createState = {true}
         data={card}
         key={i}
         matchDetailClick = {this.matchDetailStateToggle}
@@ -142,7 +142,7 @@ class Dashboard extends Component {
             langClick={this.languageToggle}/>
           {backDrop}
           <div className="maincontent">
-            <button onClick={this.showdata}>Check Data</button>
+            <p>this is data from login {this.props.loadMatchData.MatchID}</p>
             {cardDynamically}
           </div>
           <ModalAddScore
