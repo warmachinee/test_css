@@ -11,14 +11,7 @@ class App extends Component {
     this.state = {
       pageLogin: true,
       pageDashboard: false,
-      appLoadMatch:{
-        MatchID:'',
-        MatchName:'',
-        UserHost:'',
-        Type:'',
-        FieldName:'',
-        Date:''
-      }
+      appLoadMatch:[],
     }
   }
   goToAnotherPage = () =>{
@@ -47,9 +40,10 @@ class App extends Component {
      },
      xhrFields: { withCredentials: true },
      success: function(data) {
+       console.log(data)
        localStorage['matchid']=data.matchid;
-       localStorage['matchname']=data.matchname;
        localStorage['userhost']=data.userhost;
+       localStorage['matchname']=data.matchname;
        localStorage['type']=data.type;
        localStorage['fieldname']=data.fieldname;
        localStorage['date']=data.date;
@@ -57,29 +51,40 @@ class App extends Component {
     });
     if(localStorage['matchid']){
       var matchid = localStorage['matchid'];
-      var matchname = localStorage['matchname'];
       var userhost = localStorage['userhost'];
+      var matchname = localStorage['matchname'];
       var type = localStorage['type'];
       var fieldname = localStorage['fieldname'];
       var date = localStorage['date'];
-      this.setState(
-        () => (
-          {
-            appLoadMatch: {
-              MatchID: matchid,
-              MatchName: matchname,
-              UserHost: userhost,
-              Type: type,
-              FieldName: fieldname,
-              Date: date
-          }
-        }))
-      /*this.setState({appLoadMatch.MatchID: matchid});
-      this.setState({appLoadMatch.MatchName: matchname});
-      this.setState({appLoadMatch.UserHost: userhost});
-      this.setState({appLoadMatch.Type: type});
-      this.setState({appLoadMatch.FieldName: fieldname});
-      this.setState({appLoadMatch.Date: date});*/
+
+      matchid= JSON.parse("["+matchid+"]"),
+      matchname= matchname.split(",",matchname.length),
+      userhost= JSON.parse("["+userhost+"]"),
+      type= type.split(",",type.length),
+      fieldname= fieldname.split(",",fieldname.length),
+      date= date.split(",",date.length)
+
+      for(var i=0;i<matchid.length;i++){
+        var obj = {
+          MatchID: matchid[i],
+          MatchName: matchname[i],
+          UserHost: userhost[i],
+          Type: type[i],
+          FieldName: fieldname[i],
+          Date: date[i]
+        }
+        this.state.appLoadMatch.push(obj);
+      }
+
+        console.log("From handler this.state.appLoadMatch :: ",this.state.appLoadMatch)
+        /*
+      this.setState({MatchID: matchid});
+      this.setState({MatchName: matchname});
+      this.setState({UserHost: userhost});
+      this.setState({Type: type});
+      this.setState({FieldName: fieldname});
+      this.setState({Date: date});*/
+      //console.log("this.state.appLoadMatch ::",this.state.appLoadMatch)
       localStorage.clear()
     }
     localStorage.clear()
