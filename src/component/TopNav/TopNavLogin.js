@@ -16,10 +16,6 @@ class TopNavLogin extends React.Component{
     this.props.inputPassword(val);
   }
   render(){
-    let ahref = ""
-    if(this.props.regisCardState){
-      ahref = "#registerCard"
-    }
     return(
       <div>
         <header className="topnavlogin">
@@ -40,7 +36,7 @@ class TopNavLogin extends React.Component{
               </form>
             </div>
             <div className="topnavlogin__signup">
-              <a href={ahref} className="signupbtn" onClick={this.props.regisPageClick}>Sign up</a>
+              <a href='/' className="signupbtn">Sign up</a>
             </div>
           </nav>
         </header>

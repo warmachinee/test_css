@@ -11,8 +11,33 @@ class App extends Component {
     this.state = {
       pageLogin: true,
       pageDashboard: false,
-      appLoadMatch:[],
+      appLoadMatch:[
+        {
+          MatchID: '12312311',
+          MatchName: 'm1',
+          UserHost: 'host1',
+          Type: 'type1',
+          FieldName: 'fe21',
+          Date: 'dat1'
+        }
+      ],
+      detailData:[
+        {
+          MatchID: 'MatchID123',
+          MatchName: 'MatchName123',
+          UserHost: 'UserHost123',
+          Type: 'Type123',
+          FieldName: 'FieldName123',
+          Date: 'Date123'
+        }
+      ]
     }
+    this.cardStateClick = ''
+  }
+  getCardTargetID =(value)=>{
+    this.cardStateClick = value
+    console.log('this.cardStateClick :: ',this.cardStateClick)
+    console.log('value ::',value);
   }
   goToAnotherPage = () =>{
     this.setState( (pageState)=>{
@@ -40,7 +65,7 @@ class App extends Component {
      },
      xhrFields: { withCredentials: true },
      success: function(data) {
-       console.log(data)
+       //console.log(data)
        localStorage['matchid']=data.matchid;
        localStorage['userhost']=data.userhost;
        localStorage['matchname']=data.matchname;
@@ -75,20 +100,11 @@ class App extends Component {
         }
         this.state.appLoadMatch.push(obj);
       }
-
-        console.log("From handler this.state.appLoadMatch :: ",this.state.appLoadMatch)
-        /*
-      this.setState({MatchID: matchid});
-      this.setState({MatchName: matchname});
-      this.setState({UserHost: userhost});
-      this.setState({Type: type});
-      this.setState({FieldName: fieldname});
-      this.setState({Date: date});*/
-      //console.log("this.state.appLoadMatch ::",this.state.appLoadMatch)
-      localStorage.clear()
+      console.log("From handler this.state.appLoadMatch :: ",this.state.appLoadMatch)
+      //localStorage.clear()
     }
-    localStorage.clear()
   }
+
 
   render() {
     if(this.state.pageLogin){
@@ -100,6 +116,8 @@ class App extends Component {
     }else if (this.state.pageDashboard) {
       return(
         <Dashboard
+          getCardTargetID = {this.getCardTargetID}
+          sentCardTargetID = {this.state.detailData}
           loadMatchData = {this.state.appLoadMatch}
           pageDashboardClick = {this.goToAnotherPage}/>
       );

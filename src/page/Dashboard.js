@@ -35,14 +35,13 @@ class Dashboard extends Component {
       },
       PlayerInMatch:{
         playerName:''
-      }
-  }
+      },
+    }
   };
   matchDetailStateToggle = () =>{
     this.setState((prevState)=>{
       return {matchDetailState: !prevState.matchDetailState};
     });
-
   };
   drawerToggleClickHandler = () =>{
     this.setState((prevState)=>{
@@ -71,6 +70,15 @@ class Dashboard extends Component {
     this.setState((state)=>{
       return {addscoreModalIsOpen: !state.addscoreModalIsOpen}
     });
+  }
+  showdata = () =>{
+    console.log("MatchID : ",this.state.data.length);
+    console.log("MatchName : ",this.state.MatchModalData.MatchName);
+    console.log("MatchTeamNumber : ",this.state.MatchModalData.MatchTeamNumber);
+    console.log("MatchLocation : ",this.state.MatchModalData.MatchLocation);
+    console.log("MatchDate : ",this.state.MatchModalData.MatchDate);
+    console.log("MatchDate : ",this.state.MatchModalData.MatchDate);
+    console.log("Player : ",this.state.PlayerInMatch.playerName);
   }
   addMatch = ()=>{
     console.log("data old :: ",this.state.data);
@@ -103,6 +111,10 @@ class Dashboard extends Component {
   getMatchID = ()=>{
      return this.state.data.length;
   }
+  getCardTargetID =(value)=>{
+    this.props.getCardTargetID(value)
+    console.log("Detail :: ID",value)
+  }
   showDataFromLoad = () => {
     console.log("Click ",this.props.loadMatchData)
 
@@ -114,7 +126,6 @@ class Dashboard extends Component {
       console.log('this.state.dataFromLoad ::',this.state.dataFromLoad);
       this.setState(this.state);
     }
-
   }
   render() {
     let backDrop;
@@ -123,6 +134,7 @@ class Dashboard extends Component {
         data={card}
         key={i}
         matchDetailClick = {this.matchDetailStateToggle}
+
         addPeopleClick = {this.toggleAddpeopleModal}
         addScoreClick = {this.toggleAddScoreModal}
         />
@@ -148,6 +160,8 @@ class Dashboard extends Component {
               {this.props.loadMatchData.map((number,i) =>
                 <Card
                   data={number}
+                  targetClickID={this.getCardTargetID}
+                  loadDetail = {this.loadDetail}
                   matchDetailClick = {this.matchDetailStateToggle}
                   addPeopleClick = {this.toggleAddpeopleModal}
                   addScoreClick = {this.toggleAddScoreModal}
@@ -177,6 +191,7 @@ class Dashboard extends Component {
       );
     }
     else{
+      console.log('sentCardTargetID ::',this.props.sentCardTargetID)
       return(
         <div>
           <TopNav

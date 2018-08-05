@@ -11,8 +11,16 @@ import ic_lock from '../img/baseline-lock-24px.svg'
 class Card extends React.Component{
   constructor(props){
     super(props)
+    this.state={
+
+    }
+    this.stateID=''
   }
 
+  getCardMatchID = (value)=>{
+    this.props.targetClickID(value)
+    setTimeout(this.props.matchDetailClick,1000)
+  }
   render(){
     let cardMatchName = "Match Name"
     let cardDate ="01/01/2012"
@@ -39,7 +47,9 @@ class Card extends React.Component{
             <div className="card-add-detail">
               <a onClick={this.props.addPeopleClick} className="card-add"><img src={ic_person_add}></img></a>
               <div className="card-spacer-add-detail"></div>
-              <a onClick={this.props.matchDetailClick} className="card-detail" >DETAIL</a>
+              <button onClick={
+                  (e)=>this.getCardMatchID(this.props.data.MatchID)}
+                className="card-detail">DETAIL</button>
             </div>
           </div>
           <div className="card-item-small">
