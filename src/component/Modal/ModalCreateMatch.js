@@ -15,7 +15,8 @@ class ModalCreateMatch extends React.Component{
       field:[],
       dataLength:0,
       clickedFieldDetail:[],
-      clickedFieldCourt:[]
+      clickedFieldCourt:[],
+      clickedFieldID:''
     }
     this.showDropdownMenu = this.showDropdownMenu.bind(this);
     this.hideDropdownMenu = this.hideDropdownMenu.bind(this);
@@ -51,10 +52,10 @@ class ModalCreateMatch extends React.Component{
     this.props.createSetDepartmentNumber(departnum);
   }
   getField = (value)=>{
-    //this.state.clickedFieldID = value
-    //console.log("clickedFieldID",this.state.clickedFieldID)
+    this.state.clickedFieldID = value
+    console.log("clickedFieldID before",this.state.clickedFieldID)
     this.state.clickedFieldDetail = []
-    this.state.clickedFieldDetail.push(value)
+    console.log("this.state.clickedFieldDetail.push :::",this.state.clickedFieldDetail);
     var geturl;
     geturl = $.ajax({
       type: "POST",
@@ -73,6 +74,9 @@ class ModalCreateMatch extends React.Component{
       if(localStorage['fieldcord']){
         var fieldcord = localStorage['fieldcord'];
         fieldcord = fieldcord.split(",",fieldcord.length)
+        this.state.clickedFieldDetail = []
+        this.state.clickedFieldDetail.push(this.state.clickedFieldID)
+        this.state.clickedFieldID = []
         for(var i = 0;i < fieldcord.length;i++){
           /*var obj = {
             fieldcord: fieldcord[i]
@@ -80,7 +84,7 @@ class ModalCreateMatch extends React.Component{
           this.state.clickedFieldDetail.push(fieldcord[i]);
         }
         //this.state.clickedFieldCourt.push(fieldcord[i]);
-        //console.log("this.state.clickedFieldDetail.push(obj) :::",this.state.clickedFieldDetail)
+        console.log("this.state.clickedFieldDetail.push(obj) :::",this.state.clickedFieldDetail)
         //this.setState({dataLength: this.state.fieldFromLoad.length})//-------
       }
       this.createModalRefresh = false;
@@ -166,10 +170,10 @@ class ModalCreateMatch extends React.Component{
                   )}
                 </select>
               <label>Team</label>
-              <EditTextImg type="text" formType="username" placeholder="How many team?"
+              <EditTextImg type="number" formType="username" placeholder="How many team?"
                 editTextValue={this.createSetTeamNumber}/>
               <label>Department</label>
-              <EditTextImg type="text" formType="department" placeholder="How many Department?"
+              <EditTextImg type="number" formType="department" placeholder="How many Department?"
                 editTextValue={this.createSetDepartmentNumber}/>
               <label>{'Date'}</label>
               <EditTextImg type="date" placeholder="Date" formType="username"

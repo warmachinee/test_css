@@ -73,7 +73,7 @@ class App extends Component {
          type= type.split(",",type.length)
          fieldname= fieldname.split(",",fieldname.length)
          date= date.split(",",date.length)
-
+         this.state.appLoadMatch = []
          for(var i = 0;i < matchid.length;i++){
            var obj = {
              MatchID: matchid[i],

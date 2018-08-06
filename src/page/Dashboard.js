@@ -99,7 +99,7 @@ class Dashboard extends Component {
     this.state.matchModalData.date = date
   }
   createSetTeamNumber=(teamnum)=>{
-    if(teamnum <= 0 || teamnum === "" || teamnum === null){
+    if(teamnum < 1 || teamnum === "" || teamnum === null){
       this.state.matchModalData.teamnum = 0
     }
     else{
@@ -160,6 +160,9 @@ class Dashboard extends Component {
 
 
   HandlerAddMatch = event => {
+    this.createSetTypeRoom(this.state.matchModalData.typeroom)
+    this.createSetTeamNumber(this.state.matchModalData.teamnum)
+    this.createSetDepartmentNumber(this.state.matchModalData.departnum)
     console.log("in HandlerAddMatch :::",this.state.matchModalData);
     var geturl;
     geturl = $.ajax({
@@ -195,11 +198,11 @@ class Dashboard extends Component {
   }
   CreateMatchAction=()=>{
     if(this.getResultCreateMatch()){
-      alert("this.getResultCreateMatch() true ::",this.getResultCreateMatch())
+      alert(this.getResultCreateMatch())
       console.log("this.getResultCreateMatch() true ::",this.getResultCreateMatch());
       console.log(this.getResultCreateMatch());
     }else{
-      alert("this.getResultCreateMatch() false ::",this.getResultCreateMatch())
+      alert(this.getResultCreateMatch())
       console.log("this.getResultCreateMatch() false ::",this.getResultCreateMatch());
       console.log(this.getResultCreateMatch());
     }
