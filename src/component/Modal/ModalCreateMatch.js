@@ -128,14 +128,6 @@ class ModalCreateMatch extends React.Component{
   }
 
   render(){
-    const listItems = this.state.field.map(
-      (d,i) =>
-      <button key={i} onClick={
-          (e)=>{
-            this.getField(d.fieldid)
-          }
-        }>{d.fieldname}</button>
-    );
 
     if(this.props.modalState){
       setTimeout(this.showFieldFromLoad,1000);
@@ -154,7 +146,13 @@ class ModalCreateMatch extends React.Component{
                  <button onClick={this.showDropdownMenu}>Select Field</button>
                   { this.state.displayMenu ? (
                     <div className="dropdown__item">
-                    {listItems}
+                    {this.state.field.map((d) =>
+                      <button onClick={
+                          (e)=>{
+                            this.getField(d.fieldid)
+                          }
+                        }>{d.fieldname}</button>
+                    )}
                     </div>
                   ):(null)
                   }

@@ -57,15 +57,19 @@ const sideNav = props =>{
       </ul>
       <ul>
         <li>
-          <a href="/">
+          <a>
             <img className="icon" src={ic_dashboard} />
-            <div className="text">{menu.Dashboard[i]}</div>
+            <div className="text">
+              <button onClick={props.dashboardPageClick}>{menu.Dashboard[i]}</button>
+            </div>
           </a>
         </li>
         <li>
-          <a href="/">
+          <a>
             <img className="icon" src={ic_history} />
-            <div className="text">{menu.History[i]}</div>
+            <div className="text">
+              <button onClick={props.historyPageClick}>{menu.History[i]}</button>
+            </div>
           </a>
         </li>
         <form>

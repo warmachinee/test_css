@@ -10,6 +10,7 @@ import Card from '../component/Card/Card'
 import ModalCreateMatch from '../component/Modal/ModalCreateMatch'
 import ModalAddPeople from '../component/Modal/ModalAddPeople'
 import ModalAddScore from '../component/Modal/ModalAddScore'
+import HistoryCard from '../component/Card/HistoryCard'
 
 const pageClickState = props =>{
   return (props.pageDashboardClick);
@@ -25,10 +26,12 @@ class Dashboard extends Component {
       sideDrawerOpen: false,
       languageState: false,
       matchDetailState: false,
+      historyPage: false,
       createMatchStatus:'',
       data:[],
       dataLength:0,
       fieldFromLoad:[],
+      historyFromLoad:[],
       dataFromLoad:[],
       matchModalData:{
         fieldid:'',
@@ -43,9 +46,31 @@ class Dashboard extends Component {
       },
     }
   };
+  historyPageToggle = () =>{
+    this.drawerToggleClickHandler()
+    this.setState((prevState)=>{
+      return {
+        historyPage: true,
+        matchDetailState: false
+      };
+    });
+  };
+  dashboardStateToggle = () =>{
+    this.drawerToggleClickHandler()
+
+    this.setState((prevState)=>{
+      return {
+        historyPage: false,
+        matchDetailState: false
+    };
+    });
+  }
   matchDetailStateToggle = () =>{
     this.setState((prevState)=>{
-      return {matchDetailState: !prevState.matchDetailState};
+      return {
+        historyPage: false,
+        matchDetailState: true
+    };
     });
   };
   drawerToggleClickHandler = () =>{
@@ -157,6 +182,54 @@ class Dashboard extends Component {
     localStorage.clear()
   }
 
+  HandlerLoadHistory = event => {
+    var geturl;
+    geturl = $.ajax({
+      type: "POST",
+     url: "http://pds.in.th/phpadmin/matchhistory.php",
+     dataType: 'json',
+     data: {},
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+       console.log(data);
+     }
+    });
+    setTimeout(()=>{
+      if(localStorage['matchid']){
+        var matchid = localStorage['matchid'];
+        var matchname = localStorage['matchname'];
+        var userhost = localStorage['userhost'];
+        var fieldname = localStorage['fieldname'];
+        var date = localStorage['date'];
+
+        matchid = JSON.parse("["+matchid+"]")
+        matchname = matchname.split(",",matchname.length)
+        userhost= JSON.parse("["+userhost+"]")
+        fieldname= fieldname.split(",",fieldname.length)
+        date= date.split(",",date.length)
+        //console.log(fieldid);
+        //console.log(fieldname);
+        //console.log(cordnum);
+        for(var i = 0;i < matchid.length;i++){
+          var obj = {
+            matchid: matchid[i],
+            matchname: matchname[i],
+            userhost: userhost[i],
+            fieldname: fieldname[i],
+            date: date[i]
+          }
+          this.state.historyFromLoad.push(obj);
+        }
+        console.log("this.state.historyFromLoad.push(obj) :::",this.state.historyFromLoad)
+        //this.setState({dataLength: this.state.fieldFromLoad.length})//-------
+      }
+      this.historyPageToggle()
+      this.dashboardRefresh = false
+      this.showDataFromLoad()
+    },1500)
+    localStorage.clear()
+  }
+
 
 
   HandlerAddMatch = event => {
@@ -242,7 +315,7 @@ class Dashboard extends Component {
     if(this.state.sideDrawerOpen){
       backDrop = <BackDrop click={this.backdropClickHander}/>;
     }
-    if(!this.state.matchDetailState){
+    if(this.state.matchDetailState === false && this.state.historyPage === false){
       setTimeout(this.showDataFromLoad,1000);
       return(
         <div>
@@ -254,6 +327,8 @@ class Dashboard extends Component {
             logOut = {this.props.logOut}
             show={this.state.sideDrawerOpen}
             click={pageClickState}
+            dashboardPageClick={this.dashboardStateToggle}
+            historyPageClick={this.HandlerLoadHistory}
             lang={this.state.languageState}
             langClick={this.languageToggle}/>
           {backDrop}
@@ -295,7 +370,62 @@ class Dashboard extends Component {
         </div>
       );
     }
-    else{
+    else if(this.state.matchDetailState === false && this.state.historyPage === true){
+      setTimeout(this.showDataFromLoad,1000);
+      return(
+        <div>
+          <TopNav
+            loadField = {this.HandlerLoadField}
+            drawerClickHandler = {this.drawerToggleClickHandler}
+            />
+          <SideNav
+            logOut = {this.props.logOut}
+            show={this.state.sideDrawerOpen}
+            click={pageClickState}
+            dashboardPageClick={this.dashboardStateToggle}
+            historyPageClick={this.HandlerLoadHistory}
+            lang={this.state.languageState}
+            langClick={this.languageToggle}/>
+          {backDrop}
+          <div className="maincontent">
+            {this.state.historyFromLoad.map((data)=>
+              <HistoryCard
+                matchID = {data.matchid}
+                matchName = {data.matchname}
+                userHost = {data.userhost}
+                fieldName = {data.fieldname}
+                date = {data.date}
+                />
+            )}
+          </div>
+          <ModalAddScore
+            modalClick = {this.toggleAddScoreModal}
+            modalState = {this.state.addscoreModalIsOpen} />
+          <ModalAddPeople
+            addPeople = {this.addPeople}
+            matchTeamNumber = {this.state.matchModalData.MatchTeamNumber}
+            modalClick = {this.toggleAddpeopleModal}
+            modalState = {this.state.addpeopleModalIsOpen} />
+
+          <ModalCreateMatch
+            addMatch = {this.HandlerAddMatch}
+            modalClick = {this.toggleCreateModal}
+            createSetFieldId = {this.createSetFieldId}
+            createSetMatchName = {this.createSetMatchName}
+            createSetTypeRoom = {this.createSetTypeRoom}
+            createSetDate = {this.createSetDate}
+            createSetTeamNumber = {this.createSetTeamNumber}
+            createSetDepartmentNumber = {this.createSetDepartmentNumber}
+
+            fieldDetail = {this.state.fieldFromLoad}
+            matchModalData = {this.state.matchModalData}
+            modalClose = {this.closeCreateMatchModal}
+            modalState = {this.state.createModalIsOpen}/>
+        </div>
+      );
+    }
+    else if(this.state.matchDetailState === true && this.state.historyPage === false){
+      setTimeout(this.showDataFromLoad,1000);
       console.log('sentCardTargetID ::',this.props.sentCardTargetID)
       return(
         <div>
@@ -316,8 +446,19 @@ class Dashboard extends Component {
             modalClick = {this.toggleAddpeopleModal}
             modalState = {this.state.addpeopleModalIsOpen} />
           <ModalCreateMatch
+            addMatch = {this.HandlerAddMatch}
             modalClick = {this.toggleCreateModal}
+            createSetFieldId = {this.createSetFieldId}
+            createSetMatchName = {this.createSetMatchName}
+            createSetTypeRoom = {this.createSetTypeRoom}
+            createSetDate = {this.createSetDate}
+            createSetTeamNumber = {this.createSetTeamNumber}
+            createSetDepartmentNumber = {this.createSetDepartmentNumber}
+            fieldDetail = {this.state.fieldFromLoad}
+            matchModalData = {this.state.matchModalData}
+            modalClose = {this.closeCreateMatchModal}
             modalState = {this.state.createModalIsOpen}/>
+
         </div>
       );
     }
