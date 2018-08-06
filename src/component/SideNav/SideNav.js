@@ -73,7 +73,7 @@ const sideNav = props =>{
             <button
               className={menu.LogOutBtnClass[i]}
               style={{position: 'fixed',left: '3rem'}}
-              onClick={props.click}>{menu.Logout[i]}
+              onClick={props.logOut}>{menu.Logout[i]}
             </button>
           </li>
         </form>

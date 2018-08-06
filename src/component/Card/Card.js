@@ -18,7 +18,7 @@ class Card extends React.Component{
   }
 
   getCardMatchID = (value)=>{
-    this.props.targetClickID(value)
+    this.props.targetClickID(value.MatchID)
     setTimeout(this.props.matchDetailClick,1000)
   }
   render(){
@@ -48,7 +48,7 @@ class Card extends React.Component{
               <a onClick={this.props.addPeopleClick} className="card-add"><img src={ic_person_add}></img></a>
               <div className="card-spacer-add-detail"></div>
               <button onClick={
-                  (e)=>this.getCardMatchID(this.props.data.MatchID)}
+                  (e)=>this.getCardMatchID(this.props.data)}
                 className="card-detail">DETAIL</button>
             </div>
           </div>

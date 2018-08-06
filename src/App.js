@@ -15,12 +15,12 @@ class App extends Component {
       dataLength:0,
       detailData:[
         {
-          MatchID: 'MatchID123',
-          MatchName: 'MatchName123',
-          UserHost: 'UserHost123',
-          Type: 'Type123',
-          FieldName: 'FieldName123',
-          Date: 'Date123'
+          MatchID: '',
+          MatchName: '',
+          UserHost: '',
+          Type: '',
+          FieldName: '',
+          Date: ''
         }
       ]
     }
@@ -39,7 +39,19 @@ class App extends Component {
       };
     });
   };
-
+  handelLogout = event =>{
+    event.preventDefault()
+    $.ajax({
+      type: "POST",
+     url: "http://pds.in.th/phpadmin/logout.php",
+     dataType: 'json',
+     data: {},
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+      }
+     });
+     setTimeout(this.goToAnotherPage,500)
+  }
   handleLoadMatch = event => {
     $.ajax({
       type: "POST",
@@ -49,7 +61,7 @@ class App extends Component {
      data: {},
      xhrFields: { withCredentials: true },
      success: function(data) {
-       //console.log(data)
+       console.log(data)
        localStorage['matchid']=data.matchid;
        localStorage['userhost']=data.userhost;
        localStorage['matchname']=data.matchname;
@@ -61,14 +73,16 @@ class App extends Component {
      setTimeout(()=>{
        //console.log("in setLoadmatchData")
        if(localStorage['matchid']){
+         //console.log("localStorage['matchid']",localStorage['matchid']);
          var matchid = localStorage['matchid'];
          var userhost = localStorage['userhost'];
          var matchname = localStorage['matchname'];
          var type = localStorage['type'];
          var fieldname = localStorage['fieldname'];
          var date = localStorage['date'];
-         matchid= JSON.parse("["+matchid+"]")
-         matchname= matchname.split(",",matchname.length)
+         //console.log("matchid :::",matchid);
+         matchid = JSON.parse("["+matchid+"]")
+         matchname = matchname.split(",",matchname.length)
          userhost= JSON.parse("["+userhost+"]")
          type= type.split(",",type.length)
          fieldname= fieldname.split(",",fieldname.length)
@@ -101,6 +115,7 @@ class App extends Component {
     }else if (this.state.pageDashboard) {
       return(
         <Dashboard
+          logOut = {this.handelLogout}
           loadMatch = {this.handleLoadMatch}
           getCardTargetID = {this.getCardTargetID}
           sentCardTargetID = {this.state.detailData}

@@ -172,11 +172,11 @@ class LoginForm extends React.Component{
                   editTextValue={this.inputPhoneRegis}/>
               </div>
               <div className="form__card__items">
-                <EditTextImg type="text" placeholder="Department" formType="department"
+                <EditTextImg type="text" placeholder="Department (optional)" formType="department"
                   editTextValue={this.inputDepartmentRegis}/>
               </div>
               <div className="form__card__items">
-                <EditTextImg type="text" placeholder="Your racket" formType="racket"
+                <EditTextImg type="text" placeholder="Your racket (optional)" formType="racket"
                   editTextValue={this.inputRacketRegis}/>
               </div>
               <div className="form__card__items">

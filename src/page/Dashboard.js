@@ -251,6 +251,7 @@ class Dashboard extends Component {
             drawerClickHandler = {this.drawerToggleClickHandler}
             />
           <SideNav
+            logOut = {this.props.logOut}
             show={this.state.sideDrawerOpen}
             click={pageClickState}
             lang={this.state.languageState}
