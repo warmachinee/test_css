@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDom from 'react-dom';
+import $ from 'jquery'
 import '../css/App.css'
 
 import TopNav from '../component/TopNav/TopNav'
@@ -16,7 +17,7 @@ const pageClickState = props =>{
 class Dashboard extends Component {
   constructor(props){
     super(props)
-    this.stop = false;
+    this.dashboardRefresh = false;
     this.state = {
       createModalIsOpen: false,
       addpeopleModalIsOpen: false,
@@ -24,14 +25,18 @@ class Dashboard extends Component {
       sideDrawerOpen: false,
       languageState: false,
       matchDetailState: false,
+      createMatchStatus:'',
       data:[],
+      dataLength:0,
+      fieldFromLoad:[],
       dataFromLoad:[],
-      MatchModalData:{
-        MatchID:"",
-        MatchTeamNumber:"",
-        MatchName:"",
-        MatchLocation:"",
-        MatchDate:""
+      matchModalData:{
+        fieldid:'',
+        matchname:'',
+        typeroom:'',
+        date:'',
+        teamnum:'',
+        departnum:'',
       },
       PlayerInMatch:{
         playerName:''
@@ -61,6 +66,12 @@ class Dashboard extends Component {
       return {createModalIsOpen: !state.createModalIsOpen}
     });
   }
+  closeCreateMatchModal = () =>{
+    this.setState({
+      createModalIsOpen: false,
+      matchModalData:{}
+    });
+  }
   toggleAddpeopleModal = () => {
     this.setState((state)=>{
       return {addpeopleModalIsOpen: !state.addpeopleModalIsOpen}
@@ -68,87 +79,173 @@ class Dashboard extends Component {
   }
   toggleAddScoreModal = () => {
     this.setState((state)=>{
-      return {addscoreModalIsOpen: !state.addscoreModalIsOpen}
+      return {addscoreModalIsOpen: false}
     });
   }
-  showdata = () =>{
-    console.log("MatchID : ",this.state.data.length);
-    console.log("MatchName : ",this.state.MatchModalData.MatchName);
-    console.log("MatchTeamNumber : ",this.state.MatchModalData.MatchTeamNumber);
-    console.log("MatchLocation : ",this.state.MatchModalData.MatchLocation);
-    console.log("MatchDate : ",this.state.MatchModalData.MatchDate);
-    console.log("MatchDate : ",this.state.MatchModalData.MatchDate);
-    console.log("Player : ",this.state.PlayerInMatch.playerName);
+  createSetFieldId=(fieldid)=>{
+    this.state.matchModalData.fieldid = fieldid
   }
-  addMatch = ()=>{
-    console.log("data old :: ",this.state.data);
-    this.state.data.push({
-      MatchID:this.state.data.length,
-      MatchName:this.state.MatchModalData.MatchName,
-      MatchTeamNumber:this.state.MatchModalData.MatchTeamNumber,
-      UserHost:this.state.data.length,
-      FieldName:this.state.MatchModalData.MatchLocation,
-      Date:this.state.MatchModalData.MatchDate
+  createSetMatchName=(matchname)=>{
+    this.state.matchModalData.matchname = matchname
+  }
+  createSetTypeRoom=(typeroom)=>{
+    if(typeroom === "" || typeroom === null){
+      this.state.matchModalData.typeroom = 0
+    }else{
+      this.state.matchModalData.typeroom = typeroom
+    }
+  }
+  createSetDate=(date)=>{
+    this.state.matchModalData.date = date
+  }
+  createSetTeamNumber=(teamnum)=>{
+    if(teamnum <= 0 || teamnum === "" || teamnum === null){
+      this.state.matchModalData.teamnum = 0
+    }
+    else{
+      this.state.matchModalData.teamnum = teamnum
+    }
+
+  }
+  createSetDepartmentNumber=(departnum)=>{
+    if(departnum <= 0 || departnum === "" || departnum === null){
+      this.state.matchModalData.departnum = 0
+    }else{
+      this.state.matchModalData.departnum = departnum
+    }
+  }
+
+  HandlerLoadField = event => {
+    var geturl;
+    geturl = $.ajax({
+      type: "POST",
+     url: "http://pds.in.th/phpadmin/loadfield.php",
+     dataType: 'json',
+     data: {},
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+       localStorage['fieldid']=data.fieldid;
+       localStorage['fieldname']=data.fieldname;
+       localStorage['cordnum']=data.cordnum;
+       console.log(data);
+     }
     });
-    console.log("data new :: ",this.state.data);
-    ReactDom.render(<Dashboard />,document.getElementById("root"));
+    setTimeout(()=>{
+      if(localStorage['fieldid']){
+        var fieldid = localStorage['fieldid'];
+        var fieldname = localStorage['fieldname'];
+        var cordnum = localStorage['cordnum'];
+        fieldid = fieldid.split(",",fieldid.length)
+        fieldname = fieldname.split(",",fieldname.length)
+        cordnum = cordnum.split(",",cordnum.length)
+        console.log(fieldid);
+        console.log(fieldname);
+        console.log(cordnum);
+        for(var i = 0;i < fieldid.length;i++){
+          var obj = {
+            fieldid: fieldid[i],
+            fieldname: fieldname[i],
+            cordnum: cordnum[i],
+          }
+          this.state.fieldFromLoad.push(obj);
+        }
+        console.log("this.state.fieldFromLoad.push(obj) :::",this.state.fieldFromLoad)
+        //this.setState({dataLength: this.state.fieldFromLoad.length})//-------
+      }
+      this.toggleCreateModal()
+    },1500)
+    localStorage.clear()
   }
+
+
+
+  HandlerAddMatch = event => {
+    console.log("in HandlerAddMatch :::",this.state.matchModalData);
+    var geturl;
+    geturl = $.ajax({
+      type: "POST",
+     //url: "http://127.0.0.1/php/login.php",
+     url: "http://pds.in.th/phpadmin/creatematch.php",
+     dataType: 'json',
+     data: {
+       "fieldid": this.state.matchModalData.fieldid,
+       "matchname": this.state.matchModalData.matchname,
+       "typeroom": this.state.matchModalData.typeroom,
+       "date": this.state.matchModalData.date,
+       "teamnum": this.state.matchModalData.teamnum,
+       "departnum": this.state.matchModalData.departnum,
+     },
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+       //localStorage.setItem("response",JSON.stringify(data));
+       localStorage['response']=data.status;
+       console.log(data);
+     }
+    });
+    if(localStorage['response']){
+      var response = localStorage['response'];
+      this.setState({createMatchStatus: response});
+    }
+    setTimeout(this.CreateMatchAction,1000);
+  }
+  getResultCreateMatch=()=>{
+    var result = localStorage['response'];
+    return result;
+    //return 'Success'
+  }
+  CreateMatchAction=()=>{
+    if(this.getResultCreateMatch()){
+      alert("this.getResultCreateMatch() true ::",this.getResultCreateMatch())
+      console.log("this.getResultCreateMatch() true ::",this.getResultCreateMatch());
+      console.log(this.getResultCreateMatch());
+    }else{
+      alert("this.getResultCreateMatch() false ::",this.getResultCreateMatch())
+      console.log("this.getResultCreateMatch() false ::",this.getResultCreateMatch());
+      console.log(this.getResultCreateMatch());
+    }
+    localStorage['response']=null;
+    localStorage.clear()
+    this.dashboardRefresh = false
+    this.setState({
+      matchModalData:{}
+    });
+    this.props.loadMatch();
+    setTimeout(this.showDataFromLoad,1500);
+  }
+
   addPeople = (PlayerName) =>{
     this.state.PlayerInMatch.playerName = PlayerName
   }
-  setMatchName = (MatchName)=>{
-    this.state.MatchModalData.MatchName = MatchName;
-  }
-  setMatchTeamNumber = (MatchTeamNumber) =>{
-    this.state.MatchModalData.MatchTeamNumber = MatchTeamNumber;
-  }
-  setMatchLocation = (MatchLocation)=>{
-    this.state.MatchModalData.MatchLocation = MatchLocation;
-  }
-  setMatchDate = (MatchDate)=>{
-    this.state.MatchModalData.MatchDate = MatchDate;
-  }
-  getMatchID = ()=>{
-     return this.state.data.length;
-  }
+
   getCardTargetID =(value)=>{
     this.props.getCardTargetID(value)
     console.log("Detail :: ID",value)
   }
   showDataFromLoad = () => {
-    console.log("Click ",this.props.loadMatchData)
-
-    if(!this.stop){
-      this.stop=true;
-      for(var i=0;i<this.props.loadMatchData.length;i++){
+    if(!this.dashboardRefresh ){
+      this.dashboardRefresh=true;
+      this.state.dataFromLoad=[]
+      for(var i = 0;i < this.props.loadMatchData.length ;i++){
+        //console.log(i)
         this.state.dataFromLoad.push(this.props.loadMatchData[i]);
+        //console.log('this.state.dataFromLoad in for::',this.state.dataFromLoad);
       }
-      console.log('this.state.dataFromLoad ::',this.state.dataFromLoad);
+      //console.log('this.state.dataFromLoad after set::',this.state.dataFromLoad);
       this.setState(this.state);
     }
   }
   render() {
     let backDrop;
-    const cardDynamically = this.state.data.map((card,i)=>
-      <Card
-        data={card}
-        key={i}
-        matchDetailClick = {this.matchDetailStateToggle}
-
-        addPeopleClick = {this.toggleAddpeopleModal}
-        addScoreClick = {this.toggleAddScoreModal}
-        />
-    )
     if(this.state.sideDrawerOpen){
       backDrop = <BackDrop click={this.backdropClickHander}/>;
     }
     if(!this.state.matchDetailState){
-      setTimeout(this.showDataFromLoad,1500);
+      setTimeout(this.showDataFromLoad,1000);
       return(
         <div>
           <TopNav
+            loadField = {this.HandlerLoadField}
             drawerClickHandler = {this.drawerToggleClickHandler}
-            createMatchClick = {this.toggleCreateModal}
             />
           <SideNav
             show={this.state.sideDrawerOpen}
@@ -167,25 +264,29 @@ class Dashboard extends Component {
                   addScoreClick = {this.toggleAddScoreModal}
                   />
               )}
-            {cardDynamically}
           </div>
           <ModalAddScore
             modalClick = {this.toggleAddScoreModal}
             modalState = {this.state.addscoreModalIsOpen} />
           <ModalAddPeople
             addPeople = {this.addPeople}
-            matchTeamNumber = {this.state.MatchModalData.MatchTeamNumber}
+            matchTeamNumber = {this.state.matchModalData.MatchTeamNumber}
             modalClick = {this.toggleAddpeopleModal}
             modalState = {this.state.addpeopleModalIsOpen} />
+
           <ModalCreateMatch
-            addMatch = {this.addMatch}
-            getMatchID = {this.getMatchID}
-            setMatchName = {this.setMatchName}
-            setMatchTeamNumber = {this.setMatchTeamNumber}
-            setMatchLocation = {this.setMatchLocation}
-            setMatchDate = {this.setMatchDate}
-            ModalData = {this.state.MatchModalData}
+            addMatch = {this.HandlerAddMatch}
             modalClick = {this.toggleCreateModal}
+            createSetFieldId = {this.createSetFieldId}
+            createSetMatchName = {this.createSetMatchName}
+            createSetTypeRoom = {this.createSetTypeRoom}
+            createSetDate = {this.createSetDate}
+            createSetTeamNumber = {this.createSetTeamNumber}
+            createSetDepartmentNumber = {this.createSetDepartmentNumber}
+
+            fieldDetail = {this.state.fieldFromLoad}
+            matchModalData = {this.state.matchModalData}
+            modalClose = {this.closeCreateMatchModal}
             modalState = {this.state.createModalIsOpen}/>
         </div>
       );

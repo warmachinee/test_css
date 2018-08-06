@@ -156,6 +156,7 @@ class Login extends Component{
   getResultLogin=()=>{
     var result = localStorage['response'];
     return result;
+    //return 'Success'
   }
   getResultRegis=()=>{
     var result = localStorage['response'];

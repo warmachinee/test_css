@@ -11,16 +11,8 @@ class App extends Component {
     this.state = {
       pageLogin: true,
       pageDashboard: false,
-      appLoadMatch:[
-        {
-          MatchID: '12312311',
-          MatchName: 'm1',
-          UserHost: 'host1',
-          Type: 'type1',
-          FieldName: 'fe21',
-          Date: 'dat1'
-        }
-      ],
+      appLoadMatch:[],
+      dataLength:0,
       detailData:[
         {
           MatchID: 'MatchID123',
@@ -49,20 +41,12 @@ class App extends Component {
   };
 
   handleLoadMatch = event => {
-    var geturl;
-    geturl = $.ajax({
+    $.ajax({
       type: "POST",
      //url: "http://127.0.0.1/php/login.php",
      url: "http://pds.in.th/phpadmin/loadmatch.php",
      dataType: 'json',
-     data: {
-       "matchid": this.state.appLoadMatch.MatchID,
-       "matchname": this.state.appLoadMatch.MatchName,
-       "userhost": this.state.appLoadMatch.UserHost,
-       "type": this.state.appLoadMatch.Type,
-       "fieldname": this.state.appLoadMatch.FieldName,
-       "date": this.state.appLoadMatch.Date,
-     },
+     data: {},
      xhrFields: { withCredentials: true },
      success: function(data) {
        //console.log(data)
@@ -72,39 +56,40 @@ class App extends Component {
        localStorage['type']=data.type;
        localStorage['fieldname']=data.fieldname;
        localStorage['date']=data.date;
-     }
-    });
-    if(localStorage['matchid']){
-      var matchid = localStorage['matchid'];
-      var userhost = localStorage['userhost'];
-      var matchname = localStorage['matchname'];
-      var type = localStorage['type'];
-      var fieldname = localStorage['fieldname'];
-      var date = localStorage['date'];
-
-      matchid= JSON.parse("["+matchid+"]"),
-      matchname= matchname.split(",",matchname.length),
-      userhost= JSON.parse("["+userhost+"]"),
-      type= type.split(",",type.length),
-      fieldname= fieldname.split(",",fieldname.length),
-      date= date.split(",",date.length)
-
-      for(var i=0;i<matchid.length;i++){
-        var obj = {
-          MatchID: matchid[i],
-          MatchName: matchname[i],
-          UserHost: userhost[i],
-          Type: type[i],
-          FieldName: fieldname[i],
-          Date: date[i]
-        }
-        this.state.appLoadMatch.push(obj);
       }
-      console.log("From handler this.state.appLoadMatch :: ",this.state.appLoadMatch)
-      //localStorage.clear()
-    }
-  }
+     });
+     setTimeout(()=>{
+       //console.log("in setLoadmatchData")
+       if(localStorage['matchid']){
+         var matchid = localStorage['matchid'];
+         var userhost = localStorage['userhost'];
+         var matchname = localStorage['matchname'];
+         var type = localStorage['type'];
+         var fieldname = localStorage['fieldname'];
+         var date = localStorage['date'];
+         matchid= JSON.parse("["+matchid+"]")
+         matchname= matchname.split(",",matchname.length)
+         userhost= JSON.parse("["+userhost+"]")
+         type= type.split(",",type.length)
+         fieldname= fieldname.split(",",fieldname.length)
+         date= date.split(",",date.length)
 
+         for(var i = 0;i < matchid.length;i++){
+           var obj = {
+             MatchID: matchid[i],
+             MatchName: matchname[i],
+             UserHost: userhost[i],
+             Type: type[i],
+             FieldName: fieldname[i],
+             Date: date[i]
+           }
+           this.state.appLoadMatch.push(obj);
+         }
+         this.setState({dataLength: this.state.appLoadMatch.length})///Dont delete
+       }
+     },1500);
+     localStorage.clear()
+   }
 
   render() {
     if(this.state.pageLogin){
@@ -116,6 +101,7 @@ class App extends Component {
     }else if (this.state.pageDashboard) {
       return(
         <Dashboard
+          loadMatch = {this.handleLoadMatch}
           getCardTargetID = {this.getCardTargetID}
           sentCardTargetID = {this.state.detailData}
           loadMatchData = {this.state.appLoadMatch}

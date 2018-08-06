@@ -18,7 +18,7 @@ class TopNav extends React.Component{
             <SideNavToggle click={this.props.drawerClickHandler}/>
           </div>
           <div className="topnav__button">
-            <a onClick={this.props.createMatchClick}><img src={ic_add}></img></a>
+            <a onClick={this.props.loadField}><img src={ic_add}></img></a>
           </div>
           <div className="spacer"></div>
           <div className="topnav__items">

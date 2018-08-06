@@ -72,8 +72,8 @@ class LoginForm extends React.Component{
                   editTextValue={this.inputPassword}/>
               </div>
               <div className="form__card__items">
-                <form onSubmit={this.props.submitLogin}>
-                  <Button btnLabel="Sign in" type="submit"/>
+                <form>
+                  <Button btnLabel="Sign up" btnOnClick={this.props.submitLogin} type="button"/>
                 </form>
               </div>
             </div>

@@ -1,3 +1,8 @@
+.dropdown__item{
+  display: flex;
+  flex-direction: column;
+}
+
 .modal-creatematch{
   position: fixed;
   height: 100%;

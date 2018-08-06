@@ -9,36 +9,94 @@ import Button from '../Button/Button'
 class ModalCreateMatch extends React.Component{
   constructor(props){
     super(props)
+    this.createModalRefresh = false;
     this.state={
-      MatchID:"",
-      MatchTeamNumber:"",
-      MatchName:"",
-      MatchLocation:"",
-      MatchDate:""
+      field:[],
+      dataLength:0,
+      clickedFieldID:[]
+    }
+    this.showDropdownMenu = this.showDropdownMenu.bind(this);
+    this.hideDropdownMenu = this.hideDropdownMenu.bind(this);
+  }
+  showDropdownMenu(event) {
+      event.preventDefault();
+      this.setState({ displayMenu: true }, () => {
+      document.addEventListener('click', this.hideDropdownMenu);
+      });
+    }
+  hideDropdownMenu() {
+      this.setState({ displayMenu: false }, () => {
+        document.removeEventListener('click', this.hideDropdownMenu);
+      });
+  }
+  createSetFieldId=(fieldid)=>{
+    this.props.createSetFieldId(fieldid);
+  }
+  createSetMatchName=(matchname)=>{
+    this.props.createSetMatchName(matchname);
+  }
+  createSetTypeRoom=(typeroom)=>{
+    this.props.createSetTypeRoom(typeroom);
+  }
+  createSetDate=(date)=>{
+    this.props.createSetDate(date);
+  }
+  createSetTeamNumber=(teamnum)=>{
+    this.props.createSetTeamNumber(teamnum);
+  }
+  createSetDepartmentNumber=(departnum)=>{
+    this.props.createSetDepartmentNumber(departnum);
+  }
+  getField = (value)=>{
+    this.state.clickedFieldID = value
+    console.log("clickedFieldID",this.state.clickedFieldID)
+
+  }
+  addMatch=()=>{
+    console.log("matchModalData ::: ",this.props.matchModalData)
+    /*console.log("fieldid ::: ",this.props.matchModalData.fieldid)
+    console.log("matchname ::: ",this.props.matchModalData.matchname)
+    console.log("typeroom ::: ",this.props.matchModalData.typeroom)
+    console.log("date ::: ",this.props.matchModalData.date)
+    console.log("teamnum ::: ",this.props.matchModalData.teamnum)
+    console.log("departnum ::: ",this.props.matchModalData.departnum)*/
+    //this.props.modalClick();
+    if(
+      this.props.matchModalData.matchname &&
+      this.props.matchModalData.fieldid &&
+      this.props.matchModalData.date){
+        this.props.addMatch();
+        this.props.modalClose();
+      }else{
+        alert('Please complete the information!!!')
+      }
+  }
+  showFieldFromLoad = () => {
+    if(!this.createModalRefresh ){
+      this.createModalRefresh = true;
+      this.state.field=[]
+      console.log('field data ::',this.props.fieldDetail);
+      console.log('this.state.field len ::',this.props.fieldDetail.length);
+      for(var i = 0;i < this.props.fieldDetail.length ;i++){
+        this.state.field.push(this.props.fieldDetail[i]);
+      }
+      console.log('this.state.field ::',this.state.field);
+      this.setState(this.state);
     }
   }
 
-  setMatchName=(val)=>{
-    this.props.setMatchName(val);
-  }
-  setMatchTeamNumber=(val)=>{
-    this.props.setMatchTeamNumber(val);
-  }
-  setMatchLocation=(val)=>{
-    this.props.setMatchLocation(val);
-  }
-
-  setMatchDate=(val)=>{
-    this.props.setMatchDate(val);
-  }
-
-  addMatch=()=>{
-    this.props.addMatch();
-    this.props.modalClick();
-  }
-  
   render(){
+    const listItems = this.state.field.map(
+      (d,i) =>
+      <button key={i} onClick={
+          (e)=>{
+            this.getField(d.fieldid)
+          }
+        }>{d.fieldname}</button>
+    );
+
     if(this.props.modalState){
+      setTimeout(this.showFieldFromLoad,1000);
       return(
         <div className="modal-creatematch">
           <ModalBackDrop click = {this.props.modalClick}/>
@@ -47,14 +105,41 @@ class ModalCreateMatch extends React.Component{
             <div className="spacer"></div>
             <div className="modal-creatematch__card">
               <label>Match name</label>
-              <EditTextImg type="text" placeholder="Match name" formType="username" editTextValue={this.setMatchName}/>
+              <EditTextImg type="text" placeholder="Match name" formType="username"
+                editTextValue={this.createSetMatchName}/>
+              <label>{'Location'}</label>
+                <div  className="dropdown" style={{position: 'fixed',center: '0'}}>
+                 <button onClick={this.showDropdownMenu}>Select Field</button>
+                  { this.state.displayMenu ? (
+                    <div className="dropdown__item">
+                    {listItems}
+                    </div>
+                  ):(null)
+                  }
+                </div>
+                <select>
+                  {this.state.field.map((data,i)=>
+                    <option value={i} onClick={(e)=>console.log(e)}>{data.cordnum}</option>
+                  )}
+                </select>
+                <select>
+                  {this.state.field.map((data,i)=>
+                    <option value={i} onClick={(e)=>console.log(e)}>{data.cordnum}</option>
+                  )}
+                </select>
               <label>Team</label>
-              <EditTextImg type="text" formType="username" placeholder="How many team?" editTextValue={this.setMatchTeamNumber}/>
-              <label>Location</label>
-              <EditTextImg type="text" placeholder="Location" formType="username" editTextValue={this.setMatchLocation}/>
-              <label>Date</label>
-              <EditTextImg type="date" placeholder="Date" formType="username" editTextValue={this.setMatchDate}/>
-              <Button btnLabel="Close" btnOnClick = {this.props.modalClick}></Button>
+              <EditTextImg type="text" formType="username" placeholder="How many team?"
+                editTextValue={this.createSetTeamNumber}/>
+              <label>Department</label>
+              <EditTextImg type="text" formType="department" placeholder="How many Department?"
+                editTextValue={this.createSetDepartmentNumber}/>
+              <label>{'Date'}</label>
+              <EditTextImg type="date" placeholder="Date" formType="username"
+                editTextValue={this.createSetDate}/>
+              <label>Room password</label>
+              <EditTextImg type="password" placeholder="Set password to access" formType="password"
+                editTextValue={this.createSetTypeRoom}/>
+              <Button btnLabel="Close" btnOnClick = {this.props.modalClose}></Button>
               <Button btnLabel="Create" btnOnClick = {this.addMatch}></Button>
             </div>
             <div className="spacer"></div>
