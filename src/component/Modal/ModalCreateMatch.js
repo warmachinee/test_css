@@ -1,5 +1,6 @@
 import React from 'react'
 import './ModalCreateMatch.css'
+import $ from 'jquery'
 
 import ModalBackDrop from './ModalBackDrop'
 import EditText from '../EditText/EditText'
@@ -13,7 +14,8 @@ class ModalCreateMatch extends React.Component{
     this.state={
       field:[],
       dataLength:0,
-      clickedFieldID:[]
+      clickedFieldDetail:[],
+      clickedFieldCourt:[]
     }
     this.showDropdownMenu = this.showDropdownMenu.bind(this);
     this.hideDropdownMenu = this.hideDropdownMenu.bind(this);
@@ -29,8 +31,9 @@ class ModalCreateMatch extends React.Component{
         document.removeEventListener('click', this.hideDropdownMenu);
       });
   }
-  createSetFieldId=(fieldid)=>{
-    this.props.createSetFieldId(fieldid);
+  createSetFieldId=()=>{
+    console.log("this.state.clickedFieldDetail :::",this.state.clickedFieldDetail)
+    this.props.createSetFieldId(this.state.clickedFieldDetail);
   }
   createSetMatchName=(matchname)=>{
     this.props.createSetMatchName(matchname);
@@ -48,12 +51,49 @@ class ModalCreateMatch extends React.Component{
     this.props.createSetDepartmentNumber(departnum);
   }
   getField = (value)=>{
-    this.state.clickedFieldID = value
-    console.log("clickedFieldID",this.state.clickedFieldID)
-
+    //this.state.clickedFieldID = value
+    //console.log("clickedFieldID",this.state.clickedFieldID)
+    this.state.clickedFieldDetail = []
+    this.state.clickedFieldDetail.push(value)
+    var geturl;
+    geturl = $.ajax({
+      type: "POST",
+     url: "http://pds.in.th/phpadmin/loadfielddetail.php",
+     dataType: 'json',
+     data: {
+       fieldid: value
+     },
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+       localStorage['fieldcord']=data.fieldcord;
+       console.log(data);
+     }
+    });
+    setTimeout(()=>{
+      if(localStorage['fieldcord']){
+        var fieldcord = localStorage['fieldcord'];
+        fieldcord = fieldcord.split(",",fieldcord.length)
+        for(var i = 0;i < fieldcord.length;i++){
+          /*var obj = {
+            fieldcord: fieldcord[i]
+          }*/
+          this.state.clickedFieldDetail.push(fieldcord[i]);
+        }
+        //this.state.clickedFieldCourt.push(fieldcord[i]);
+        //console.log("this.state.clickedFieldDetail.push(obj) :::",this.state.clickedFieldDetail)
+        //this.setState({dataLength: this.state.fieldFromLoad.length})//-------
+      }
+      this.createModalRefresh = false;
+      this.showFieldFromLoad()
+    },1500)
+    localStorage.clear()
+  }
+  getCourt = (Court)=>{
+    this.state.clickedFieldCourt = Court
   }
   addMatch=()=>{
     console.log("matchModalData ::: ",this.props.matchModalData)
+    this.createSetFieldId()
     /*console.log("fieldid ::: ",this.props.matchModalData.fieldid)
     console.log("matchname ::: ",this.props.matchModalData.matchname)
     console.log("typeroom ::: ",this.props.matchModalData.typeroom)
@@ -75,8 +115,6 @@ class ModalCreateMatch extends React.Component{
     if(!this.createModalRefresh ){
       this.createModalRefresh = true;
       this.state.field=[]
-      console.log('field data ::',this.props.fieldDetail);
-      console.log('this.state.field len ::',this.props.fieldDetail.length);
       for(var i = 0;i < this.props.fieldDetail.length ;i++){
         this.state.field.push(this.props.fieldDetail[i]);
       }
@@ -117,14 +155,14 @@ class ModalCreateMatch extends React.Component{
                   ):(null)
                   }
                 </div>
-                <select>
-                  {this.state.field.map((data,i)=>
-                    <option value={i} onClick={(e)=>console.log(e)}>{data.cordnum}</option>
+                <select onChange={(e)=>this.getCourt(e.target.value)}>
+                  {this.state.clickedFieldCourt.map((data,i)=>
+                    <option value={data}>{data}</option>
                   )}
                 </select>
-                <select>
-                  {this.state.field.map((data,i)=>
-                    <option value={i} onClick={(e)=>console.log(e)}>{data.cordnum}</option>
+                <select onChange={(e)=>this.getCourt(e.target.value)}>
+                  {this.state.clickedFieldCourt.map((data,i)=>
+                    <option value={data}>{data}</option>
                   )}
                 </select>
               <label>Team</label>

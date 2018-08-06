@@ -73,7 +73,7 @@ class LoginForm extends React.Component{
               </div>
               <div className="form__card__items">
                 <form>
-                  <Button btnLabel="Sign up" btnOnClick={this.props.submitLogin} type="button"/>
+                  <Button btnLabel="Sign in" btnOnClick={this.props.submitLogin} type="button"/>
                 </form>
               </div>
             </div>

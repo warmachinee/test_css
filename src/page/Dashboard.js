@@ -127,7 +127,7 @@ class Dashboard extends Component {
        localStorage['fieldid']=data.fieldid;
        localStorage['fieldname']=data.fieldname;
        localStorage['cordnum']=data.cordnum;
-       console.log(data);
+       //console.log(data);
      }
     });
     setTimeout(()=>{
@@ -138,9 +138,9 @@ class Dashboard extends Component {
         fieldid = fieldid.split(",",fieldid.length)
         fieldname = fieldname.split(",",fieldname.length)
         cordnum = cordnum.split(",",cordnum.length)
-        console.log(fieldid);
-        console.log(fieldname);
-        console.log(cordnum);
+        //console.log(fieldid);
+        //console.log(fieldname);
+        //console.log(cordnum);
         for(var i = 0;i < fieldid.length;i++){
           var obj = {
             fieldid: fieldid[i],
@@ -149,7 +149,7 @@ class Dashboard extends Component {
           }
           this.state.fieldFromLoad.push(obj);
         }
-        console.log("this.state.fieldFromLoad.push(obj) :::",this.state.fieldFromLoad)
+        //console.log("this.state.fieldFromLoad.push(obj) :::",this.state.fieldFromLoad)
         //this.setState({dataLength: this.state.fieldFromLoad.length})//-------
       }
       this.toggleCreateModal()
