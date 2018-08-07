@@ -56,6 +56,7 @@ class Dashboard extends Component {
       invitePlayer:'',
       inviteMatchID:'',
       inviteAction:'',
+      calScoreMatchID:''
     }
   };
   historyPageToggle = () =>{
@@ -100,6 +101,10 @@ class Dashboard extends Component {
     };
     });*/
   };
+  sideNaveNoti=()=>{
+    this.HandlerActivityRequest()
+    this.drawerToggleClickHandler()
+  }
   drawerToggleClickHandler = () =>{
     this.setState((prevState)=>{
       return {sideDrawerOpen: !prevState.sideDrawerOpen};
@@ -141,9 +146,17 @@ class Dashboard extends Component {
       return {addpeopleModalIsOpen: !state.addpeopleModalIsOpen}
     });
   }
+  getCalScoreMatchID=(MatchID)=>{
+    this.state.calScoreMatchID = MatchID
+  }
+  calculateScore = (score)=>{
+    this.toggleAddScoreModal()
+    this.HandlerUpdateScore(score)
+    //console.log("calculator :::",score);
+  }
   toggleAddScoreModal = () => {
     this.setState((state)=>{
-      return {addscoreModalIsOpen: false}
+      return {addscoreModalIsOpen: !state.addscoreModalIsOpen}
     });
   }
   createSetFieldId=(fieldid)=>{
@@ -253,6 +266,37 @@ class Dashboard extends Component {
       //this.dashboardRefresh = false
       //this.showHistoryFromLoad()
     },1500)
+    localStorage.clear()
+  }
+
+  HandlerUpdateScore = (data) =>{
+    console.log("Score ::",data);
+    console.log("MatchID ::",this.state.calScoreMatchID.matchid);
+    var geturl;
+    geturl = $.ajax({
+      type: "POST",
+     //url: "http://127.0.0.1/php/login.php",
+     url: "http://pds.in.th/phpadmin/userupdatescore.php",
+     dataType: 'json',
+     data: {
+       "matchid": this.state.calScoreMatchID.matchid,
+       "arrscore": data,
+     },
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+       //localStorage.setItem("response",JSON.stringify(data));
+       localStorage['response']=data.status;
+       console.log(data);
+     }
+    });
+    setTimeout(()=>{
+      if(localStorage['response']){
+        console.log(localStorage['response']);
+        this.toggleAddScoreModal()
+        this.state.calScoreMatchID = ''
+      }
+
+    },1000)
     localStorage.clear()
   }
 
@@ -509,7 +553,7 @@ class Dashboard extends Component {
     this.state.inviteMatchID = Data.matchid
   }
   sentRequestPlayerNotOwn=(Data)=>{
-    this.state.invitePlayer = this.props.userID
+    this.state.invitePlayer = Data.userhost
     this.state.inviteMatchID = Data.matchid
     console.log("this.state.inviteMatchID ",this.state.inviteMatchID);
     console.log("this.state.invitePlayer ",this.state.invitePlayer);
@@ -581,11 +625,13 @@ class Dashboard extends Component {
       return(
         <div>
           <TopNav
+            userID = {this.props.userID}
             loadField = {this.HandlerLoadField}
             drawerClickHandler = {this.drawerToggleClickHandler}
             notiClick = {this.HandlerActivityRequest}
             />
           <SideNav
+            notiClick = {this.sideNaveNoti}
             logOut = {this.props.logOut}
             show={this.state.sideDrawerOpen}
             click={pageClickState}
@@ -610,6 +656,7 @@ class Dashboard extends Component {
                   getCardTargetData={this.getCardTargetData}
                   targetClickID={this.getCardTargetID}
                   loadDetail = {this.loadDetail}
+                  getCalScoreMatchID={this.getCalScoreMatchID}
                   matchDetailClick = {this.matchDetailStateToggle}
                   addPeopleClick = {this.toggleAddpeopleModal}
                   addScoreClick = {this.toggleAddScoreModal}
@@ -617,7 +664,8 @@ class Dashboard extends Component {
               )}
           </div>
           <ModalAddScore
-            modalClick = {this.toggleAddScoreModal}
+            closeAddScoreModal = {this.toggleAddScoreModal}
+            calculateScore = {this.calculateScore}
             modalState = {this.state.addscoreModalIsOpen} />
           <ModalAddPeople
             addPeople = {this.addPeople}

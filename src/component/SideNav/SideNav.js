@@ -44,9 +44,11 @@ const sideNav = props =>{
       <div className="space"></div>
       <ul className="fromtopnav">
         <li>
-          <a href="/">
+          <a>
             <img className="icon" src={ic_noti_side} />
-            <div className="text">{menu.Notifications[i]}</div>
+            <div className="text">
+              <button onClick={props.notiClick}>{menu.Notifications[i]}</button>
+            </div>
           </a>
         </li>
         <li>

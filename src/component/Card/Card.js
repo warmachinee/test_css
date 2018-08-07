@@ -37,6 +37,11 @@ class Card extends React.Component{
     }
     /**/
   }
+  calculateScore = (value)=>{
+    //console.log(value);
+    this.props.getCalScoreMatchID(value)
+    this.props.addScoreClick()
+  }
   render(){
     let cardMatchName = "Match Name"
     let cardDate ="01/01/2012"
@@ -72,7 +77,7 @@ class Card extends React.Component{
             <div className="card-spacer"></div>
             <a className="card-games"><img src={ic_game}></img></a>
             <div className="card-spacer"></div>
-            <a onClick={this.props.addScoreClick} className="card-calculator"><img src={ic_calculator}></img></a>
+            <a onClick={(e)=>this.calculateScore(this.props.data)} className="card-calculator"><img src={ic_calculator}></img></a>
           </div>
         </div>
       </div>

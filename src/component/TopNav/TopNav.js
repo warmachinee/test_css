@@ -23,6 +23,8 @@ class TopNav extends React.Component{
             <a onClick={this.props.loadField}><img src={ic_add}></img></a>
           </div>
           <div className="spacer"></div>
+          <div className="topnav__button">User Id : {this.props.userID}</div>
+          <div className="spacer"></div>
           <div className="topnav__items">
             <ul>
               <li><a onClick={this.props.notiClick} href="#"><img src={ic_noti}></img></a></li>
