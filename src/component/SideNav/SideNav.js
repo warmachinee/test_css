@@ -16,6 +16,7 @@ const menu ={
   Notifications: ['Notifications','การแจ้งเตือน'],
   Profile: ['Profile','โปรไฟล์'],
   Dashboard: ['DASHBOARD','แดชบอร์ด'],
+  Running: ['Running','กำลังเล่น'],
   History: ['HISTORY','ประวัติ'],
   Logout: ['Log out','ออกจากระบบ'],
   LogOutBtnClass: ['sidenav-btn','sidenav-btn thailang']
@@ -61,6 +62,14 @@ const sideNav = props =>{
             <img className="icon" src={ic_dashboard} />
             <div className="text">
               <button onClick={props.dashboardPageClick}>{menu.Dashboard[i]}</button>
+            </div>
+          </a>
+        </li>
+        <li>
+          <a>
+            <img className="icon" src={ic_dashboard} />
+            <div className="text">
+              <button onClick={props.runningPageClick}>{menu.Running[i]}</button>
             </div>
           </a>
         </li>

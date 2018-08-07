@@ -28,7 +28,7 @@ class ModalAddPeople extends React.Component{
               <EditTextImg type="text" placeholder="Player name" editTextValue={this.addPeople}/>
               <p>{this.props.matchTeamNumber}</p>
               <Button btnLabel="Close" btnOnClick = {this.props.modalClick}></Button>
-              <Button btnLabel="Add"></Button>
+              <Button btnLabel="Add" btnOnClick={this.props.addRequestPlayer}></Button>
             </div>
             <div className="spacer"></div>
           </div>

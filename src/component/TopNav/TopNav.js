@@ -9,6 +9,8 @@ import ic_noti from '../img/baseline-notifications-24px.svg'
 class TopNav extends React.Component{
   constructor(props){
     super(props)
+    this.state = {
+    }
   }
   render(){
     return(
@@ -23,8 +25,8 @@ class TopNav extends React.Component{
           <div className="spacer"></div>
           <div className="topnav__items">
             <ul>
-              <li><a href="/"><img src={ic_noti}></img></a></li>
-              <li><a href="/"><img src={ic_profile}></img></a></li>
+              <li><a onClick={this.props.notiClick} href="#"><img src={ic_noti}></img></a></li>
+              <li><a href="#"><img src={ic_profile}></img></a></li>
             </ul>
           </div>
         </nav>

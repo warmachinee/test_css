@@ -22,14 +22,19 @@ class App extends Component {
           FieldName: '',
           Date: ''
         }
-      ]
+      ],
+      userID:''
     }
     this.cardStateClick = ''
   }
+  getUserID = (UserID) =>{
+    this.state.userID = UserID
+  }
+
   getCardTargetID =(value)=>{
     this.cardStateClick = value
-    console.log('this.cardStateClick :: ',this.cardStateClick)
-    console.log('value ::',value);
+    //console.log('this.cardStateClick :: ',this.cardStateClick)
+    //console.log('value ::',value);
   }
   goToAnotherPage = () =>{
     this.setState( (pageState)=>{
@@ -90,12 +95,12 @@ class App extends Component {
          this.state.appLoadMatch = []
          for(var i = 0;i < matchid.length;i++){
            var obj = {
-             MatchID: matchid[i],
-             MatchName: matchname[i],
-             UserHost: userhost[i],
-             Type: type[i],
-             FieldName: fieldname[i],
-             Date: date[i]
+             matchid: matchid[i],
+             matchname: matchname[i],
+             userhost: userhost[i],
+             type: type[i],
+             fieldname: fieldname[i],
+             date: date[i]
            }
            this.state.appLoadMatch.push(obj);
          }
@@ -109,12 +114,14 @@ class App extends Component {
     if(this.state.pageLogin){
       return (
         <Login
+          userID = {this.getUserID}
           loadMatch = {this.handleLoadMatch}
           pageLoginClick = {this.goToAnotherPage}/>
       );
     }else if (this.state.pageDashboard) {
       return(
         <Dashboard
+          userID = {this.state.userID}
           logOut = {this.handelLogout}
           loadMatch = {this.handleLoadMatch}
           getCardTargetID = {this.getCardTargetID}

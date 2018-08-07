@@ -11,6 +11,7 @@ import ModalCreateMatch from '../component/Modal/ModalCreateMatch'
 import ModalAddPeople from '../component/Modal/ModalAddPeople'
 import ModalAddScore from '../component/Modal/ModalAddScore'
 import HistoryCard from '../component/Card/HistoryCard'
+import DropDown from '../component/DropDown/DropDown'
 
 const pageClickState = props =>{
   return (props.pageDashboardClick);
@@ -24,15 +25,26 @@ class Dashboard extends Component {
       addpeopleModalIsOpen: false,
       addscoreModalIsOpen: false,
       sideDrawerOpen: false,
+      notiToggle: false,
       languageState: false,
       matchDetailState: false,
+      matchRunningState: false,
       historyPage: false,
       createMatchStatus:'',
       data:[],
       dataLength:0,
       fieldFromLoad:[],
+      cardTargetData:[{
+        matchid:'',
+        userTarget:'',
+        action:''
+      }],
       historyFromLoad:[],
+      runningFromLoad:[],
+      activityRequest:[],
+      activityRequestMap:[],
       dataFromLoad:[],
+      UserID:'',
       matchModalData:{
         fieldid:'',
         matchname:'',
@@ -41,9 +53,9 @@ class Dashboard extends Component {
         teamnum:'',
         departnum:'',
       },
-      PlayerInMatch:{
-        playerName:''
-      },
+      invitePlayer:'',
+      inviteMatchID:'',
+      inviteAction:'',
     }
   };
   historyPageToggle = () =>{
@@ -51,7 +63,19 @@ class Dashboard extends Component {
     this.setState((prevState)=>{
       return {
         historyPage: true,
-        matchDetailState: false
+        matchDetailState: false,
+        matchRunningState: false
+      };
+    });
+  };
+  runningPageToggle = () =>{
+    this.drawerToggleClickHandler()
+    console.log("Running match")
+    this.setState((prevState)=>{
+      return {
+        historyPage: false,
+        matchDetailState: false,
+        matchRunningState: true
       };
     });
   };
@@ -61,17 +85,20 @@ class Dashboard extends Component {
     this.setState((prevState)=>{
       return {
         historyPage: false,
-        matchDetailState: false
+        matchDetailState: false,
+        matchRunningState: false
     };
     });
   }
-  matchDetailStateToggle = () =>{
+  matchDetailStateToggle = (data) =>{
+    console.log(data)
+    /*
     this.setState((prevState)=>{
       return {
         historyPage: false,
         matchDetailState: true
     };
-    });
+    });*/
   };
   drawerToggleClickHandler = () =>{
     this.setState((prevState)=>{
@@ -81,6 +108,18 @@ class Dashboard extends Component {
   languageToggle = () =>{
     this.setState((state)=>{
       return {languageState: !state.languageState}
+    });
+  };
+  getNotiClick = () =>{
+    //console.log("noti__inside ::",this.state.activityRequest)
+    //console.log("this.props.activityRequest length :::",this.state.activityRequest.length);
+    this.state.activityRequestMap=[]
+    for(var i = 0;i < this.state.activityRequest.length ;i++){
+      this.state.activityRequestMap.push(this.state.activityRequest[i]);
+    }
+    //console.log("this.state.getActivityRequest ::",this.state.activityRequestMap);
+    this.setState((prev)=>{
+      return{notiToggle: !prev.notiToggle}
     });
   };
   backdropClickHander = () =>{
@@ -140,6 +179,119 @@ class Dashboard extends Component {
     }
   }
 
+  HandlerResultRequest = (data) => {
+    var geturl;
+    geturl = $.ajax({
+      type: "POST",
+     //url: "http://127.0.0.1/php/login.php",
+     url: "http://pds.in.th/phpadmin/resultrequest.php",
+     dataType: 'json',
+     data: {
+       "matchid": data.matchid,
+       "userTarget": data.userTarget,
+       "action": data.action,
+       "status": data.status,
+     },
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+       //localStorage.setItem("response",JSON.stringify(data));
+       localStorage['response']=data.status;
+       console.log(data);
+     }
+    });
+    if(localStorage['response']){
+      var response = localStorage['response'];
+      alert(response)
+    }
+    this.setState((prev)=>{
+      return{notiToggle: !prev.notiToggle}
+    });
+    setTimeout(this.CreateMatchAction,1000);
+  }
+
+  HandlerActivityRequest = event =>{
+    this.state.activityRequest = []
+    var geturl;
+    geturl = $.ajax({
+      type: "POST",
+     url: "http://pds.in.th/phpadmin/activityrequest.php",
+     dataType: 'json',
+     data: {},
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+       console.log(data);
+       localStorage['matchid'] = data.matchid
+       localStorage['userid'] = data.userid
+       localStorage['action'] = data.action
+     }
+    });
+    setTimeout(()=>{
+      this.state.activityRequest=[]
+      if(localStorage['userid']){
+        var matchid = localStorage['matchid'];
+        var userid = localStorage['userid'];
+        var action = localStorage['action'];
+        matchid = JSON.parse("["+matchid+"]")
+        userid = JSON.parse("["+userid+"]")
+        action = JSON.parse("["+action+"]")
+
+        for(var i = 0;i < matchid.length;i++){
+          var obj = {
+            matchid: matchid[i],
+            userid: userid[i],
+            action: action[i]
+          }
+          //this.setState({activityRequest: obj})
+          this.state.activityRequest.push(obj);
+        }
+
+        //this.setState({dataLength: this.state.fieldFromLoad.length})//-------
+      }
+      //console.log("this.state.activityRequest :::",this.state.activityRequest)
+      this.getNotiClick()
+      //this.historyPageToggle()
+      //this.dashboardRefresh = false
+      //this.showHistoryFromLoad()
+    },1500)
+    localStorage.clear()
+  }
+
+  HanderlSendRequest = event =>{
+    console.log("this.state.inviteMatchID ",this.state.inviteMatchID);
+    console.log("this.state.invitePlayer ",this.state.invitePlayer);
+    console.log("this.state.inviteAction ",this.state.inviteAction);
+    var geturl;
+    geturl = $.ajax({
+      type: "POST",
+     //url: "http://127.0.0.1/php/login.php",
+     url: "http://pds.in.th/phpadmin/sendrequest.php",
+     dataType: 'json',
+     data: {
+       "matchid": this.state.inviteMatchID,
+       "userTarget": this.state.invitePlayer,
+       "action": this.state.inviteAction,
+     },
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+       //localStorage.setItem("response",JSON.stringify(data));
+       localStorage['response']=data.status;
+       console.log(data);
+     }
+    });
+    setTimeout(()=>{
+      if(localStorage['response']){
+        console.log(localStorage['response']);
+        if(this.state.inviteAction===0){
+          this.toggleAddpeopleModal()
+        }
+        this.state.invitePlayer = ''
+        this.state.inviteMatchID = ''
+        this.state.inviteAction = ''
+      }
+    },1000)
+    localStorage.clear()
+  }
+
   HandlerLoadField = event => {
     var geturl;
     geturl = $.ajax({
@@ -195,6 +347,7 @@ class Dashboard extends Component {
      }
     });
     setTimeout(()=>{
+      this.state.historyFromLoad=[]
       if(localStorage['matchid']){
         var matchid = localStorage['matchid'];
         var matchname = localStorage['matchname'];
@@ -220,17 +373,67 @@ class Dashboard extends Component {
           }
           this.state.historyFromLoad.push(obj);
         }
-        console.log("this.state.historyFromLoad.push(obj) :::",this.state.historyFromLoad)
+        //console.log("this.state.historyFromLoad.push(obj) :::",this.state.historyFromLoad)
         //this.setState({dataLength: this.state.fieldFromLoad.length})//-------
       }
       this.historyPageToggle()
       this.dashboardRefresh = false
-      this.showDataFromLoad()
+      this.showHistoryFromLoad()
     },1500)
     localStorage.clear()
   }
 
+  HandlerLoadRunning = event => {
+    var geturl;
+    geturl = $.ajax({
+      type: "POST",
+     url: "http://pds.in.th/phpadmin/loadmatchrunning.php",
+     dataType: 'json',
+     data: {},
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+       console.log(data);
+       localStorage['matchid'] = data.matchid;
+       localStorage['matchname'] = data.matchname;
+       localStorage['userhost'] = data.userhost;
+       localStorage['fieldname'] = data.fieldname;
+       localStorage['date'] = data.date;
+     }
+    });
+    setTimeout(()=>{
+      this.state.runningFromLoad=[]
+      if(localStorage['matchid']){
+        var matchid = localStorage['matchid'];
+        var matchname = localStorage['matchname'];
+        var userhost = localStorage['userhost'];
+        var fieldname = localStorage['fieldname'];
+        var date = localStorage['date'];
 
+        matchid = JSON.parse("["+matchid+"]")
+        matchname = matchname.split(",",matchname.length)
+        userhost= JSON.parse("["+userhost+"]")
+        fieldname= fieldname.split(",",fieldname.length)
+        date= date.split(",",date.length)
+
+        for(var i = 0;i < matchid.length;i++){
+          var obj = {
+            matchid: matchid[i],
+            matchname: matchname[i],
+            userhost: userhost[i],
+            fieldname: fieldname[i],
+            date: date[i]
+          }
+          this.state.runningFromLoad.push(obj);
+        }
+        console.log("this.state.runningFromLoad.push(obj) :::",this.state.runningFromLoad)
+        //this.setState({dataLength: this.state.fieldFromLoad.length})//-------
+      }
+      this.runningPageToggle()
+      this.dashboardRefresh = false
+      this.showRunningFromLoad()
+    },1500)
+    localStorage.clear()
+  }
 
   HandlerAddMatch = event => {
     this.createSetTypeRoom(this.state.matchModalData.typeroom)
@@ -264,6 +467,8 @@ class Dashboard extends Component {
     }
     setTimeout(this.CreateMatchAction,1000);
   }
+
+  //HandlerActivity
   getResultCreateMatch=()=>{
     var result = localStorage['response'];
     return result;
@@ -288,14 +493,52 @@ class Dashboard extends Component {
     this.props.loadMatch();
     setTimeout(this.showDataFromLoad,1500);
   }
-
   addPeople = (PlayerName) =>{
-    this.state.PlayerInMatch.playerName = PlayerName
+    this.state.invitePlayer = PlayerName
   }
+  getCardTargetData=(Data)=>{
 
+    console.log("getCardTargetData ::",Data);
+    console.log("this.state.cardTargetData before:::",this.state.cardTargetData);
+    console.log("Data.invitePlayer :::",this.state.invitePlayer)
+
+    console.log("invitePlayer ::",this.state.cardTargetData)
+  }
+  sentRequestPlayer=(Data)=>{
+    this.state.cardTargetData =[]
+    this.state.inviteMatchID = Data.matchid
+  }
+  sentRequestPlayerNotOwn=(Data)=>{
+    this.state.invitePlayer = this.props.userID
+    this.state.inviteMatchID = Data.matchid
+    console.log("this.state.inviteMatchID ",this.state.inviteMatchID);
+    console.log("this.state.invitePlayer ",this.state.invitePlayer);
+    console.log("this.state.inviteAction ",this.state.inviteAction);
+    this.HanderlSendRequest()
+  }
+  setInviteAction =(action)=>{
+    this.state.inviteAction = action
+  }
+  addRequestPlayer = ()=>{
+    console.log("this.props.userID ",this.props.userID);
+    console.log("this.state.invitePlayer ",this.state.invitePlayer);
+    if(this.state.invitePlayer===this.props.userID){
+      alert("Same id please enter again")
+    }else{
+      this.HanderlSendRequest()
+    }
+    //
+    /*this.state.invitePlayer = ''
+    this.state.inviteMatchID = ''
+    this.state.inviteAction = ''*/
+  }
   getCardTargetID =(value)=>{
     this.props.getCardTargetID(value)
-    console.log("Detail :: ID",value)
+    console.log("Detail Data:: ",value)
+  }
+  getActivityRequest = (data) =>{
+    console.log('getActivityRequest data',data)
+    this.HandlerResultRequest(data)
   }
   showDataFromLoad = () => {
     if(!this.dashboardRefresh ){
@@ -304,9 +547,23 @@ class Dashboard extends Component {
       for(var i = 0;i < this.props.loadMatchData.length ;i++){
         //console.log(i)
         this.state.dataFromLoad.push(this.props.loadMatchData[i]);
-        //console.log('this.state.dataFromLoad in for::',this.state.dataFromLoad);
+        console.log('this.state.dataFromLoad in for::',this.state.dataFromLoad);
       }
       //console.log('this.state.dataFromLoad after set::',this.state.dataFromLoad);
+      this.setState(this.state);
+    }
+  }
+  showHistoryFromLoad = () => {
+    if(!this.dashboardRefresh ){
+      this.dashboardRefresh=true;
+      console.log('showHistoryFromLoad');
+      this.setState(this.state);
+    }
+  }
+  showRunningFromLoad = () => {
+    if(!this.dashboardRefresh ){
+      this.dashboardRefresh=true;
+      console.log('showRunningFromLoad');
       this.setState(this.state);
     }
   }
@@ -315,27 +572,42 @@ class Dashboard extends Component {
     if(this.state.sideDrawerOpen){
       backDrop = <BackDrop click={this.backdropClickHander}/>;
     }
-    if(this.state.matchDetailState === false && this.state.historyPage === false){
+    //----------Dashboard----------
+    if(
+      this.state.matchDetailState === false &&
+      this.state.historyPage === false &&
+      this.state.matchRunningState === false){
       setTimeout(this.showDataFromLoad,1000);
       return(
         <div>
           <TopNav
             loadField = {this.HandlerLoadField}
             drawerClickHandler = {this.drawerToggleClickHandler}
+            notiClick = {this.HandlerActivityRequest}
             />
           <SideNav
             logOut = {this.props.logOut}
             show={this.state.sideDrawerOpen}
             click={pageClickState}
+            runningPageClick={this.HandlerLoadRunning}
             dashboardPageClick={this.dashboardStateToggle}
             historyPageClick={this.HandlerLoadHistory}
             lang={this.state.languageState}
             langClick={this.languageToggle}/>
           {backDrop}
           <div className="maincontent">
+            <DropDown
+              getActivityRequest = {this.getActivityRequest}
+              activityRequest = {this.state.activityRequestMap}
+              notiState = {this.state.notiToggle} />
               {this.props.loadMatchData.map((number,i) =>
                 <Card
                   data={number}
+                  userID={this.props.userID}
+                  setInviteAction = {this.setInviteAction}
+                  sentRequestPlayerNotOwn = {this.sentRequestPlayerNotOwn}
+                  sentRequestPlayer={this.sentRequestPlayer}
+                  getCardTargetData={this.getCardTargetData}
                   targetClickID={this.getCardTargetID}
                   loadDetail = {this.loadDetail}
                   matchDetailClick = {this.matchDetailStateToggle}
@@ -349,6 +621,7 @@ class Dashboard extends Component {
             modalState = {this.state.addscoreModalIsOpen} />
           <ModalAddPeople
             addPeople = {this.addPeople}
+            addRequestPlayer = {this.addRequestPlayer}
             matchTeamNumber = {this.state.matchModalData.MatchTeamNumber}
             modalClick = {this.toggleAddpeopleModal}
             modalState = {this.state.addpeopleModalIsOpen} />
@@ -370,8 +643,12 @@ class Dashboard extends Component {
         </div>
       );
     }
-    else if(this.state.matchDetailState === false && this.state.historyPage === true){
-      setTimeout(this.showDataFromLoad,1000);
+    //----------History----------
+    else if(this.state.matchDetailState === false &&
+      this.state.historyPage === true &&
+      this.state.matchRunningState === false){
+      setTimeout(this.showHistoryFromLoad,1000);
+      console.log("this.state.historyFromLoad",this.state.historyFromLoad)
       return(
         <div>
           <TopNav
@@ -382,6 +659,7 @@ class Dashboard extends Component {
             logOut = {this.props.logOut}
             show={this.state.sideDrawerOpen}
             click={pageClickState}
+            runningPageClick={this.HandlerLoadRunning}
             dashboardPageClick={this.dashboardStateToggle}
             historyPageClick={this.HandlerLoadHistory}
             lang={this.state.languageState}
@@ -424,7 +702,12 @@ class Dashboard extends Component {
         </div>
       );
     }
-    else if(this.state.matchDetailState === true && this.state.historyPage === false){
+    //----------Detail----------
+    else if(
+      this.state.matchDetailState === true &&
+      this.state.historyPage === false &&
+      this.state.matchRunningState === false){
+      this.dashboardRefresh=false;
       setTimeout(this.showDataFromLoad,1000);
       console.log('sentCardTargetID ::',this.props.sentCardTargetID)
       return(
@@ -458,7 +741,67 @@ class Dashboard extends Component {
             matchModalData = {this.state.matchModalData}
             modalClose = {this.closeCreateMatchModal}
             modalState = {this.state.createModalIsOpen}/>
+        </div>
+      );
+    }
+    //----------Running----------
+    else if(
+      this.state.matchDetailState === false &&
+      this.state.historyPage === false &&
+      this.state.matchRunningState === true ){
+        setTimeout(this.showRunningFromLoad,1000);
+        //console.log("RunningFromLoad ::",this.state.runningFromLoad)
+      return(
+        <div>
+          <TopNav
+            loadField = {this.HandlerLoadField}
+            drawerClickHandler = {this.drawerToggleClickHandler}
+            />
+          <SideNav
+            logOut = {this.props.logOut}
+            show={this.state.sideDrawerOpen}
+            click={pageClickState}
+            runningPageClick={this.HandlerLoadRunning}
+            dashboardPageClick={this.dashboardStateToggle}
+            historyPageClick={this.HandlerLoadHistory}
+            lang={this.state.languageState}
+            langClick={this.languageToggle}/>
+          {backDrop}
+          <div className="maincontent">
+            {this.state.runningFromLoad.map((data)=>
+                <Card
+                  data={data}
+                  targetClickID={this.getCardTargetID}
+                  loadDetail = {this.loadDetail}
+                  matchDetailClick = {this.matchDetailStateToggle}
+                  addPeopleClick = {this.toggleAddpeopleModal}
+                  addScoreClick = {this.toggleAddScoreModal}
+                  />
+            )}
+          </div>
+          <ModalAddScore
+            modalClick = {this.toggleAddScoreModal}
+            modalState = {this.state.addscoreModalIsOpen} />
+          <ModalAddPeople
+            addPeople = {this.addPeople}
+            matchTeamNumber = {this.state.matchModalData.MatchTeamNumber}
+            modalClick = {this.toggleAddpeopleModal}
+            modalState = {this.state.addpeopleModalIsOpen} />
 
+          <ModalCreateMatch
+            addMatch = {this.HandlerAddMatch}
+            modalClick = {this.toggleCreateModal}
+            createSetFieldId = {this.createSetFieldId}
+            createSetMatchName = {this.createSetMatchName}
+            createSetTypeRoom = {this.createSetTypeRoom}
+            createSetDate = {this.createSetDate}
+            createSetTeamNumber = {this.createSetTeamNumber}
+            createSetDepartmentNumber = {this.createSetDepartmentNumber}
+
+            fieldDetail = {this.state.fieldFromLoad}
+            matchModalData = {this.state.matchModalData}
+            modalClose = {this.closeCreateMatchModal}
+            modalState = {this.state.createModalIsOpen}/>
         </div>
       );
     }

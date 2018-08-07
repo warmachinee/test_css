@@ -34,6 +34,7 @@ class Login extends Component{
     }
   }
   state = {
+    userID:'',
     loginStatus: '',
     regisStatus: '',
   }
@@ -73,6 +74,9 @@ class Login extends Component{
   inputConfirmPasswordRegis = (ConfirmPassword) =>{
     this.state.checkPassword.confirmPassword = ConfirmPassword
   }
+  sendUserID =() =>{
+    this.props.userID(this.state.userID)
+  }
   handleSubmit = event => {
     event.preventDefault();
     var geturl;
@@ -89,15 +93,22 @@ class Login extends Component{
      success: function(data) {
        //localStorage.setItem("response",JSON.stringify(data));
        localStorage['response']=data.status;
+       localStorage['id']=data.id;
        console.log(data);
-
      }
     });
-    if(localStorage['response']){
-      var response = localStorage['response'];
-      this.setState({loginStatus: response});
-    }
-    setTimeout(this.LoginAction,1000);
+    setTimeout(()=>{
+      if(localStorage['id']){
+        var response = localStorage['response'];
+        var id = localStorage['id'];
+        this.setState({
+          loginStatus: response,
+          userID: id
+        });
+        //console.log("this.state.userID :::",this.state.userID);
+      }
+      this.LoginAction()
+    },1000)
   }
   handleSubmitRegis =()=> {
     var geturl;
@@ -132,7 +143,8 @@ class Login extends Component{
   }
   LoginAction = () =>{
     if(this.getResultLogin()==='Success'){
-      console.log(this.getResultLogin());
+      console.log(this.state.userID," ::",this.getResultLogin());
+      this.sendUserID();
       this.props.pageLoginClick();
       setTimeout(this.props.loadMatch,500);
     }else{
