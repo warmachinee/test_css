@@ -32,6 +32,7 @@ class Dashboard extends Component {
       matchDetailState: false,
       matchRunningState: false,
       historyPage: false,
+      publicPageState:false,
       createMatchStatus:'',
       data:[],
       dataLength:0,
@@ -43,6 +44,7 @@ class Dashboard extends Component {
       }],
       historyFromLoad:[],
       runningFromLoad:[],
+      publicFromLoad:[],
       activityRequest:[],
       activityRequestMap:[],
       roomDetailToAccess:[],
@@ -68,7 +70,8 @@ class Dashboard extends Component {
       return {
         historyPage: true,
         matchDetailState: false,
-        matchRunningState: false
+        matchRunningState: false,
+        publicPageState: false
       };
     });
   };
@@ -79,7 +82,20 @@ class Dashboard extends Component {
       return {
         historyPage: false,
         matchDetailState: false,
-        matchRunningState: true
+        matchRunningState: true,
+        publicPageState: false
+      };
+    });
+  };
+  publicPageToggle = () =>{
+    this.drawerToggleClickHandler()
+    console.log("Running match")
+    this.setState((prevState)=>{
+      return {
+        historyPage: false,
+        matchDetailState: false,
+        matchRunningState: false,
+        publicPageState: true
       };
     });
   };
@@ -89,7 +105,8 @@ class Dashboard extends Component {
       return {
         historyPage: false,
         matchDetailState: false,
-        matchRunningState: false
+        matchRunningState: false,
+        publicPageState: false
     };
     });
   }
@@ -368,9 +385,6 @@ class Dashboard extends Component {
         fieldid = fieldid.split(",",fieldid.length)
         fieldname = fieldname.split(",",fieldname.length)
         cordnum = cordnum.split(",",cordnum.length)
-        //console.log(fieldid);
-        //console.log(fieldname);
-        //console.log(cordnum);
         for(var i = 0;i < fieldid.length;i++){
           var obj = {
             fieldid: fieldid[i],
@@ -379,8 +393,6 @@ class Dashboard extends Component {
           }
           this.state.fieldFromLoad.push(obj);
         }
-        //console.log("this.state.fieldFromLoad.push(obj) :::",this.state.fieldFromLoad)
-        //this.setState({dataLength: this.state.fieldFromLoad.length})//-------
       }
       this.toggleCreateModal()
     },500)
@@ -432,7 +444,7 @@ class Dashboard extends Component {
       this.historyPageToggle()
       this.dashboardRefresh = false
       this.showHistoryFromLoad()
-    },1500)
+    },500)
     localStorage.clear()
   }
 
@@ -484,7 +496,7 @@ class Dashboard extends Component {
       this.runningPageToggle()
       this.dashboardRefresh = false
       this.showRunningFromLoad()
-    },1500)
+    },500)
     localStorage.clear()
   }
 
@@ -521,11 +533,60 @@ class Dashboard extends Component {
     setTimeout(this.CreateMatchAction,1000);
   }
 
-  //HandlerActivity
+  HandlerLoadPublicMatch = event => {
+    var geturl;
+    geturl = $.ajax({
+      type: "POST",
+     url: "http://pds.in.th/phpadmin/loadmatchpublic.php",
+     dataType: 'json',
+     data: {},
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+       console.log(data);
+       localStorage['matchid'] = data.matchid;
+       localStorage['matchname'] = data.matchname;
+       localStorage['userhost'] = data.userhost;
+       localStorage['fieldname'] = data.fieldname;
+       localStorage['date'] = data.date;
+     }
+    });
+    setTimeout(()=>{
+      this.state.publicFromLoad=[]
+      if(localStorage['matchid']){
+        var matchid = localStorage['matchid'];
+        var matchname = localStorage['matchname'];
+        var userhost = localStorage['userhost'];
+        var fieldname = localStorage['fieldname'];
+        var date = localStorage['date'];
+
+        matchid = JSON.parse("["+matchid+"]")
+        matchname = matchname.split(",",matchname.length)
+        userhost= JSON.parse("["+userhost+"]")
+        fieldname= fieldname.split(",",fieldname.length)
+        date= date.split(",",date.length)
+
+        for(var i = 0;i < matchid.length;i++){
+          var obj = {
+            matchid: matchid[i],
+            matchname: matchname[i],
+            userhost: userhost[i],
+            fieldname: fieldname[i],
+            date: date[i]
+          }
+          this.state.publicFromLoad.push(obj);
+        }
+        console.log("this.state.publicFromLoad :::",this.state.publicFromLoad)
+      }
+      this.publicPageToggle()
+      this.dashboardRefresh = false
+      this.showPublicFromLoad()
+    },500)
+    localStorage.clear()
+  }
+
   getResultCreateMatch=()=>{
     var result = localStorage['response'];
     return result;
-    //return 'Success'
   }
   CreateMatchAction=()=>{
     if(this.getResultCreateMatch()){
@@ -602,7 +663,7 @@ class Dashboard extends Component {
         //console.log(i)
         this.state.dataFromLoad.push(this.props.loadMatchData[i]);
       }
-      //console.log('this.state.dataFromLoad after set::',this.state.dataFromLoad);
+      console.log('this.state.dataFromLoad after set::',this.state.dataFromLoad);
       this.setState(this.state);
     }
   }
@@ -616,16 +677,32 @@ class Dashboard extends Component {
   showRunningFromLoad = () => {
     if(!this.dashboardRefresh ){
       this.dashboardRefresh=true;
-      console.log('showRunningFromLoad');
       this.setState(this.state);
     }
   }
+  showPublicFromLoad = () =>{
+    if(!this.dashboardRefresh ){
+      this.dashboardRefresh=true;
+      this.setState(this.state);
+    }
+  }
+
   refreshData=()=>{
     setTimeout(()=>{
       console.log("refresh");
       this.state.dashboardRefresh = false
       this.showDataFromLoad()
     },500);
+  }
+  dashboardPageClick = ()=>{
+    console.log("dashboardPageClick");
+    this.props.loadMatch();
+    setTimeout(()=>{
+      this.dashboardStateToggle()
+      this.dashboardRefresh = false
+      this.showDataFromLoad()
+    },500);
+    this.drawerToggleClickHandler()
   }
   render() {
     let backDrop;
@@ -636,7 +713,8 @@ class Dashboard extends Component {
     if(
       this.state.matchDetailState === false &&
       this.state.historyPage === false &&
-      this.state.matchRunningState === false)
+      this.state.matchRunningState === false &&
+      this.state.publicPageState === false)
       {
       this.refreshData()
       return(
@@ -653,8 +731,9 @@ class Dashboard extends Component {
             show={this.state.sideDrawerOpen}
             click={pageClickState}
             runningPageClick={this.HandlerLoadRunning}
-            dashboardPageClick={this.refreshData}
+            dashboardPageClick={this.dashboardPageClick}
             historyPageClick={this.HandlerLoadHistory}
+            publicPageClick={this.HandlerLoadPublicMatch}
             lang={this.state.languageState}
             langClick={this.languageToggle}/>
           {backDrop}
@@ -714,44 +793,60 @@ class Dashboard extends Component {
         </div>
       );
     }
+
+
     //----------History----------
     else if(this.state.matchDetailState === false &&
       this.state.historyPage === true &&
-      this.state.matchRunningState === false){
-      setTimeout(this.showHistoryFromLoad,1000);
-      console.log("this.state.historyFromLoad",this.state.historyFromLoad)
+      this.state.matchRunningState === false &&
+      this.state.publicPageState === false){
+      this.refreshData()
       return(
         <div>
           <TopNav
+            userID = {this.props.userID}
             loadField = {this.HandlerLoadField}
             drawerClickHandler = {this.drawerToggleClickHandler}
+            notiClick = {this.HandlerActivityRequest}
             />
           <SideNav
+            notiClick = {this.sideNaveNoti}
             logOut = {this.props.logOut}
             show={this.state.sideDrawerOpen}
             click={pageClickState}
             runningPageClick={this.HandlerLoadRunning}
-            dashboardPageClick={this.dashboardStateToggle}
+            dashboardPageClick={this.dashboardPageClick}
             historyPageClick={this.HandlerLoadHistory}
+            publicPageClick={this.HandlerLoadPublicMatch}
             lang={this.state.languageState}
             langClick={this.languageToggle}/>
           {backDrop}
           <div className="maincontent">
-            {this.state.historyFromLoad.map((data)=>
-              <HistoryCard
-                matchID = {data.matchid}
-                matchName = {data.matchname}
-                userHost = {data.userhost}
-                fieldName = {data.fieldname}
-                date = {data.date}
-                />
-            )}
+            <DropDown
+              getActivityRequest = {this.getActivityRequest}
+              activityRequest = {this.state.activityRequestMap}
+              notiState = {this.state.notiToggle} />
+              {this.state.historyFromLoad.map((data)=>
+                <HistoryCard
+                  matchID = {data.matchid}
+                  matchName = {data.matchname}
+                  userHost = {data.userhost}
+                  fieldName = {data.fieldname}
+                  date = {data.date}
+                  />
+              )}
           </div>
+          <ModalRoomPassword
+            roomDetailToAccess = {this.state.roomDetailToAccess}
+            modalClick = {this.toggleRoomPasswordModal}
+            modalState = {this.state.roomPasswordModal} />
           <ModalAddScore
-            modalClick = {this.toggleAddScoreModal}
+            closeAddScoreModal = {this.toggleAddScoreModal}
+            calculateScore = {this.calculateScore}
             modalState = {this.state.addscoreModalIsOpen} />
           <ModalAddPeople
             addPeople = {this.addPeople}
+            addRequestPlayer = {this.addRequestPlayer}
             matchTeamNumber = {this.state.matchModalData.MatchTeamNumber}
             modalClick = {this.toggleAddpeopleModal}
             modalState = {this.state.addpeopleModalIsOpen} />
@@ -777,84 +872,49 @@ class Dashboard extends Component {
     else if(
       this.state.matchDetailState === true &&
       this.state.historyPage === false &&
-      this.state.matchRunningState === false){
+      this.state.matchRunningState === false &&
+      this.state.publicPageState === false){
       this.dashboardRefresh=false;
-      setTimeout(this.showDataFromLoad,1000);
+      this.refreshData()
       console.log('sentCardTargetID ::',this.props.sentCardTargetID)
       return(
         <div>
           <TopNav
-            drawerClickHandler = {this.drawerToggleClickHandler}/>
-          <SideNav
-            show={this.state.sideDrawerOpen}
-            click={pageClickState}
-            lang={this.state.languageState}
-            langClick={this.languageToggle}/>
-          {backDrop}
-          <div className="maincontent">
-            <p>{"this is content"}</p>
-            <p>{this.state.data.MatchName}</p>
-            <p>{this.state.data.MatchDate}</p>
-          </div>
-          <ModalAddPeople
-            modalClick = {this.toggleAddpeopleModal}
-            modalState = {this.state.addpeopleModalIsOpen} />
-          <ModalCreateMatch
-            addMatch = {this.HandlerAddMatch}
-            modalClick = {this.toggleCreateModal}
-            createSetFieldId = {this.createSetFieldId}
-            createSetMatchName = {this.createSetMatchName}
-            createSetTypeRoom = {this.createSetTypeRoom}
-            createSetDate = {this.createSetDate}
-            createSetTeamNumber = {this.createSetTeamNumber}
-            createSetDepartmentNumber = {this.createSetDepartmentNumber}
-            fieldDetail = {this.state.fieldFromLoad}
-            matchModalData = {this.state.matchModalData}
-            modalClose = {this.closeCreateMatchModal}
-            modalState = {this.state.createModalIsOpen}/>
-        </div>
-      );
-    }
-    //----------Running----------
-    else if(
-      this.state.matchDetailState === false &&
-      this.state.historyPage === false &&
-      this.state.matchRunningState === true ){
-        setTimeout(this.showRunningFromLoad,1000);
-        //console.log("RunningFromLoad ::",this.state.runningFromLoad)
-      return(
-        <div>
-          <TopNav
+            userID = {this.props.userID}
             loadField = {this.HandlerLoadField}
             drawerClickHandler = {this.drawerToggleClickHandler}
+            notiClick = {this.HandlerActivityRequest}
             />
           <SideNav
+            notiClick = {this.sideNaveNoti}
             logOut = {this.props.logOut}
             show={this.state.sideDrawerOpen}
             click={pageClickState}
             runningPageClick={this.HandlerLoadRunning}
-            dashboardPageClick={this.dashboardStateToggle}
+            dashboardPageClick={this.dashboardPageClick}
             historyPageClick={this.HandlerLoadHistory}
+            publicPageClick={this.HandlerLoadPublicMatch}
             lang={this.state.languageState}
             langClick={this.languageToggle}/>
           {backDrop}
           <div className="maincontent">
-            {this.state.runningFromLoad.map((data)=>
-                <Card
-                  data={data}
-                  targetClickID={this.getCardTargetID}
-                  loadDetail = {this.loadDetail}
-                  matchDetailClick = {this.matchDetailStateToggle}
-                  addPeopleClick = {this.toggleAddpeopleModal}
-                  addScoreClick = {this.toggleAddScoreModal}
-                  />
-            )}
+            <DropDown
+              getActivityRequest = {this.getActivityRequest}
+              activityRequest = {this.state.activityRequestMap}
+              notiState = {this.state.notiToggle} />
+
           </div>
+          <ModalRoomPassword
+            roomDetailToAccess = {this.state.roomDetailToAccess}
+            modalClick = {this.toggleRoomPasswordModal}
+            modalState = {this.state.roomPasswordModal} />
           <ModalAddScore
-            modalClick = {this.toggleAddScoreModal}
+            closeAddScoreModal = {this.toggleAddScoreModal}
+            calculateScore = {this.calculateScore}
             modalState = {this.state.addscoreModalIsOpen} />
           <ModalAddPeople
             addPeople = {this.addPeople}
+            addRequestPlayer = {this.addRequestPlayer}
             matchTeamNumber = {this.state.matchModalData.MatchTeamNumber}
             modalClick = {this.toggleAddpeopleModal}
             modalState = {this.state.addpeopleModalIsOpen} />
@@ -876,6 +936,173 @@ class Dashboard extends Component {
         </div>
       );
     }
+    //----------Running----------
+    else if(
+      this.state.matchDetailState === false &&
+      this.state.historyPage === false &&
+      this.state.matchRunningState === true &&
+      this.state.publicPageState === false){
+        this.refreshData()
+        //console.log("RunningFromLoad ::",this.state.runningFromLoad)
+      return(
+        <div>
+          <TopNav
+            userID = {this.props.userID}
+            loadField = {this.HandlerLoadField}
+            drawerClickHandler = {this.drawerToggleClickHandler}
+            notiClick = {this.HandlerActivityRequest}
+            />
+          <SideNav
+            notiClick = {this.sideNaveNoti}
+            logOut = {this.props.logOut}
+            show={this.state.sideDrawerOpen}
+            click={pageClickState}
+            runningPageClick={this.HandlerLoadRunning}
+            dashboardPageClick={this.dashboardPageClick}
+            historyPageClick={this.HandlerLoadHistory}
+            publicPageClick={this.HandlerLoadPublicMatch}
+            lang={this.state.languageState}
+            langClick={this.languageToggle}/>
+          {backDrop}
+          <div className="maincontent">
+            <DropDown
+              getActivityRequest = {this.getActivityRequest}
+              activityRequest = {this.state.activityRequestMap}
+              notiState = {this.state.notiToggle} />
+            {this.state.runningFromLoad.map((number,i) =>
+                <Card
+                  data={number}
+                  userID={this.props.userID}
+                  setInviteAction = {this.setInviteAction}
+                  sentRequestPlayerNotOwn = {this.sentRequestPlayerNotOwn}
+                  sentRequestPlayer={this.sentRequestPlayer}
+                  getCardTargetData={this.getCardTargetData}
+                  targetClickID={this.getCardTargetID}
+                  loadDetail = {this.loadDetail}
+                  getRoomDetailToAccess = {this.getRoomDetailToAccess}
+                  getCalScoreMatchID={this.getCalScoreMatchID}
+                  matchDetailClick = {this.matchDetailStateToggle}
+                  roomPasswordClick = {this.toggleRoomPasswordModal}
+                  addPeopleClick = {this.toggleAddpeopleModal}
+                  addScoreClick = {this.toggleAddScoreModal}
+                  />
+              )}
+          </div>
+          <ModalRoomPassword
+            roomDetailToAccess = {this.state.roomDetailToAccess}
+            modalClick = {this.toggleRoomPasswordModal}
+            modalState = {this.state.roomPasswordModal} />
+          <ModalAddScore
+            closeAddScoreModal = {this.toggleAddScoreModal}
+            calculateScore = {this.calculateScore}
+            modalState = {this.state.addscoreModalIsOpen} />
+          <ModalAddPeople
+            addPeople = {this.addPeople}
+            addRequestPlayer = {this.addRequestPlayer}
+            matchTeamNumber = {this.state.matchModalData.MatchTeamNumber}
+            modalClick = {this.toggleAddpeopleModal}
+            modalState = {this.state.addpeopleModalIsOpen} />
+
+          <ModalCreateMatch
+            addMatch = {this.HandlerAddMatch}
+            modalClick = {this.toggleCreateModal}
+            createSetFieldId = {this.createSetFieldId}
+            createSetMatchName = {this.createSetMatchName}
+            createSetTypeRoom = {this.createSetTypeRoom}
+            createSetDate = {this.createSetDate}
+            createSetTeamNumber = {this.createSetTeamNumber}
+            createSetDepartmentNumber = {this.createSetDepartmentNumber}
+
+            fieldDetail = {this.state.fieldFromLoad}
+            matchModalData = {this.state.matchModalData}
+            modalClose = {this.closeCreateMatchModal}
+            modalState = {this.state.createModalIsOpen}/>
+        </div>
+      );
+    }
+    //----------Public----------
+    else if(
+      this.state.matchDetailState === false &&
+      this.state.historyPage === false &&
+      this.state.matchRunningState === false &&
+      this.state.publicPageState === true){
+        this.refreshData()
+        return(
+          <div>
+            <TopNav
+              userID = {this.props.userID}
+              loadField = {this.HandlerLoadField}
+              drawerClickHandler = {this.drawerToggleClickHandler}
+              notiClick = {this.HandlerActivityRequest}
+              />
+            <SideNav
+              notiClick = {this.sideNaveNoti}
+              logOut = {this.props.logOut}
+              show={this.state.sideDrawerOpen}
+              click={pageClickState}
+              runningPageClick={this.HandlerLoadRunning}
+              dashboardPageClick={this.dashboardPageClick}
+              historyPageClick={this.HandlerLoadHistory}
+              publicPageClick={this.HandlerLoadPublicMatch}
+              lang={this.state.languageState}
+              langClick={this.languageToggle}/>
+            {backDrop}
+            <div className="maincontent">
+              <DropDown
+                getActivityRequest = {this.getActivityRequest}
+                activityRequest = {this.state.activityRequestMap}
+                notiState = {this.state.notiToggle} />
+              {this.state.publicFromLoad.map((number,i) =>
+                  <Card
+                    data={number}
+                    userID={this.props.userID}
+                    setInviteAction = {this.setInviteAction}
+                    sentRequestPlayerNotOwn = {this.sentRequestPlayerNotOwn}
+                    sentRequestPlayer={this.sentRequestPlayer}
+                    getCardTargetData={this.getCardTargetData}
+                    targetClickID={this.getCardTargetID}
+                    loadDetail = {this.loadDetail}
+                    getRoomDetailToAccess = {this.getRoomDetailToAccess}
+                    getCalScoreMatchID={this.getCalScoreMatchID}
+                    matchDetailClick = {this.matchDetailStateToggle}
+                    roomPasswordClick = {this.toggleRoomPasswordModal}
+                    addPeopleClick = {this.toggleAddpeopleModal}
+                    addScoreClick = {this.toggleAddScoreModal}
+                    />
+                )}
+            </div>
+            <ModalRoomPassword
+              roomDetailToAccess = {this.state.roomDetailToAccess}
+              modalClick = {this.toggleRoomPasswordModal}
+              modalState = {this.state.roomPasswordModal} />
+            <ModalAddScore
+              closeAddScoreModal = {this.toggleAddScoreModal}
+              calculateScore = {this.calculateScore}
+              modalState = {this.state.addscoreModalIsOpen} />
+            <ModalAddPeople
+              addPeople = {this.addPeople}
+              addRequestPlayer = {this.addRequestPlayer}
+              matchTeamNumber = {this.state.matchModalData.MatchTeamNumber}
+              modalClick = {this.toggleAddpeopleModal}
+              modalState = {this.state.addpeopleModalIsOpen} />
+
+            <ModalCreateMatch
+              addMatch = {this.HandlerAddMatch}
+              modalClick = {this.toggleCreateModal}
+              createSetFieldId = {this.createSetFieldId}
+              createSetMatchName = {this.createSetMatchName}
+              createSetTypeRoom = {this.createSetTypeRoom}
+              createSetDate = {this.createSetDate}
+              createSetTeamNumber = {this.createSetTeamNumber}
+              createSetDepartmentNumber = {this.createSetDepartmentNumber}
+
+              fieldDetail = {this.state.fieldFromLoad}
+              matchModalData = {this.state.matchModalData}
+              modalClose = {this.closeCreateMatchModal}
+              modalState = {this.state.createModalIsOpen}/>
+          </div>
+        );
+      }
   }
 }
 

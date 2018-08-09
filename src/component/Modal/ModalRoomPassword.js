@@ -24,7 +24,7 @@ class ModalRoomPassword extends React.Component{
      url: "http://pds.in.th/phpadmin/matchaccess.php",
      dataType: 'json',
      data: {
-       "matchid": this.props.roomDetailToAccess.matchid,
+       "matchid": parseInt(this.props.roomDetailToAccess.matchid),
        "password": this.state.roomPassword,
      },
      xhrFields: { withCredentials: true },

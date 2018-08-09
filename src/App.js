@@ -61,7 +61,7 @@ class App extends Component {
     $.ajax({
       type: "POST",
      //url: "http://127.0.0.1/php/login.php",
-     url: "http://pds.in.th/phpadmin/loadmatchpublic.php",
+     url: "http://pds.in.th/phpadmin/loadmatchprivate.php",
      dataType: 'json',
      data: {},
      xhrFields: { withCredentials: true },
@@ -77,14 +77,12 @@ class App extends Component {
      });
      setTimeout(()=>{
        if(localStorage['matchid']){
-         //console.log("localStorage['matchid']",localStorage['matchid']);
          var matchid = localStorage['matchid'];
          var userhost = localStorage['userhost'];
          var matchname = localStorage['matchname'];
          var type = localStorage['type'];
          var fieldname = localStorage['fieldname'];
          var date = localStorage['date'];
-         //console.log("matchid :::",matchid);
          matchid = JSON.parse("["+matchid+"]")
          matchname = matchname.split(",",matchname.length)
          userhost= JSON.parse("["+userhost+"]")

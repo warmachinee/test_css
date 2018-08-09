@@ -98,13 +98,6 @@ class ModalCreateMatch extends React.Component{
   addMatch=()=>{
     console.log("matchModalData ::: ",this.props.matchModalData)
     this.createSetFieldId()
-    /*console.log("fieldid ::: ",this.props.matchModalData.fieldid)
-    console.log("matchname ::: ",this.props.matchModalData.matchname)
-    console.log("typeroom ::: ",this.props.matchModalData.typeroom)
-    console.log("date ::: ",this.props.matchModalData.date)
-    console.log("teamnum ::: ",this.props.matchModalData.teamnum)
-    console.log("departnum ::: ",this.props.matchModalData.departnum)*/
-    //this.props.modalClick();
     if(
       this.props.matchModalData.matchname &&
       this.props.matchModalData.fieldid &&

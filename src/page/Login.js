@@ -23,10 +23,6 @@ class Login extends Component{
         lastname:'',
         phoneNumber:'',
       },
-      checkPassword:{
-        password:'',
-        confirmPassword:''
-      }
     }
   }
   state = {
@@ -53,7 +49,8 @@ class Login extends Component{
     this.state.regisData.lastname = Lastname
   }
   inputPasswordRegis = (Password) =>{
-    this.state.checkPassword.password = Password
+    this.state.regisData.password = Password
+    console.log(this.state.regisData.password)
   }
   sendUserID =() =>{
     this.props.userID(this.state.userID)

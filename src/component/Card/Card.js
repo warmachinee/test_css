@@ -51,7 +51,7 @@ class Card extends React.Component{
        url: "http://pds.in.th/phpadmin/matchaccess.php",
        dataType: 'json',
        data: {
-         "matchid": Data.matchid,
+         "matchid": parseInt(Data.matchid),
          "password": 0,
        },
        xhrFields: { withCredentials: true },
@@ -64,6 +64,7 @@ class Card extends React.Component{
         if(localStorage['response']){
           var response = localStorage['response'];
         }
+        console.log(response);
         alert(response)
       },250)
     }else{
