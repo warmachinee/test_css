@@ -10,6 +10,7 @@ import Card from '../component/Card/Card'
 import ModalCreateMatch from '../component/Modal/ModalCreateMatch'
 import ModalAddPeople from '../component/Modal/ModalAddPeople'
 import ModalAddScore from '../component/Modal/ModalAddScore'
+import ModalRoomPassword from '../component/Modal/ModalRoomPassword'
 import HistoryCard from '../component/Card/HistoryCard'
 import DropDown from '../component/DropDown/DropDown'
 
@@ -24,6 +25,7 @@ class Dashboard extends Component {
       createModalIsOpen: false,
       addpeopleModalIsOpen: false,
       addscoreModalIsOpen: false,
+      roomPasswordModal:false,
       sideDrawerOpen: false,
       notiToggle: false,
       languageState: false,
@@ -43,6 +45,7 @@ class Dashboard extends Component {
       runningFromLoad:[],
       activityRequest:[],
       activityRequestMap:[],
+      roomDetailToAccess:[],
       dataFromLoad:[],
       UserID:'',
       matchModalData:{
@@ -82,7 +85,6 @@ class Dashboard extends Component {
   };
   dashboardStateToggle = () =>{
     this.drawerToggleClickHandler()
-
     this.setState((prevState)=>{
       return {
         historyPage: false,
@@ -149,6 +151,9 @@ class Dashboard extends Component {
   getCalScoreMatchID=(MatchID)=>{
     this.state.calScoreMatchID = MatchID
   }
+  getRoomDetailToAccess=(Data)=>{
+    this.state.roomDetailToAccess = Data
+  }
   calculateScore = (score)=>{
     this.toggleAddScoreModal()
     this.HandlerUpdateScore(score)
@@ -157,6 +162,11 @@ class Dashboard extends Component {
   toggleAddScoreModal = () => {
     this.setState((state)=>{
       return {addscoreModalIsOpen: !state.addscoreModalIsOpen}
+    });
+  }
+  toggleRoomPasswordModal = () =>{
+    this.setState((state)=>{
+      return{roomPasswordModal: !state.roomPasswordModal}
     });
   }
   createSetFieldId=(fieldid)=>{
@@ -270,8 +280,6 @@ class Dashboard extends Component {
   }
 
   HandlerUpdateScore = (data) =>{
-    console.log("Score ::",data);
-    console.log("MatchID ::",this.state.calScoreMatchID.matchid);
     var geturl;
     geturl = $.ajax({
       type: "POST",
@@ -290,13 +298,14 @@ class Dashboard extends Component {
      }
     });
     setTimeout(()=>{
-      if(localStorage['response']){
+      if(localStorage['response']==='success'){
         console.log(localStorage['response']);
-        this.toggleAddScoreModal()
+        this.setState({addscoreModalIsOpen: false})
         this.state.calScoreMatchID = ''
+      }else{
+        alert(localStorage['response'])
       }
-
-    },1000)
+    },500)
     localStorage.clear()
   }
 
@@ -374,7 +383,7 @@ class Dashboard extends Component {
         //this.setState({dataLength: this.state.fieldFromLoad.length})//-------
       }
       this.toggleCreateModal()
-    },1500)
+    },500)
     localStorage.clear()
   }
 
@@ -535,7 +544,7 @@ class Dashboard extends Component {
       matchModalData:{}
     });
     this.props.loadMatch();
-    setTimeout(this.showDataFromLoad,1500);
+    setTimeout(this.showDataFromLoad,500);
   }
   addPeople = (PlayerName) =>{
     this.state.invitePlayer = PlayerName
@@ -564,8 +573,8 @@ class Dashboard extends Component {
     this.state.inviteAction = action
   }
   addRequestPlayer = ()=>{
-    console.log("this.props.userID ",this.props.userID);
-    console.log("this.state.invitePlayer ",this.state.invitePlayer);
+    //console.log("this.props.userID ",this.props.userID);
+    //console.log("this.state.invitePlayer ",this.state.invitePlayer);
     if(this.state.invitePlayer===this.props.userID){
       alert("Same id please enter again")
     }else{
@@ -588,10 +597,10 @@ class Dashboard extends Component {
     if(!this.dashboardRefresh ){
       this.dashboardRefresh=true;
       this.state.dataFromLoad=[]
+      this.props.loadMatch()
       for(var i = 0;i < this.props.loadMatchData.length ;i++){
         //console.log(i)
         this.state.dataFromLoad.push(this.props.loadMatchData[i]);
-        console.log('this.state.dataFromLoad in for::',this.state.dataFromLoad);
       }
       //console.log('this.state.dataFromLoad after set::',this.state.dataFromLoad);
       this.setState(this.state);
@@ -611,6 +620,13 @@ class Dashboard extends Component {
       this.setState(this.state);
     }
   }
+  refreshData=()=>{
+    setTimeout(()=>{
+      console.log("refresh");
+      this.state.dashboardRefresh = false
+      this.showDataFromLoad()
+    },500);
+  }
   render() {
     let backDrop;
     if(this.state.sideDrawerOpen){
@@ -620,8 +636,9 @@ class Dashboard extends Component {
     if(
       this.state.matchDetailState === false &&
       this.state.historyPage === false &&
-      this.state.matchRunningState === false){
-      setTimeout(this.showDataFromLoad,1000);
+      this.state.matchRunningState === false)
+      {
+      this.refreshData()
       return(
         <div>
           <TopNav
@@ -636,7 +653,7 @@ class Dashboard extends Component {
             show={this.state.sideDrawerOpen}
             click={pageClickState}
             runningPageClick={this.HandlerLoadRunning}
-            dashboardPageClick={this.dashboardStateToggle}
+            dashboardPageClick={this.refreshData}
             historyPageClick={this.HandlerLoadHistory}
             lang={this.state.languageState}
             langClick={this.languageToggle}/>
@@ -656,13 +673,19 @@ class Dashboard extends Component {
                   getCardTargetData={this.getCardTargetData}
                   targetClickID={this.getCardTargetID}
                   loadDetail = {this.loadDetail}
+                  getRoomDetailToAccess = {this.getRoomDetailToAccess}
                   getCalScoreMatchID={this.getCalScoreMatchID}
                   matchDetailClick = {this.matchDetailStateToggle}
+                  roomPasswordClick = {this.toggleRoomPasswordModal}
                   addPeopleClick = {this.toggleAddpeopleModal}
                   addScoreClick = {this.toggleAddScoreModal}
                   />
               )}
           </div>
+          <ModalRoomPassword
+            roomDetailToAccess = {this.state.roomDetailToAccess}
+            modalClick = {this.toggleRoomPasswordModal}
+            modalState = {this.state.roomPasswordModal} />
           <ModalAddScore
             closeAddScoreModal = {this.toggleAddScoreModal}
             calculateScore = {this.calculateScore}

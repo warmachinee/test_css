@@ -89,7 +89,7 @@ class ModalCreateMatch extends React.Component{
       }
       this.createModalRefresh = false;
       this.showFieldFromLoad()
-    },1500)
+    },500)
     localStorage.clear()
   }
   getCourt = (Court)=>{

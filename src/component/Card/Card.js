@@ -1,6 +1,6 @@
 import React from 'react'
 import './Card.css'
-
+import $ from 'jquery'
 import ic_person_add from '../img/baseline-person_add-24px.svg'
 import ic_location from '../img/baseline-place-24px.svg'
 import ic_edit from '../img/baseline-edit-24px-white.svg'
@@ -42,13 +42,44 @@ class Card extends React.Component{
     this.props.getCalScoreMatchID(value)
     this.props.addScoreClick()
   }
+  detailRoom = (Data)=>{
+    if(Data.type === 'public' ){
+      console.log("Type Room Public:::",Data.type)
+      var geturl;
+      geturl = $.ajax({
+       type: "POST",
+       url: "http://pds.in.th/phpadmin/matchaccess.php",
+       dataType: 'json',
+       data: {
+         "matchid": Data.matchid,
+         "password": 0,
+       },
+       xhrFields: { withCredentials: true },
+       success: function(data) {
+         localStorage['response']=data.status;
+         console.log(data);
+       }
+      });
+      setTimeout(()=>{
+        if(localStorage['response']){
+          var response = localStorage['response'];
+        }
+        alert(response)
+      },250)
+    }else{
+      console.log("Type Room Private:::",Data.type)
+      this.props.getRoomDetailToAccess(Data)
+      this.props.roomPasswordClick()
+    }
+  }
+
   render(){
     let cardMatchName = "Match Name"
     let cardDate ="01/01/2012"
     let cardLocation = "Location"
     let cardPrivateDrawer = 'card-private public'
 
-    if(this.props.cardPrivate){
+    if(this.props.data.type === 'private'){
       cardPrivateDrawer = 'card-private private'
     }
     return(
@@ -69,7 +100,9 @@ class Card extends React.Component{
             <div className="card-add-detail">
               <a onClick={(e)=>this.getCardMatchID(this.props.data)} className="card-add"><img src={ic_person_add}></img></a>
               <div className="card-spacer-add-detail"></div>
-              <button className="card-detail">DETAIL</button>
+              <button
+                className="card-detail"
+                onClick={(e)=>this.detailRoom(this.props.data)}>DETAIL</button>
             </div>
           </div>
           <div className="card-item-small">

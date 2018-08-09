@@ -61,7 +61,7 @@ class App extends Component {
     $.ajax({
       type: "POST",
      //url: "http://127.0.0.1/php/login.php",
-     url: "http://pds.in.th/phpadmin/loadmatch.php",
+     url: "http://pds.in.th/phpadmin/loadmatchpublic.php",
      dataType: 'json',
      data: {},
      xhrFields: { withCredentials: true },
@@ -76,7 +76,6 @@ class App extends Component {
       }
      });
      setTimeout(()=>{
-       //console.log("in setLoadmatchData")
        if(localStorage['matchid']){
          //console.log("localStorage['matchid']",localStorage['matchid']);
          var matchid = localStorage['matchid'];
@@ -106,7 +105,7 @@ class App extends Component {
          }
          this.setState({dataLength: this.state.appLoadMatch.length})///Dont delete
        }
-     },1500);
+     },250);
      localStorage.clear()
    }
 

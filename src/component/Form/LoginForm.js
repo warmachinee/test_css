@@ -23,29 +23,14 @@ class LoginForm extends React.Component{
   inputPhoneRegis=(val)=>{
     this.props.inputPhoneRegis(val)
   }
-  inputSexRegis=(val)=>{
-    this.props.inputSexRegis(val)
-  }
   inputFullnameRegis=(val)=>{
     this.props.inputFullnameRegis(val)
   }
   inputLastnameRegis=(val)=>{
     this.props.inputLastnameRegis(val)
   }
-  inputNicknameRegis=(val)=>{
-    this.props.inputNicknameRegis(val)
-  }
-  inputDepartmentRegis=(val)=>{
-    this.props.inputDepartmentRegis(val)
-  }
-  inputRacketRegis=(val)=>{
-    this.props.inputRacketRegis(val)
-  }
   inputPasswordRegis=(val)=>{
     this.props.inputPasswordRegis(val)
-  }
-  inputConfirmPasswordRegis=(val)=>{
-    this.props.inputConfirmPasswordRegis(val)
   }
 
   render(){
@@ -87,20 +72,12 @@ class LoginForm extends React.Component{
                 <div className="spacer"></div>
               </div>
               <div className="form__card__items">
-                <EditTextImg type="text" placeholder="Enter Username" formType="username"
+                <EditTextImg type="text" placeholder="Enter Email" formType="username"
                   editTextValue={this.inputUsernameRegis}/>
               </div>
               <div className="form__card__items">
                 <EditTextImg type="password" placeholder="Password" formType="password"
                   editTextValue={this.inputPasswordRegis}/>
-              </div>
-              <div className="form__card__items">
-                <EditTextImg type="password" placeholder="Confirm Password" formType="password"
-                  editTextValue={this.inputConfirmPasswordRegis}/>
-              </div>
-              <div className="form__card__items">
-                <EditTextImg type="text" placeholder="Sex" formType="username"
-                  editTextValue={this.inputSexRegis}/>
               </div>
               <div className="form__card__items">
                 <EditTextImg type="text" placeholder="Fullname" formType="username"
@@ -111,20 +88,8 @@ class LoginForm extends React.Component{
                   editTextValue={this.inputLastnameRegis}/>
               </div>
               <div className="form__card__items">
-                <EditTextImg type="text" placeholder="Nickname" formType="username"
-                  editTextValue={this.inputNicknameRegis}/>
-              </div>
-              <div className="form__card__items">
                 <EditTextImg type="text" placeholder="Phone number" formType="phone"
                   editTextValue={this.inputPhoneRegis}/>
-              </div>
-              <div className="form__card__items">
-                <EditTextImg type="text" placeholder="Department" formType="department"
-                  editTextValue={this.inputDepartmentRegis}/>
-              </div>
-              <div className="form__card__items">
-                <EditTextImg type="text" placeholder="Your racket" formType="racket"
-                  editTextValue={this.inputRacketRegis}/>
               </div>
               <div className="form__card__items">
                 <Button btnLabel="Sign up" btnOnClick={this.props.submitRegis} type="button"/>
@@ -140,20 +105,12 @@ class LoginForm extends React.Component{
                 <div className="spacer"></div>
               </div>
               <div className="form__card__items">
-                <EditTextImg type="text" placeholder="Enter Username" formType="username"
+                <EditTextImg type="text" placeholder="Enter Email" formType="username"
                   editTextValue={this.inputUsernameRegis}/>
               </div>
               <div className="form__card__items">
                 <EditTextImg type="password" placeholder="Password" formType="password"
                   editTextValue={this.inputPasswordRegis}/>
-              </div>
-              <div className="form__card__items">
-                <EditTextImg type="password" placeholder="Confirm Password" formType="password"
-                  editTextValue={this.inputConfirmPasswordRegis}/>
-              </div>
-              <div className="form__card__items">
-                <EditTextImg type="text" placeholder="Sex" formType="username"
-                  editTextValue={this.inputSexRegis}/>
               </div>
               <div className="form__card__items">
                 <EditTextImg type="text" placeholder="Fullname" formType="username"
@@ -164,20 +121,8 @@ class LoginForm extends React.Component{
                   editTextValue={this.inputLastnameRegis}/>
               </div>
               <div className="form__card__items">
-                <EditTextImg type="text" placeholder="Nickname" formType="username"
-                  editTextValue={this.inputNicknameRegis}/>
-              </div>
-              <div className="form__card__items">
                 <EditTextImg type="text" placeholder="Phone number" formType="phone"
                   editTextValue={this.inputPhoneRegis}/>
-              </div>
-              <div className="form__card__items">
-                <EditTextImg type="text" placeholder="Department (optional)" formType="department"
-                  editTextValue={this.inputDepartmentRegis}/>
-              </div>
-              <div className="form__card__items">
-                <EditTextImg type="text" placeholder="Your racket (optional)" formType="racket"
-                  editTextValue={this.inputRacketRegis}/>
               </div>
               <div className="form__card__items">
                 <Button btnLabel="Sign up" btnOnClick={this.props.submitRegis} type="button"/>

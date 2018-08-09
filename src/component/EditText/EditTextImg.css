@@ -13,6 +13,9 @@
     display: inline-block;
     border: .2rem #036ec8 solid;
     background: white;
+    -webkit-border-radius: 0rem;
+    -moz-border-radius: 0rem;
+    border-radius: 0rem;
 }
 .edittextimg__grid input[type=text]:focus,
 .edittextimg__grid input[type=password]:focus,
