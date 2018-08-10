@@ -6,6 +6,7 @@ import ModalBackDrop from './ModalBackDrop'
 import EditText from '../EditText/EditText'
 import EditTextImg from '../EditText/EditTextImg'
 import Button from '../Button/Button'
+import SwitchToggle from '../Switch/SwitchToggle'
 
 class ModalCreateMatch extends React.Component{
   constructor(props){
@@ -14,8 +15,11 @@ class ModalCreateMatch extends React.Component{
     this.state={
       field:[],
       dataLength:0,
+      publicShow: 0,
       clickedFieldDetail:[],
       clickedFieldCourt:[],
+      FieldCourt:[],
+      courtNumber:[],
       clickedFieldID:''
     }
     this.showDropdownMenu = this.showDropdownMenu.bind(this);
@@ -33,8 +37,10 @@ class ModalCreateMatch extends React.Component{
       });
   }
   createSetFieldId=()=>{
-    console.log("this.state.clickedFieldDetail :::",this.state.clickedFieldDetail)
     this.props.createSetFieldId(this.state.clickedFieldDetail);
+  }
+  createSetPublicShow=()=>{
+    this.props.publicShow(this.state.publicShow)
   }
   createSetMatchName=(matchname)=>{
     this.props.createSetMatchName(matchname);
@@ -53,9 +59,8 @@ class ModalCreateMatch extends React.Component{
   }
   getField = (value)=>{
     this.state.clickedFieldID = value
-    console.log("clickedFieldID before",this.state.clickedFieldID)
     this.state.clickedFieldDetail = []
-    console.log("this.state.clickedFieldDetail.push :::",this.state.clickedFieldDetail);
+    this.state.clickedFieldDetail[0] = this.state.clickedFieldID
     var geturl;
     geturl = $.ajax({
       type: "POST",
@@ -74,17 +79,17 @@ class ModalCreateMatch extends React.Component{
       if(localStorage['fieldcord']){
         var fieldcord = localStorage['fieldcord'];
         fieldcord = fieldcord.split(",",fieldcord.length)
-        this.state.clickedFieldDetail = []
-        this.state.clickedFieldDetail.push(this.state.clickedFieldID)
-        this.state.clickedFieldID = []
+        //this.state.clickedFieldDetail = []
+        //this.state.clickedFieldDetail.push(this.state.clickedFieldID)
+        this.state.FieldCourt = []
         for(var i = 0;i < fieldcord.length;i++){
           /*var obj = {
             fieldcord: fieldcord[i]
           }*/
-          this.state.clickedFieldDetail.push(fieldcord[i]);
+          this.state.FieldCourt.push(fieldcord[i]);
         }
         //this.state.clickedFieldCourt.push(fieldcord[i]);
-        console.log("this.state.clickedFieldDetail.push(obj) :::",this.state.clickedFieldDetail)
+        console.log("this.state.clickedFieldID.push(obj) :::",this.state.FieldCourt)
         //this.setState({dataLength: this.state.fieldFromLoad.length})//-------
       }
       this.createModalRefresh = false;
@@ -92,12 +97,23 @@ class ModalCreateMatch extends React.Component{
     },500)
     localStorage.clear()
   }
-  getCourt = (Court)=>{
-    this.state.clickedFieldCourt = Court
+  getCourt = (Court,i)=>{
+    //this.state.clickedFieldCourt = []
+    this.state.courtNumber[i] = Court
+    if(this.state.courtNumber[0]===this.state.courtNumber[1]){
+      alert("Please select different court")
+    }
+    this.state.clickedFieldDetail[0] = this.state.clickedFieldID
+    this.state.clickedFieldDetail[1] = this.state.courtNumber[0]
+    this.state.clickedFieldDetail[2] = this.state.courtNumber[1]
+    console.log("this.state.courtNumber ::",this.state.courtNumber)
   }
   addMatch=()=>{
     console.log("matchModalData ::: ",this.props.matchModalData)
     this.createSetFieldId()
+    this.createSetPublicShow()
+
+    this.state.clickedFieldDetail = []
     if(
       this.props.matchModalData.matchname &&
       this.props.matchModalData.fieldid &&
@@ -116,14 +132,22 @@ class ModalCreateMatch extends React.Component{
         this.state.field.push(this.props.fieldDetail[i]);
       }
       console.log('this.state.field ::',this.state.field);
+      console.log("this.state.clickedFieldID",this.state.clickedFieldID);
       this.setState(this.state);
     }
   }
-
+  switchToggleState=(value)=>{
+    if(value){
+      this.state.publicShow = 1
+    }else{
+      this.state.publicShow = 0
+    }
+    console.log("this.state.publicShow:::",this.state.publicShow);
+  }
   render(){
 
     if(this.props.modalState){
-      setTimeout(this.showFieldFromLoad,1000);
+      setTimeout(this.showFieldFromLoad,500);
       return(
         <div className="modal-creatematch">
           <ModalBackDrop click = {this.props.modalClick}/>
@@ -134,6 +158,8 @@ class ModalCreateMatch extends React.Component{
               <label>Match name</label>
               <EditTextImg type="text" placeholder="Match name" formType="username"
                 editTextValue={this.createSetMatchName}/>
+              <p>Public</p>
+              <SwitchToggle switchToggleState={this.switchToggleState}/>
               <label>{'Location'}</label>
                 <div  className="dropdown" style={{position: 'fixed',center: '0'}}>
                  <button onClick={this.showDropdownMenu}>Select Field</button>
@@ -145,18 +171,19 @@ class ModalCreateMatch extends React.Component{
                             this.getField(d.fieldid)
                           }
                         }>{d.fieldname}</button>
-                    )}
+                      )}
                     </div>
                   ):(null)
+
                   }
                 </div>
-                <select onChange={(e)=>this.getCourt(e.target.value)}>
-                  {this.state.clickedFieldCourt.map((data,i)=>
+                <select onChange={(e)=>this.getCourt(e.target.value,0)}>
+                  {this.state.FieldCourt.map((data,i)=>
                     <option value={data}>{data}</option>
                   )}
                 </select>
-                <select onChange={(e)=>this.getCourt(e.target.value)}>
-                  {this.state.clickedFieldCourt.map((data,i)=>
+                <select onChange={(e)=>this.getCourt(e.target.value,1)}>
+                  {this.state.FieldCourt.map((data,i)=>
                     <option value={data}>{data}</option>
                   )}
                 </select>

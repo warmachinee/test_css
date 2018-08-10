@@ -54,6 +54,7 @@ class Dashboard extends Component {
         fieldid:'',
         matchname:'',
         typeroom:'',
+        publicshow:'',
         date:'',
         teamnum:'',
         departnum:'',
@@ -187,23 +188,32 @@ class Dashboard extends Component {
     });
   }
   createSetFieldId=(fieldid)=>{
-    this.state.matchModalData.fieldid = fieldid
+    if(fieldid[1] === undefined || fieldid[2] === undefined){
+      this.state.matchModalData.fieldid = fieldid
+      this.state.matchModalData.fieldid[1] = 1
+      this.state.matchModalData.fieldid[2] = 2
+    }else{
+      this.state.matchModalData.fieldid = fieldid
+    }
   }
   createSetMatchName=(matchname)=>{
     this.state.matchModalData.matchname = matchname
   }
   createSetTypeRoom=(typeroom)=>{
-    if(typeroom === "" || typeroom === null){
+    if(typeroom === "" || typeroom === null || typeroom === undefined){
       this.state.matchModalData.typeroom = 0
     }else{
       this.state.matchModalData.typeroom = typeroom
     }
   }
+  createSetPublicShow = (publicshow)=>{
+    this.state.matchModalData.publicshow = publicshow
+  }
   createSetDate=(date)=>{
     this.state.matchModalData.date = date
   }
   createSetTeamNumber=(teamnum)=>{
-    if(teamnum < 1 || teamnum === "" || teamnum === null){
+    if(teamnum < 1 || teamnum === "" || teamnum === null || teamnum === undefined){
       this.state.matchModalData.teamnum = 0
     }
     else{
@@ -212,7 +222,7 @@ class Dashboard extends Component {
 
   }
   createSetDepartmentNumber=(departnum)=>{
-    if(departnum <= 0 || departnum === "" || departnum === null){
+    if(departnum <= 0 || departnum === "" || departnum === null || departnum === undefined){
       this.state.matchModalData.departnum = 0
     }else{
       this.state.matchModalData.departnum = departnum
@@ -362,7 +372,8 @@ class Dashboard extends Component {
     localStorage.clear()
   }
 
-  HandlerLoadField = event => {
+  HandlerLoadField = (event) => {
+    console.log("Click HandlerLoadField");
     var geturl;
     geturl = $.ajax({
       type: "POST",
@@ -515,6 +526,7 @@ class Dashboard extends Component {
        "fieldid": this.state.matchModalData.fieldid,
        "matchname": this.state.matchModalData.matchname,
        "typeroom": this.state.matchModalData.typeroom,
+       "publicshow": this.state.matchModalData.publicshow,
        "date": this.state.matchModalData.date,
        "teamnum": this.state.matchModalData.teamnum,
        "departnum": this.state.matchModalData.departnum,
@@ -530,7 +542,7 @@ class Dashboard extends Component {
       var response = localStorage['response'];
       this.setState({createMatchStatus: response});
     }
-    setTimeout(this.CreateMatchAction,1000);
+    //setTimeout(this.CreateMatchAction,1000);
   }
 
   HandlerLoadPublicMatch = event => {
@@ -702,7 +714,7 @@ class Dashboard extends Component {
       this.dashboardRefresh = false
       this.showDataFromLoad()
     },500);
-    this.drawerToggleClickHandler()
+    this.setState(()=>{{sideDrawerOpen: false};});
   }
   render() {
     let backDrop;
@@ -786,6 +798,7 @@ class Dashboard extends Component {
             createSetTeamNumber = {this.createSetTeamNumber}
             createSetDepartmentNumber = {this.createSetDepartmentNumber}
 
+            publicShow = {this.createSetPublicShow}
             fieldDetail = {this.state.fieldFromLoad}
             matchModalData = {this.state.matchModalData}
             modalClose = {this.closeCreateMatchModal}
@@ -861,6 +874,7 @@ class Dashboard extends Component {
             createSetTeamNumber = {this.createSetTeamNumber}
             createSetDepartmentNumber = {this.createSetDepartmentNumber}
 
+            publicShow = {this.createSetPublicShow}
             fieldDetail = {this.state.fieldFromLoad}
             matchModalData = {this.state.matchModalData}
             modalClose = {this.closeCreateMatchModal}
@@ -929,6 +943,7 @@ class Dashboard extends Component {
             createSetTeamNumber = {this.createSetTeamNumber}
             createSetDepartmentNumber = {this.createSetDepartmentNumber}
 
+            publicShow = {this.createSetPublicShow}
             fieldDetail = {this.state.fieldFromLoad}
             matchModalData = {this.state.matchModalData}
             modalClose = {this.closeCreateMatchModal}
@@ -1013,6 +1028,7 @@ class Dashboard extends Component {
             createSetTeamNumber = {this.createSetTeamNumber}
             createSetDepartmentNumber = {this.createSetDepartmentNumber}
 
+            publicShow = {this.createSetPublicShow}
             fieldDetail = {this.state.fieldFromLoad}
             matchModalData = {this.state.matchModalData}
             modalClose = {this.closeCreateMatchModal}

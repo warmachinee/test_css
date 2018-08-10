@@ -52,7 +52,7 @@ class Card extends React.Component{
        dataType: 'json',
        data: {
          "matchid": parseInt(Data.matchid),
-         "password": 0,
+         "password": 1,
        },
        xhrFields: { withCredentials: true },
        success: function(data) {
