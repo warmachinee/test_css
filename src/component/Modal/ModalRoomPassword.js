@@ -37,7 +37,8 @@ class ModalRoomPassword extends React.Component{
       if(localStorage['response']){
         var response = localStorage['response'];
       }
-      alert(response)
+      console.log(response);
+      this.props.modalClick()
     },250)
   }
   render(){

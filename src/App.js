@@ -66,7 +66,7 @@ class App extends Component {
      data: {},
      xhrFields: { withCredentials: true },
      success: function(data) {
-       console.log(data)
+       //console.log(data)
        localStorage['matchid']=data.matchid;
        localStorage['userhost']=data.userhost;
        localStorage['matchname']=data.matchname;

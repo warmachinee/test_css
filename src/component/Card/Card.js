@@ -52,23 +52,24 @@ class Card extends React.Component{
        dataType: 'json',
        data: {
          "matchid": parseInt(Data.matchid),
-         "password": 1,
+         "password": 0,
        },
        xhrFields: { withCredentials: true },
        success: function(data) {
          localStorage['response']=data.status;
-         console.log(data);
+         //console.log(data);
        }
       });
       setTimeout(()=>{
         if(localStorage['response']){
           var response = localStorage['response'];
         }
-        console.log(response);
-        alert(response)
+        //console.log(response);
+        this.props.targetClickID(Data)
+        //alert(response)
       },250)
     }else{
-      console.log("Type Room Private:::",Data.type)
+      //console.log("Type Room Private:::",Data.type)
       this.props.getRoomDetailToAccess(Data)
       this.props.roomPasswordClick()
     }

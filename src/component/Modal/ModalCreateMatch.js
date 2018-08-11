@@ -155,52 +155,66 @@ class ModalCreateMatch extends React.Component{
           <div className="modal-creatematch__grid">
             <div className="spacer"></div>
             <div className="modal-creatematch__card">
-              <label>Match name</label>
-              <EditTextImg type="text" placeholder="Match name" formType="username"
-                editTextValue={this.createSetMatchName}/>
-              <p>Public</p>
-              <SwitchToggle switchToggleState={this.switchToggleState}/>
-              <label>{'Location'}</label>
-                <div  className="dropdown" style={{position: 'fixed',center: '0'}}>
-                 <button onClick={this.showDropdownMenu}>Select Field</button>
-                  { this.state.displayMenu ? (
-                    <div className="dropdown__item">
-                    {this.state.field.map((d) =>
-                      <button onClick={
-                          (e)=>{
-                            this.getField(d.fieldid)
-                          }
-                        }>{d.fieldname}</button>
+              <div className="modal-creatematch__items">
+                <label>Match name</label>
+                <EditTextImg type="text" placeholder="Match name" formType="username"
+                  editTextValue={this.createSetMatchName}/>
+              </div>
+              <div className="modal-creatematch__items">
+                <p>Public</p>
+                <SwitchToggle switchToggleState={this.switchToggleState}/>
+              </div>
+              <div className="modal-creatematch__items">
+                <label>{'Location'}</label>
+                  <div  className="dropdown__item">
+                   <button onClick={this.showDropdownMenu}>Select Field</button>
+                    { this.state.displayMenu ? (
+                      <div className="dropdown__item">
+                      {this.state.field.map((d) =>
+                        <button onClick={
+                            (e)=>{
+                              this.getField(d.fieldid)
+                            }
+                          }>{d.fieldname}</button>
+                        )}
+                      </div>
+                    ):(null)}
+                    <select onChange={(e)=>this.getCourt(e.target.value,0)}>
+                      {this.state.FieldCourt.map((data,i)=>
+                        <option value={data}>{data}</option>
                       )}
-                    </div>
-                  ):(null)
-
-                  }
-                </div>
-                <select onChange={(e)=>this.getCourt(e.target.value,0)}>
-                  {this.state.FieldCourt.map((data,i)=>
-                    <option value={data}>{data}</option>
-                  )}
-                </select>
-                <select onChange={(e)=>this.getCourt(e.target.value,1)}>
-                  {this.state.FieldCourt.map((data,i)=>
-                    <option value={data}>{data}</option>
-                  )}
-                </select>
-              <label>Team</label>
-              <EditTextImg type="number" formType="username" placeholder="How many team?"
-                editTextValue={this.createSetTeamNumber}/>
-              <label>Department</label>
-              <EditTextImg type="number" formType="department" placeholder="How many Department?"
-                editTextValue={this.createSetDepartmentNumber}/>
-              <label>{'Date'}</label>
-              <EditTextImg type="date" placeholder="Date" formType="username"
-                editTextValue={this.createSetDate}/>
-              <label>Room password</label>
-              <EditTextImg type="password" placeholder="Set password to access" formType="password"
-                editTextValue={this.createSetTypeRoom}/>
-              <Button btnLabel="Close" btnOnClick = {this.props.modalClose}></Button>
-              <Button btnLabel="Create" btnOnClick = {this.addMatch}></Button>
+                    </select>
+                    <select onChange={(e)=>this.getCourt(e.target.value,1)}>
+                      {this.state.FieldCourt.map((data,i)=>
+                        <option value={data}>{data}</option>
+                      )}
+                    </select>
+                  </div>
+              </div>
+              <div className="modal-creatematch__items">
+                <label>Team</label>
+                <EditTextImg type="number" formType="username" placeholder="How many team?"
+                  editTextValue={this.createSetTeamNumber}/>
+              </div>
+              <div className="modal-creatematch__items">
+                <label>Department</label>
+                <EditTextImg type="number" formType="department" placeholder="How many Department?"
+                  editTextValue={this.createSetDepartmentNumber}/>
+              </div>
+              <div className="modal-creatematch__items">
+                <label>{'Date'}</label>
+                <EditTextImg type="date" placeholder="Date" formType="username"
+                  editTextValue={this.createSetDate}/>
+              </div>
+              <div className="modal-creatematch__items">
+                <label>Room password</label>
+                <EditTextImg type="password" placeholder="Set password to access" formType="password"
+                  editTextValue={this.createSetTypeRoom}/>
+              </div>
+              <div className="modal-creatematch__items"></div>
+              <div className="modal-creatematch__items"></div>
+              <button onClick = {this.props.modalClose}>Close</button>
+              <button onClick = {this.addMatch}>Create</button>
             </div>
             <div className="spacer"></div>
           </div>

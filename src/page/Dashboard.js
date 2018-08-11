@@ -13,6 +13,7 @@ import ModalAddScore from '../component/Modal/ModalAddScore'
 import ModalRoomPassword from '../component/Modal/ModalRoomPassword'
 import HistoryCard from '../component/Card/HistoryCard'
 import DropDown from '../component/DropDown/DropDown'
+import MatchDetail from '../component/Card/MatchDetail'
 
 const pageClickState = props =>{
   return (props.pageDashboardClick);
@@ -43,6 +44,11 @@ class Dashboard extends Component {
         action:''
       }],
       historyFromLoad:[],
+      detailMatchFromLoad:[],
+      detailMatchFromLoadUser:[],
+      detailMatchFromLoadTeamDepart:[],
+      detailMatchFromLoadHoleScore:[],
+      detailMatchFromLoadField:[],
       runningFromLoad:[],
       publicFromLoad:[],
       activityRequest:[],
@@ -112,14 +118,14 @@ class Dashboard extends Component {
     });
   }
   matchDetailStateToggle = (data) =>{
-    console.log(data)
-    /*
     this.setState((prevState)=>{
       return {
         historyPage: false,
-        matchDetailState: true
+        matchDetailState: true,
+        matchRunningState: false,
+        publicPageState: false
     };
-    });*/
+    });
   };
   sideNaveNoti=()=>{
     this.HandlerActivityRequest()
@@ -171,6 +177,7 @@ class Dashboard extends Component {
   }
   getRoomDetailToAccess=(Data)=>{
     this.state.roomDetailToAccess = Data
+
   }
   calculateScore = (score)=>{
     this.toggleAddScoreModal()
@@ -306,6 +313,188 @@ class Dashboard extends Component {
     localStorage.clear()
   }
 
+  HandlerLoadMatchUserDetail = (data) =>{
+    var userhost = data.userhost
+    this.state.detailMatchFromLoad = []
+    this.state.detailMatchFromLoadUser = []
+    this.state.detailMatchFromLoadTeamDepart = []
+    this.state.detailMatchFromLoadHoleScore = []
+    this.state.detailMatchFromLoadField = []
+    var geturl;
+    geturl = $.ajax({
+      type: "POST",
+     url: "http://pds.in.th/phpadmin/loadmatchuserdetail.php",
+     dataType: 'json',
+     data: {
+       "matchid": data.matchid,
+     },
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+       localStorage['fieldid']=data.fieldid
+       localStorage['matchname']=data.matchname
+       localStorage['fieldname']=data.fieldname
+       localStorage['datecreate']=data.datecreate
+       localStorage['datemodify']=data.datemodify
+       localStorage['datematch']=data.datematch
+       localStorage['cordA']=data.cordA
+       localStorage['cordB']=data.cordB
+       localStorage['in']=data.in
+       localStorage['out']=data.out
+       localStorage['gross']=data.gross
+       localStorage['holescore']=data.holescore
+       localStorage['userid']=data.userid
+       localStorage['fullname']=data.fullname
+       localStorage['lastname']=data.lastname
+       localStorage['typescore']=data.typescore
+       localStorage['teamnum']=data.teamnum
+       localStorage['teamno']=data.teamno
+       localStorage['departnum']=data.departnum
+       localStorage['departno']=data.departno
+       //console.log(data);
+     }
+    });
+    setTimeout(()=>{
+      if(localStorage['matchname']=data.matchname){
+        var fieldid = localStorage['fieldid'];
+        var matchname = localStorage['matchname'];
+        var fieldname = localStorage['fieldname'];
+        var datecreate = localStorage['datecreate'];
+        var datemodify = localStorage['datemodify'];
+        var datematch = localStorage['datematch'];
+        var cordA = localStorage['cordA'];
+        var cordB = localStorage['cordB'];
+        var inn = localStorage['in'];
+        var outt = localStorage['out'];
+        var gross = localStorage['gross'];
+        var holescore = localStorage['holescore'];
+        var userid = localStorage['userid'];
+        var fullname = localStorage['fullname'];
+        var lastname = localStorage['lastname'];
+
+        var teamnum = localStorage['teamnum'];
+        var teamno = localStorage['teamno'];
+        var departnum = localStorage['departnum'];
+        var departno = localStorage['departno'];
+        var typescore = localStorage['typescore'];
+
+        fieldid = JSON.parse("["+fieldid+"]")
+        matchname = matchname.split(",",matchname.length)
+        fieldname= fieldname.split(",",fieldname.length)
+        datecreate = datecreate.split(",",datecreate.length)
+        datemodify= datemodify.split(",",datemodify.length)
+        datematch = datematch.split(",",datematch.length)
+        cordA = JSON.parse("["+cordA+"]")
+        cordB = JSON.parse("["+cordB+"]")
+        inn = JSON.parse("["+inn+"]")
+        outt = JSON.parse("["+outt+"]")
+        gross = JSON.parse("["+gross+"]")
+        holescore = holescore.split(",",holescore.length)
+        userid = userid.split(",",userid.length)
+        fullname = fullname.split(",",fullname.length)
+        lastname = lastname.split(",",lastname.length)
+        teamnum = teamnum.split(",",teamnum.length)
+        teamno = JSON.parse("["+teamno+"]")
+        departnum = departnum.split(",",departnum.length)
+        departno = JSON.parse("["+departno+"]")
+        typescore = typescore.split(",",typescore.length)
+        var obj = {
+          fieldid:"",
+          matchname:"",
+          fieldname:"",
+          datecreate:"",
+          datemodify:"",
+          datematch:"",
+          cordA:"",
+          cordB:"",
+          teamnum:"",
+          departnum:"",
+          typescore:"",
+        }
+        obj.fieldid = fieldid[0]
+        obj.matchname = matchname[0]
+        obj.fieldname = fieldname[0]
+        obj.datecreate = datecreate[0]
+        obj.datemodify = datemodify[0]
+        obj.datematch = datematch[0]
+        obj.cordA = cordA[0]
+        obj.cordB = cordB[0]
+        obj.teamnum = teamnum[0]
+        obj.departnum = departnum[0]
+        obj.typescore = typescore[0]
+        this.state.detailMatchFromLoad.push(obj);
+        for(var i = 0;i < userid.length;i++){
+          var obj = {
+            inn: inn[i],
+            outt: outt[i],
+            gross: gross[i],
+            userid: userid[i],
+            fullname: fullname[i],
+            lastname: lastname[i]
+          }
+          this.state.detailMatchFromLoadUser.push(obj);
+        }
+        for(var i = 0;i < teamno.length;i++){
+          var obj = {
+            teamno: teamno[i],
+            departno: departno[i]
+          }
+          this.state.detailMatchFromLoadTeamDepart.push(obj);
+        }
+        let holescoreTemp = [];
+        for(var i = 0;i < holescore.length;i++){
+          holescoreTemp.push(holescore[i])
+          if((i+1)%18===0){
+            this.state.detailMatchFromLoadHoleScore.push(holescoreTemp);
+            holescoreTemp = []
+          }
+        }
+      }
+      this.HandlerLoadMatchFieldDetail(data.matchid,parseInt(fieldid))
+    },500)
+    localStorage.clear()
+  }
+
+  HandlerLoadMatchFieldDetail = (matchid,fieldid) =>{
+    var geturl;
+    geturl = $.ajax({
+      type: "POST",
+     //url: "http://127.0.0.1/php/login.php",
+     url: "http://pds.in.th/phpadmin/loadmatchfielddetail.php",
+     dataType: 'json',
+     data: {
+       "matchid": matchid,
+       "fieldid": fieldid,
+     },
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+       console.log(data);
+       localStorage['fieldscore']=data.fieldscore
+       localStorage['fieldHscore']=data.fieldHscore
+     }
+    });
+    setTimeout(()=>{
+      if(localStorage['fieldscore']){
+        var fieldscore = localStorage['fieldscore'];
+        var fieldHscore = localStorage['fieldHscore'];
+        fieldscore = fieldscore.split(",",fieldscore.length)
+        fieldHscore = fieldHscore.split(",",fieldHscore.length)
+        for(var i = 0;i < fieldscore.length;i++){
+          var obj = {
+            fieldscore: fieldscore[i],
+            fieldHscore: fieldHscore[i]
+          }
+          this.state.detailMatchFromLoadField.push(obj)
+        }
+        console.log("detailMatchFromLoad :::",this.state.detailMatchFromLoad)
+        console.log("detailMatchFromLoadUser :::",this.state.detailMatchFromLoadUser)
+        console.log("detailMatchFromLoadTeamDepart :::",this.state.detailMatchFromLoadTeamDepart)
+        console.log("detailMatchFromLoadHoleScore :::",this.state.detailMatchFromLoadHoleScore)
+        console.log("detailMatchFromLoadField :::",this.state.detailMatchFromLoadField)
+      }
+    },500)
+    localStorage.clear()
+  }
+
   HandlerUpdateScore = (data) =>{
     var geturl;
     geturl = $.ajax({
@@ -436,9 +625,6 @@ class Dashboard extends Component {
         userhost= JSON.parse("["+userhost+"]")
         fieldname= fieldname.split(",",fieldname.length)
         date= date.split(",",date.length)
-        //console.log(fieldid);
-        //console.log(fieldname);
-        //console.log(cordnum);
         for(var i = 0;i < matchid.length;i++){
           var obj = {
             matchid: matchid[i],
@@ -659,8 +845,11 @@ class Dashboard extends Component {
     this.state.inviteAction = ''*/
   }
   getCardTargetID =(value)=>{
-    this.props.getCardTargetID(value)
-    console.log("Detail Data:: ",value)
+    //this.props.getCardTargetID(value)
+    console.log("getCardTargetID value :::",value);
+    this.HandlerLoadMatchUserDetail(value)
+    this.dashboardRefresh=false;
+    this.matchDetailStateToggle()
   }
   getActivityRequest = (data) =>{
     console.log('getActivityRequest data',data)
@@ -675,14 +864,12 @@ class Dashboard extends Component {
         //console.log(i)
         this.state.dataFromLoad.push(this.props.loadMatchData[i]);
       }
-      console.log('this.state.dataFromLoad after set::',this.state.dataFromLoad);
       this.setState(this.state);
     }
   }
   showHistoryFromLoad = () => {
     if(!this.dashboardRefresh ){
       this.dashboardRefresh=true;
-      console.log('showHistoryFromLoad');
       this.setState(this.state);
     }
   }
@@ -701,13 +888,13 @@ class Dashboard extends Component {
 
   refreshData=()=>{
     setTimeout(()=>{
-      console.log("refresh");
+      //console.log("refresh");
       this.state.dashboardRefresh = false
       this.showDataFromLoad()
     },500);
   }
   dashboardPageClick = ()=>{
-    console.log("dashboardPageClick");
+    //console.log("dashboardPageClick");
     this.props.loadMatch();
     setTimeout(()=>{
       this.dashboardStateToggle()
@@ -772,6 +959,7 @@ class Dashboard extends Component {
                   addScoreClick = {this.toggleAddScoreModal}
                   />
               )}
+
           </div>
           <ModalRoomPassword
             roomDetailToAccess = {this.state.roomDetailToAccess}
@@ -888,9 +1076,7 @@ class Dashboard extends Component {
       this.state.historyPage === false &&
       this.state.matchRunningState === false &&
       this.state.publicPageState === false){
-      this.dashboardRefresh=false;
       this.refreshData()
-      console.log('sentCardTargetID ::',this.props.sentCardTargetID)
       return(
         <div>
           <TopNav
