@@ -1,5 +1,209 @@
-.detail__grid{
-  background: #ccc;
+.match__detail{
   width: 100%;
   height: 100%;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+}
+.match__detail .detail__grid{
+  height: 100%;
+  width: 80%;
+  min-width: 30rem;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  flex-direction: column;
+}
+.detail__grid .detail__card{
+  -webkit-box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
+  -moz-box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
+  box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
+
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
+
+  width: 100%;
+  height: 80%;
+  background: #f1f9ff;
+
+  -webkit-border-radius: 0.25rem;
+  -moz-border-radius: 0.25rem;
+  border-radius: 0.25rem;
+
+  overflow: auto;
+}
+.space{
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  -moz-flex: 1;
+  flex: 1;
+}
+.detail__choose{
+  cursor: pointer;
+}
+.detail__card .detail__gridtop{
+  width: 100%;
+  height: 7rem;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  flex-direction: row;
+
+  -webkit-flex-wrap: wrap;
+  -moz-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+.detail__gridtop .detail__label{
+  border: 1px black solid;
+  height: 100%;
+  width: 60%;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  -moz-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+.detail__label .detail__matchname{
+  border: 1px black solid;
+  height: 50%;
+  width: 100%;
+}
+.detail__label .detail__fieldname{
+  border: 1px black solid;
+  height: 50%;
+  width: 60%;
+}
+.detail__label .detail__datematch{
+  border: 1px black solid;
+  height: 50%;
+  width: 40%;
+}
+.detail__gridtop  .detail__controller{
+  border: 1px black solid;
+  height: 100%;
+  width: 40%;
+}
+.detail__card .detail__griduserhost{
+  width: 100%;
+  height: 4rem;
+  background: #ccc;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  flex-direction: row;
+
+  -webkit-flex-wrap: wrap;
+  -moz-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+.detail__griduserhost .detail__userhostname{
+  border: 1px black solid;
+  height: 100%;
+  width: 55%;
+}
+.detail__griduserhost .detail__userhostin{
+  border: 1px black solid;
+  height: 100%;
+  width: 15%;
+}
+.detail__griduserhost .detail__userhostout{
+  border: 1px black solid;
+  height: 100%;
+  width: 15%;
+}
+.detail__griduserhost .detail__userhostgross{
+  border: 1px black solid;
+  height: 100%;
+  width: 15%;
+}
+.detail__card .detail__username{
+  width: 100%;
+  height: 4rem;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  flex-direction: row;
+
+  -webkit-flex-wrap: wrap;
+  -moz-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+.detail__username .detail__username{
+  border: 1px black solid;
+  height: 100%;
+  width: 55%;
+}
+.detail__username .detail__usernamein{
+  border: 1px black solid;
+  height: 100%;
+  width: 15%;
+}
+.detail__username .detail__usernameout{
+  border: 1px black solid;
+  height: 100%;
+  width: 15%;
+}
+.detail__username .detail__usernamegross{
+  border: 1px black solid;
+  height: 100%;
+  width: 15%;
+}
+.detail__card .detail__teambox{
+  border: 1px black solid;
+  width: 100%;
+  min-height: 4rem;
+}
+
+
+@media (min-width: 768px) and (max-width: 1200px) {
+  .match__detail .detail__grid{
+    -webkit-transform: translateX(-7rem);
+    -ms-transform: translateX(-7rem);
+    -moz-transform: translateX(-7rem);
+    -o-transform: translateX(-7rem);
+    transform: translateX(-7rem);
+    width: 60%;
+  }
+}
+@media (min-width: 1200px) and (max-width: 1600px) {
+  .match__detail .detail__grid{
+    min-width: 45rem;
+    max-width: 70%;
+    -webkit-transform: translateX(-7rem);
+    -ms-transform: translateX(-7rem);
+    -moz-transform: translateX(-7rem);
+    -o-transform: translateX(-7rem);
+    transform: translateX(-7rem);
+  }
+}
+@media (min-width: 1600px) {
+  .match__detail .detail__grid{
+    max-width: 60rem;
+    -webkit-transform: translateX(-7rem);
+    -ms-transform: translateX(-7rem);
+    -moz-transform: translateX(-7rem);
+    -o-transform: translateX(-7rem);
+    transform: translateX(-7rem);
+  }
 }

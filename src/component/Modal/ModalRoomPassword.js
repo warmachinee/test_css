@@ -15,9 +15,9 @@ class ModalRoomPassword extends React.Component{
   roomPassword = (val) =>{
     this.state.roomPassword = val;
   }
-  HandlerMatchAccess = event =>{
-    console.log("pass :::",this.state.roomPassword)
-    console.log("Props data :::",this.props.roomDetailToAccess);
+  HandlerMatchAccess = (data) =>{
+    //console.log("pass :::",this.state.roomPassword)
+    //console.log("Props data :::",this.props.roomDetailToAccess);
     var geturl;
     geturl = $.ajax({
      type: "POST",
@@ -36,8 +36,10 @@ class ModalRoomPassword extends React.Component{
     setTimeout(()=>{
       if(localStorage['response']){
         var response = localStorage['response'];
+        if(response==='pass'){
+          this.props.getCardTargetIDPass(this.props.roomDetailToAccess)
+        }
       }
-      console.log(response);
       this.props.modalClick()
     },250)
   }
@@ -51,10 +53,10 @@ class ModalRoomPassword extends React.Component{
             <div className="spacer"></div>
             <div className="modal-roompassword__card">
               <label>Room password</label>
-              <EditTextImg type="text" placeholder="Enter password" editTextValue={this.roomPassword} formType="password"/>
+              <EditTextImg type="password" placeholder="Enter password" editTextValue={this.roomPassword} formType="password"/>
               <p>{this.props.matchTeamNumber}</p>
               <Button btnLabel="Close" btnOnClick = {this.props.modalClick} />
-              <Button btnLabel="Add" btnOnClick={this.HandlerMatchAccess} />
+              <Button btnLabel="Enter" btnOnClick={this.HandlerMatchAccess} />
             </div>
             <div className="spacer"></div>
           </div>
