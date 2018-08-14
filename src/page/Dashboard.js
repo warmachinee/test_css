@@ -356,7 +356,7 @@ class Dashboard extends Component {
        localStorage['teamno']=data.teamno
        localStorage['departnum']=data.departnum
        localStorage['departno']=data.departno
-       console.log(data);
+       //console.log(data);
      }
     });
     var geturl2;
