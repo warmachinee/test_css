@@ -101,7 +101,8 @@ class Card extends React.Component{
               <img className="card-detail-img" src={ic_location}></img>
               <div className="card-detail-location">{this.props.data.fieldname}</div>
             </div>
-            <div className="card-detail-date">{this.props.data.userhost}</div>
+            <div className="card-detail-date">Userhost :  {this.props.data.userhost}</div>
+            <div className="card-detail-date">Match id :  {this.props.data.matchid}</div>
             <div className="card-spacer"></div>
             <div className="card-add-detail">
               <a onClick={(e)=>this.getCardMatchID(this.props.data)} className="card-add"><img src={ic_person_add}></img></a>

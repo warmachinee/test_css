@@ -34,7 +34,6 @@ class Dashboard extends Component {
       matchRunningState: false,
       historyPage: false,
       publicPageState:false,
-      createMatchStatus:'',
       data:[],
       dataLength:0,
       fieldFromLoad:[],
@@ -78,49 +77,53 @@ class Dashboard extends Component {
     }
   };
   historyPageToggle = () =>{
-    this.drawerToggleClickHandler()
+    //this.drawerToggleClickHandler()
     this.setState((prevState)=>{
       return {
         historyPage: true,
         matchDetailState: false,
         matchRunningState: false,
-        publicPageState: false
+        publicPageState: false,
+        sideDrawerOpen: false
       };
     });
   };
   runningPageToggle = () =>{
-    this.drawerToggleClickHandler()
+    //this.drawerToggleClickHandler()
     console.log("Running match")
     this.setState((prevState)=>{
       return {
         historyPage: false,
         matchDetailState: false,
         matchRunningState: true,
-        publicPageState: false
+        publicPageState: false,
+        sideDrawerOpen: false
       };
     });
   };
   publicPageToggle = () =>{
-    this.drawerToggleClickHandler()
+    //this.drawerToggleClickHandler()
     console.log("Running match")
     this.setState((prevState)=>{
       return {
         historyPage: false,
         matchDetailState: false,
         matchRunningState: false,
-        publicPageState: true
+        publicPageState: true,
+        sideDrawerOpen: false
       };
     });
   };
   dashboardStateToggle = () =>{
-    this.drawerToggleClickHandler()
+    //this.drawerToggleClickHandler()
     this.setState((prevState)=>{
       return {
         historyPage: false,
         matchDetailState: false,
         matchRunningState: false,
-        publicPageState: false
-    };
+        publicPageState: false,
+        sideDrawerOpen: false
+      };
     });
   }
   matchDetailStateToggle = (data) =>{
@@ -129,8 +132,9 @@ class Dashboard extends Component {
         historyPage: false,
         matchDetailState: true,
         matchRunningState: false,
-        publicPageState: false
-    };
+        publicPageState: false,
+        sideDrawerOpen: false
+      };
     });
   };
   sideNaveNoti=()=>{
@@ -170,8 +174,38 @@ class Dashboard extends Component {
   closeCreateMatchModal = () =>{
     this.setState({
       createModalIsOpen: false,
+      sideDrawerOpen: false,
       matchModalData:{}
     });
+    if(
+      this.state.matchDetailState === false &&
+      this.state.historyPage === false &&
+      this.state.matchRunningState === false &&
+      this.state.publicPageState === false){
+        console.log("defalut");
+        this.props.loadMatch();
+      }
+      else if(
+        this.state.matchDetailState === false &&
+        this.state.historyPage === false &&
+        this.state.matchRunningState === true &&
+        this.state.publicPageState === false
+      ){
+        console.log("run");
+        this.HandlerLoadRunning()
+      }else if(
+        this.state.matchDetailState === false &&
+        this.state.historyPage === false &&
+        this.state.matchRunningState === false &&
+        this.state.publicPageState === true
+      ){
+        console.log("pub");
+        this.HandlerLoadPublicMatch()
+      }
+    setTimeout(()=>{
+      this.dashboardRefresh = false
+      this.showDataFromLoad()
+    },500);
   }
   toggleAddpeopleModal = () => {
     this.setState((state)=>{
@@ -619,6 +653,7 @@ class Dashboard extends Component {
   }
 
   HandlerLoadField = (event) => {
+    this.state.fieldFromLoad = []
     console.log("Click HandlerLoadField");
     var geturl;
     geturl = $.ajax({
@@ -702,7 +737,7 @@ class Dashboard extends Component {
     localStorage.clear()
   }
 
-  HandlerLoadRunning = event => {
+  HandlerLoadRunning = (event) => {
     var geturl;
     geturl = $.ajax({
       type: "POST",
@@ -747,7 +782,6 @@ class Dashboard extends Component {
         console.log("this.state.runningFromLoad.push(obj) :::",this.state.runningFromLoad)
         //this.setState({dataLength: this.state.fieldFromLoad.length})//-------
       }
-      this.runningPageToggle()
       this.dashboardRefresh = false
       this.showRunningFromLoad()
     },500)
@@ -783,9 +817,8 @@ class Dashboard extends Component {
     });
     if(localStorage['response']){
       var response = localStorage['response'];
-      this.setState({createMatchStatus: response});
     }
-    //setTimeout(this.CreateMatchAction,1000);
+    setTimeout(this.refreshData,300);
   }
 
   HandlerLoadPublicMatch = event => {
@@ -836,7 +869,6 @@ class Dashboard extends Component {
         }
         console.log("this.state.publicFromLoad :::",this.state.publicFromLoad)
       }
-      this.publicPageToggle()
       this.dashboardRefresh = false
       this.showPublicFromLoad()
     },500)
@@ -928,12 +960,7 @@ class Dashboard extends Component {
   showDataFromLoad = () => {
     if(!this.dashboardRefresh){
       this.dashboardRefresh=true;
-      this.state.dataFromLoad=[]
       this.props.loadMatch()
-      for(var i = 0;i < this.props.loadMatchData.length ;i++){
-        //console.log(i)
-        this.state.dataFromLoad.push(this.props.loadMatchData[i]);
-      }
       this.setState(this.state);
     }
   }
@@ -944,12 +971,14 @@ class Dashboard extends Component {
     }
   }
   showRunningFromLoad = () => {
+    this.runningPageToggle()
     if(!this.dashboardRefresh ){
       this.dashboardRefresh=true;
       this.setState(this.state);
     }
   }
   showPublicFromLoad = () =>{
+    this.publicPageToggle()
     if(!this.dashboardRefresh ){
       this.dashboardRefresh=true;
       this.setState(this.state);
@@ -1045,7 +1074,6 @@ class Dashboard extends Component {
             matchTeamNumber = {this.state.matchModalData.MatchTeamNumber}
             modalClick = {this.toggleAddpeopleModal}
             modalState = {this.state.addpeopleModalIsOpen} />
-
           <ModalCreateMatch
             addMatch = {this.HandlerAddMatch}
             modalClick = {this.toggleCreateModal}
@@ -1385,6 +1413,7 @@ class Dashboard extends Component {
               createSetTeamNumber = {this.createSetTeamNumber}
               createSetDepartmentNumber = {this.createSetDepartmentNumber}
 
+              publicShow = {this.createSetPublicShow}
               fieldDetail = {this.state.fieldFromLoad}
               matchModalData = {this.state.matchModalData}
               modalClose = {this.closeCreateMatchModal}
