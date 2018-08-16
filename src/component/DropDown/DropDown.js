@@ -22,9 +22,8 @@ class DropDown extends React.Component{
   }
   render(){
     if(this.props.notiState){
-      const textAction = ['RequestFromHost','RequestFromUser'];
+      const textAction = ['RequestFromUser','RequestFromHost'];
       let i = 0;
-      console.log("this.props.activityRequest::",this.props.activityRequest);
       if(this.props.activityRequest.action===0){
         i=0;
       }else{

@@ -24,10 +24,16 @@ class ModalEditTeam extends React.Component{
           <div className="modal-editteamname__grid">
             <div className="spacer"></div>
             <div className="modal-editteamname__card">
-              <label>Team name</label>
-              <EditTextImg type="text" placeholder="Team name" editTextValue={this.setTeamName} formType="username"/>
-              <Button btnLabel="Close" btnOnClick = {this.props.modalClick}></Button>
-              <Button btnLabel="Edit" btnOnClick = {this.props.updateTNDN}></Button>
+              <div className="editteamname__item">
+                <label>Team name</label>
+              </div>
+              <div className="editteamname__item">
+                <EditTextImg type="text" placeholder="Team name" editTextValue={this.setTeamName} formType="username"/>
+              </div>
+              <div className="editteamname__item">
+                <button onClick = {this.props.modalClick}>Close</button>
+                <button onClick = {this.props.updateTNDN}>Edit</button>
+              </div>
             </div>
             <div className="spacer"></div>
           </div>

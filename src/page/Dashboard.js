@@ -59,7 +59,9 @@ class Dashboard extends Component {
       dataFromLoad:[],
       matchDetailData:[],
       matchDetailID:'',
+      tempHole:[],
       UserID:'',
+      UserHostID:'',
       matchModalData:{
         fieldid:'',
         matchname:'',
@@ -310,16 +312,18 @@ class Dashboard extends Component {
       //this.historyPageToggle()
       //this.dashboardRefresh = false
       //this.showHistoryFromLoad()
-    },1500)
+    },500)
     localStorage.clear()
   }
 
   HandlerLoadMatchUserDetail = (data) =>{
     const userhost = data.userhost
+    this.state.UserHostID = data.userhost
     let userhostIndex;
     this.state.matchDetailID = data.matchid
     this.state.matchDetailData = data
     this.state.setTeamData = []
+    this.state.tempHole = []
     this.state.detailMatchFromLoad = []
     this.state.detailMatchFromLoadUser = []
     this.state.detailMatchFromLoadHoleScore = []
@@ -477,7 +481,12 @@ class Dashboard extends Component {
             holescoreTemp = []
           }
         }
-
+        for(var i=0;i < this.state.detailMatchFromLoadUser.length;i++){
+          this.state.tempHole.push({
+            teamno: this.state.detailMatchFromLoadUser[i].teamno,
+            holescore: this.state.detailMatchFromLoadHoleScore[i]
+          })
+        }
         for(var i = 0;i < userid.length;i++){
           if(userhost === parseInt(userid[i])){
             this.state.detailMatchFromLoadUserHost.push(
@@ -531,11 +540,13 @@ class Dashboard extends Component {
           this.state.detailMatchFromLoadField.push(obj)
         }
         /*console.log("detailMatchFromLoad :::",this.state.detailMatchFromLoad)
-        console.log("detailMatchFromLoadUser :::",this.state.detailMatchFromLoadUser)
+        console.log("detailMatchFromLoadUser :::",this.state.detailMatchFromLoadUser)*/
         console.log("detailMatchFromLoadHoleScore :::",this.state.detailMatchFromLoadHoleScore)
+        console.log("tempHole ",this.state.tempHole);
+        /*
         console.log("detailMatchFromLoadField :::",this.state.detailMatchFromLoadField)
-        console.log("detailMatchFromLoadUserHost :::",this.state.detailMatchFromLoadUserHost)
-        console.log("detailMatchFromLoadUserHostScore :::",this.state.detailMatchFromLoadUserHostScore)*/
+        console.log("detailMatchFromLoadUserHost :::",this.state.detailMatchFromLoadUserHost)*/
+        console.log("detailMatchFromLoadUserHostScore :::",this.state.detailMatchFromLoadUserHostScore)
       }
     },300)
     localStorage.clear()
@@ -792,6 +803,7 @@ class Dashboard extends Component {
        localStorage['userhost'] = data.userhost;
        localStorage['fieldname'] = data.fieldname;
        localStorage['date'] = data.date;
+       localStorage['type']=data.type;
      }
     });
     setTimeout(()=>{
@@ -802,18 +814,21 @@ class Dashboard extends Component {
         var userhost = localStorage['userhost'];
         var fieldname = localStorage['fieldname'];
         var date = localStorage['date'];
+        var type = localStorage['type'];
 
         matchid = JSON.parse("["+matchid+"]")
         matchname = matchname.split(",",matchname.length)
         userhost= JSON.parse("["+userhost+"]")
         fieldname= fieldname.split(",",fieldname.length)
         date= date.split(",",date.length)
+        type= type.split(",",type.length)
 
         for(var i = 0;i < matchid.length;i++){
           var obj = {
             matchid: matchid[i],
             matchname: matchname[i],
             userhost: userhost[i],
+            type: type[i],
             fieldname: fieldname[i],
             date: date[i]
           }
@@ -1160,13 +1175,18 @@ class Dashboard extends Component {
               notiState = {this.state.notiToggle} />
 
             <MatchDetail
+              userID={this.props.userID}
+              userHostID = {this.state.UserHostID}
               loadMatchDetail = {this.HandlerLoadMatchUserDetail}
               matchDetailID = {this.state.matchDetailID}
               matchDetailData = {this.state.matchDetailData}
               setTeamData={this.state.setTeamData}
               detail={this.state.detailMatchFromLoad}
               detailUserhost={this.state.detailMatchFromLoadUserHost}
-              detailUser={this.state.detailMatchFromLoadUser}/>
+              detailUser={this.state.detailMatchFromLoadUser}
+              tempHole = {this.state.tempHole}
+              holeScore={this.state.detailMatchFromLoadHoleScore}
+              holeScoreUserhost={this.state.detailMatchFromLoadUserHostScore}/>
           </div>
           <ModalRoomPassword
             getCardTargetIDPass = {this.getCardTargetIDPass}

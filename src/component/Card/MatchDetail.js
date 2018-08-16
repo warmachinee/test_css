@@ -24,6 +24,7 @@ class MatchDetail extends React.Component{
       resultMatchFromLoad:[],
       resultMatchFromLoadUser:[],
       resultMatchFromLoadHoleScore:[],
+      tempHole:''
     }
   }
   modalMatchResultClick =() =>{
@@ -143,6 +144,9 @@ class MatchDetail extends React.Component{
   setUpdateTeam = (data)=>{
     this.state.teamNumber = data
   }
+  setTeamno = (data)=>{
+    this.state.tempHole = data
+  }
   updateTeam =()=>{
     if(this.state.teamNumber === undefined || this.state.teamNumber === "" || this.state.teamNumber === null){
       this.state.teamNumber = 1
@@ -220,110 +224,236 @@ class MatchDetail extends React.Component{
     this.state.editTeamData.teamname = data
   }
   render(){
-    return(
-      <div className="match__detail">
-        <div className="space"></div>
-        <div className="detail__grid">
+    console.log("this.props.userID",this.props.userID);
+    console.log("this.props.userHostID",this.props.userHostID);
+    if(parseInt(this.props.userID) === this.props.userHostID){
+      return(
+        <div className="match__detail">
           <div className="space"></div>
-          <div className="detail__card">
-            <div className="detail__gridtop">
-              {this.props.detail.map((data,i)=>
-                <div className="detail__label">
-                  <div className="detail__matchname">{data.matchname}</div>
-                  <div className="detail__fieldname">{data.fieldname}</div>
-                  <div className="detail__datematch">{data.datematch}</div>
+          <div className="detail__grid">
+            <div className="space"></div>
+            <div className="detail__card">
+              <div className="detail__gridtop">
+                {this.props.detail.map((data,i)=>
+                  <div className="detail__label">
+                    <div className="detail__matchname">{data.matchname}</div>
+                    <div className="detail__fieldname">{data.fieldname}</div>
+                    <div className="detail__datematch">{data.datematch}</div>
+                  </div>
+                )}
+                <div className="detail__controller">
+                  <button onClick={this.modalMatchResultClick}>Result</button>
+                </div>
+              </div>
+              <div className="detail__gridfield">
+
+              </div>
+              <div className="detail__griduserhost">
+                <div className="detail__userhostname">Name</div>
+                <div className="detail__userhostin">{"IN"}</div>
+                <div className="detail__userhostout">{"OUT"}</div>
+                <div className="detail__userhostgross">{"GROSS"}</div>
+              </div>
+              {this.props.detailUserhost.map((data)=>
+                <div className="detail__griduserhost">
+                  <div className="detail__userhostname">{data.fullname} {data.userid}</div>
+                  <div className="detail__userhostin">{data.in}</div>
+                  <div className="detail__userhostout">{data.out}</div>
+                  <div className="detail__userhostgross">{data.gross}</div>
                 </div>
               )}
-              <div className="detail__controller">
-                <button onClick={this.modalMatchResultClick}>Result</button>
-              </div>
-            </div>
-            <div className="detail__gridfield">
-
-            </div>
-            <div className="detail__griduserhost">
-              <div className="detail__userhostname">Name</div>
-              <div className="detail__userhostin">{"IN"}</div>
-              <div className="detail__userhostout">{"OUT"}</div>
-              <div className="detail__userhostgross">{"GROSS"}</div>
-            </div>
-            {this.props.detailUserhost.map((data)=>
-              <div className="detail__griduserhost">
-                <div className="detail__userhostname">{data.fullname} {data.userid}</div>
-                <div className="detail__userhostin">{data.in}</div>
-                <div className="detail__userhostout">{data.out}</div>
-                <div className="detail__userhostgross">{data.gross}</div>
-              </div>
-            )}
-            {this.props.setTeamData.map((data,i)=>
-              <div>
-                <p>{data.teamname}</p>
-                <button onClick={()=>{
-                    this.editTeamName(data)
-                  }}>edit</button>
-                <div className="detail__teambox">
-                  {this.setTeamTemp(i)}
-                  {this.props.detailUser.filter(
-                      (item)=>{
-                        return this.state.teamTemp + 1 === item.teamno;
-                      }
-                    ).map((data)=>
-                      <div className="detail__username">
-                        <div className="detail__username">{data.fullname} {data.userid}
-                          <select onChange={(e)=>this.setUpdateTeam(e.target.value)}>
-                            {this.state.optionTemp.map((data,i)=>
-                              <option value={data.teamno}>{data.teamno}</option>
-                            )}
-                          </select>
-                          <button onClick={this.updateTeam} className="detail__choose">Choose team</button>
+              {this.props.setTeamData.map((data,i)=>
+                <div>
+                  <p>{data.teamname}</p>
+                    <button onClick={()=>{
+                        this.editTeamName(data)
+                      }}>edit</button>
+                  <div className="detail__teambox">
+                    {this.setTeamTemp(i)}
+                    {this.props.detailUser.filter(
+                        (item)=>{
+                          return this.state.teamTemp + 1 === item.teamno;
+                        }
+                      ).map((data)=>
+                      <div>
+                        {this.setTeamno(data.teamno)}
+                        <div className="detail__username">
+                          <div className="detail__username">{data.fullname} {data.userid}
+                            <select onChange={(e)=>this.setUpdateTeam(e.target.value)}>
+                              {this.state.optionTemp.map((data,i)=>
+                                <option value={data.teamno}>{data.teamno}</option>
+                              )}
+                            </select>
+                            <button onClick={this.updateTeam} className="detail__choose">Choose team</button>
+                            {this.props.tempHole.filter(
+                              (item)=>{
+                                return this.state.tempHole === item.teamno
+                              }
+                            ).map((data)=>
+                            <div>{" "}{data.holescore}{" "}</div>
+                          )}
+                          </div>
+                          <div className="detail__usernamein">{data.in}</div>
+                          <div className="detail__usernameout">{data.out}</div>
+                          <div className="detail__usernamegross">{data.gross}</div>
                         </div>
-                        <div className="detail__usernamein">{data.in}</div>
-                        <div className="detail__usernameout">{data.out}</div>
-                        <div className="detail__usernamegross">{data.gross}</div>
                       </div>
-                    )}
+                      )}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {this.props.detailUser.filter(
-              (item)=>{
-                return item.teamno === 0;
-              }
-            ).map((data,i)=>
-              <div className="detail__username">
-                <div className="detail__username">{data.fullname} {data.userid}
-                  <select onChange={(e)=>this.setUpdateTeam(e.target.value)}>
-                    {this.state.optionTemp.map((data,i)=>
-                      <option value={data.teamno}>{data.teamno}</option>
-                    )}
-                  </select>
-                  <button onClick={this.updateTeam} className="detail__choose">Choose team</button>
+              {this.props.detailUser.filter(
+                (item)=>{
+                  return item.teamno === 0;
+                }
+              ).map((data,i)=>
+                <div className="detail__username">
+                  <div className="detail__username">{data.fullname} {data.userid}
+                    <select onChange={(e)=>this.setUpdateTeam(e.target.value)}>
+                      {this.state.optionTemp.map((data,i)=>
+                        <option value={data.teamno}>{data.teamno}</option>
+                      )}
+                    </select>
+                    <button onClick={this.updateTeam} className="detail__choose">Choose team</button>
+                  </div>
+                  <div className="detail__usernamein">{data.in}</div>
+                  <div className="detail__usernameout">{data.out}</div>
+                  <div className="detail__usernamegross">{data.gross}</div>
                 </div>
-                <div className="detail__usernamein">{data.in}</div>
-                <div className="detail__usernameout">{data.out}</div>
-                <div className="detail__usernamegross">{data.gross}</div>
-              </div>
-            )}
+              )}
 
+            </div>
+            <div className="space"></div>
           </div>
           <div className="space"></div>
+          <ModalEditTeam
+            updateTNDN = {this.HandlerSudoUpdateTNDN}
+            setTeamName = {this.setTeamName}
+            modalClick = {this.modalEditTeamClick}
+            modalState = {this.state.modalEditTeam}/>
+          <ModalMatchResult
+            setTeamData = {this.props.setTeamData}
+            resultMatchFromLoad = {this.state.resultMatchFromLoad}
+            resultMatchFromLoadUser = {this.state.resultMatchFromLoadUser}
+            resultMatchFromLoadHoleScore = {this.state.resultMatchFromLoadHoleScore}
+            modalClick = {this.modalMatchResultClick}
+            modalState = {this.state.modalMatchResult}/>
         </div>
-        <div className="space"></div>
-        <ModalEditTeam
-          updateTNDN = {this.HandlerSudoUpdateTNDN}
-          setTeamName = {this.setTeamName}
-          modalClick = {this.modalEditTeamClick}
-          modalState = {this.state.modalEditTeam}/>
-        <ModalMatchResult
-          setTeamData = {this.props.setTeamData}
-          resultMatchFromLoad = {this.state.resultMatchFromLoad}
-          resultMatchFromLoadUser = {this.state.resultMatchFromLoadUser}
-          resultMatchFromLoadHoleScore = {this.state.resultMatchFromLoadHoleScore}
-          modalClick = {this.modalMatchResultClick}
-          modalState = {this.state.modalMatchResult}/>
-      </div>
-    );
+      );
+    }else{
+      return(
+        <div className="match__detail">
+          <div className="space"></div>
+          <div className="detail__grid">
+            <div className="space"></div>
+            <div className="detail__card">
+              <div className="detail__gridtop">
+                {this.props.detail.map((data,i)=>
+                  <div className="detail__label">
+                    <div className="detail__matchname">{data.matchname}</div>
+                    <div className="detail__fieldname">{data.fieldname}</div>
+                    <div className="detail__datematch">{data.datematch}</div>
+                  </div>
+                )}
+                <div className="detail__controller">
+                  <button onClick={this.modalMatchResultClick}>Result</button>
+                </div>
+              </div>
+              <div className="detail__gridfield">
+
+              </div>
+              <div className="detail__griduserhost">
+                <div className="detail__userhostname">Name</div>
+                <div className="detail__userhostin">{"IN"}</div>
+                <div className="detail__userhostout">{"OUT"}</div>
+                <div className="detail__userhostgross">{"GROSS"}</div>
+              </div>
+              {this.props.detailUserhost.map((data)=>
+                <div className="detail__griduserhost">
+                  <div className="detail__userhostname">{data.fullname} {data.userid}</div>
+                  <div className="detail__userhostin">{data.in}</div>
+                  <div className="detail__userhostout">{data.out}</div>
+                  <div className="detail__userhostgross">{data.gross}</div>
+                </div>
+              )}
+              {this.props.setTeamData.map((data,i)=>
+                <div>
+                  <p>{data.teamname}</p>
+                  <div className="detail__teambox">
+                    {this.setTeamTemp(i)}
+                    {this.props.detailUser.filter(
+                        (item)=>{
+                          return this.state.teamTemp + 1 === item.teamno;
+                        }
+                      ).map((data)=>
+                      <div>
+                        {this.setTeamno(data.teamno)}
+                        <div className="detail__username">
+                          <div className="detail__username">{data.fullname} {data.userid}
+                            <select onChange={(e)=>this.setUpdateTeam(e.target.value)}>
+                              {this.state.optionTemp.map((data,i)=>
+                                <option value={data.teamno}>{data.teamno}</option>
+                              )}
+                            </select>
+                            <button onClick={this.updateTeam} className="detail__choose">Choose team</button>
+                            {this.props.tempHole.filter(
+                              (item)=>{
+                                return this.state.tempHole === item.teamno
+                              }
+                            ).map((data)=>
+                            <div>{" "}{data.holescore}{" "}</div>
+                          )}
+                          </div>
+                          <div className="detail__usernamein">{data.in}</div>
+                          <div className="detail__usernameout">{data.out}</div>
+                          <div className="detail__usernamegross">{data.gross}</div>
+                        </div>
+                      </div>
+                      )}
+                  </div>
+                </div>
+              )}
+
+              {this.props.detailUser.filter(
+                (item)=>{
+                  return item.teamno === 0;
+                }
+              ).map((data,i)=>
+                <div className="detail__username">
+                  <div className="detail__username">{data.fullname} {data.userid}
+                    <select onChange={(e)=>this.setUpdateTeam(e.target.value)}>
+                      {this.state.optionTemp.map((data,i)=>
+                        <option value={data.teamno}>{data.teamno}</option>
+                      )}
+                    </select>
+                    <button onClick={this.updateTeam} className="detail__choose">Choose team</button>
+                  </div>
+                  <div className="detail__usernamein">{data.in}</div>
+                  <div className="detail__usernameout">{data.out}</div>
+                  <div className="detail__usernamegross">{data.gross}</div>
+                </div>
+              )}
+
+            </div>
+            <div className="space"></div>
+          </div>
+          <div className="space"></div>
+          <ModalEditTeam
+            updateTNDN = {this.HandlerSudoUpdateTNDN}
+            setTeamName = {this.setTeamName}
+            modalClick = {this.modalEditTeamClick}
+            modalState = {this.state.modalEditTeam}/>
+          <ModalMatchResult
+            setTeamData = {this.props.setTeamData}
+            resultMatchFromLoad = {this.state.resultMatchFromLoad}
+            resultMatchFromLoadUser = {this.state.resultMatchFromLoadUser}
+            resultMatchFromLoadHoleScore = {this.state.resultMatchFromLoadHoleScore}
+            modalClick = {this.modalMatchResultClick}
+            modalState = {this.state.modalMatchResult}/>
+        </div>
+      );
+    }
   }
 }
 

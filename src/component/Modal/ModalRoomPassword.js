@@ -38,6 +38,8 @@ class ModalRoomPassword extends React.Component{
         var response = localStorage['response'];
         if(response==='pass'){
           this.props.getCardTargetIDPass(this.props.roomDetailToAccess)
+        }else{
+          alert(response)
         }
       }
       this.props.modalClick()
@@ -52,11 +54,20 @@ class ModalRoomPassword extends React.Component{
           <div className="modal-roompassword__grid">
             <div className="spacer"></div>
             <div className="modal-roompassword__card">
-              <label>Room password</label>
-              <EditTextImg type="password" placeholder="Enter password" editTextValue={this.roomPassword} formType="password"/>
-              <p>{this.props.matchTeamNumber}</p>
-              <Button btnLabel="Close" btnOnClick = {this.props.modalClick} />
-              <Button btnLabel="Enter" btnOnClick={this.HandlerMatchAccess} />
+              <div className="roompassword__item">
+
+              </div>
+              <div className="roompassword__item">
+                <label>Room password</label>
+              </div>
+              <div className="roompassword__item">
+                <EditTextImg type="password" placeholder="Enter password" editTextValue={this.roomPassword} formType="password"/>
+              </div>
+              <div className="roompassword__item">
+                <button onClick={this.HandlerMatchAccess}>Enter</button>
+                <button onClick = {this.props.modalClick} >Close</button>
+              </div>
+
             </div>
             <div className="spacer"></div>
           </div>

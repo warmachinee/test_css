@@ -63,6 +63,10 @@ class Card extends React.Component{
       setTimeout(()=>{
         if(localStorage['response']){
           var response = localStorage['response'];
+          if(response === 'pass'){}
+          else{
+            alert(response)
+          }
         }
         //console.log(response);
         this.props.targetClickID(Data)

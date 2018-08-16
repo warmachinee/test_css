@@ -28,11 +28,6 @@ class ModalAddScore extends React.Component{
           <div className="modal-addscore__grid">
             <div className="spacer"></div>
             <div className="modal-addscore__card">
-              <label>Court</label>
-              <select>
-                <option value="Court 1">Court 1</option>
-                <option value="Court 2">Court 2</option>
-              </select>
               <div className="holefill">
                 <input type="text" placeholder="Hole1" onChange={(e)=>this.getScore(e.target.value,0)}></input>
                 <input type="text" placeholder="Hole2" onChange={(e)=>this.getScore(e.target.value,1)}></input>

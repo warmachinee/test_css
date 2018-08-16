@@ -66,8 +66,6 @@ class ModalMatchResult extends React.Component{
                 </div>
               )}
 
-
-
               <div className="spacer"></div>
               <Button btnLabel="Close" btnOnClick = {this.props.modalClick}></Button>
               <Button btnLabel="Edit" btnOnClick = {this.showData}></Button>
