@@ -24,7 +24,10 @@ class MatchDetail extends React.Component{
       resultMatchFromLoad:[],
       resultMatchFromLoadUser:[],
       resultMatchFromLoadHoleScore:[],
-      tempHole:''
+      tempHole:{
+        teamno:'',
+        matchid:''
+      }
     }
   }
   modalMatchResultClick =() =>{
@@ -144,15 +147,24 @@ class MatchDetail extends React.Component{
   setUpdateTeam = (data)=>{
     this.state.teamNumber = data
   }
-  setTeamno = (data)=>{
-    this.state.tempHole = data
+  setTeamno = (teamno,userid)=>{
+    this.state.tempHole.teamno = teamno
+    this.state.tempHole.userid = userid
   }
   updateTeam =()=>{
     if(this.state.teamNumber === undefined || this.state.teamNumber === "" || this.state.teamNumber === null){
       this.state.teamNumber = 1
       this.HandlerUpdateTDbyUser(this.props.matchDetailID,1)
+      setTimeout(()=>{
+        this.matchDetailRefresh=false;
+        this.props.loadMatchDetail(this.props.matchDetailData)
+      },500)
     }else{
       this.HandlerUpdateTDbyUser(this.props.matchDetailID,this.state.teamNumber)
+      setTimeout(()=>{
+        this.matchDetailRefresh=false;
+        this.props.loadMatchDetail(this.props.matchDetailData)
+      },500)
     }
   }
   HandlerUpdateTDbyUser=(matchid,teamno)=>{
@@ -173,19 +185,8 @@ class MatchDetail extends React.Component{
        console.log(data);
      }
     });
-    setTimeout(()=>{
-      if(localStorage['response']){
-        this.props.loadMatchDetail(this.props.matchDetailData)
-        setTimeout(()=>{
-          /*this.matchDetailRefresh=false;
-          this.refresh()*/
-          this.setState({ state: this.state });
-          console.log("in handler update :::");
-        },500)
-      }
-    },500)
+    localStorage.clear()
   }
-
   HandlerSudoUpdateTNDN = () =>{
     var geturl;
     geturl = $.ajax({
@@ -207,14 +208,6 @@ class MatchDetail extends React.Component{
       this.modalEditTeamClick()
     },500)
   }
-  refresh = () =>{
-    if(!this.matchDetailRefresh){
-      this.matchDetailRefresh=true;
-      this.props.loadMatchDetail(this.props.matchDetailData)
-      this.setState(this.state);
-      console.log("refresh");
-    }
-  }
   editTeamName =(data)=>{
     this.state.editTeamData.matchid = this.props.matchDetailID
     this.state.editTeamData.teamno = data.teamno
@@ -224,8 +217,6 @@ class MatchDetail extends React.Component{
     this.state.editTeamData.teamname = data
   }
   render(){
-    console.log("this.props.userID",this.props.userID);
-    console.log("this.props.userHostID",this.props.userHostID);
     if(parseInt(this.props.userID) === this.props.userHostID){
       return(
         <div className="match__detail">
@@ -276,7 +267,7 @@ class MatchDetail extends React.Component{
                         }
                       ).map((data)=>
                       <div>
-                        {this.setTeamno(data.teamno)}
+                        {this.setTeamno(data.teamno,data.userid)}
                         <div className="detail__username">
                           <div className="detail__username">{data.fullname} {data.userid}
                             <select onChange={(e)=>this.setUpdateTeam(e.target.value)}>
@@ -287,7 +278,7 @@ class MatchDetail extends React.Component{
                             <button onClick={this.updateTeam} className="detail__choose">Choose team</button>
                             {this.props.tempHole.filter(
                               (item)=>{
-                                return this.state.tempHole === item.teamno
+                                return (this.state.tempHole.teamno === item.teamno) && (this.state.tempHole.userid === item.userid)
                               }
                             ).map((data)=>
                             <div>{" "}{data.holescore}{" "}</div>
@@ -388,7 +379,7 @@ class MatchDetail extends React.Component{
                         }
                       ).map((data)=>
                       <div>
-                        {this.setTeamno(data.teamno)}
+                        {this.setTeamno(data.teamno,data.userid)}
                         <div className="detail__username">
                           <div className="detail__username">{data.fullname} {data.userid}
                             <select onChange={(e)=>this.setUpdateTeam(e.target.value)}>
@@ -399,7 +390,7 @@ class MatchDetail extends React.Component{
                             <button onClick={this.updateTeam} className="detail__choose">Choose team</button>
                             {this.props.tempHole.filter(
                               (item)=>{
-                                return this.state.tempHole === item.teamno
+                                return  (this.state.tempHole.teamno === item.teamno) && (this.state.tempHole.userid === item.userid)
                               }
                             ).map((data)=>
                             <div>{" "}{data.holescore}{" "}</div>

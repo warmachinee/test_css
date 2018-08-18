@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import {Link, Redirect} from 'react-router-dom'
+import {BrowserRouter as Router, Route} from 'react-router-dom'
 import './css/App.css';
 import $ from 'jquery';
 
@@ -23,7 +25,9 @@ class App extends Component {
           Date: ''
         }
       ],
-      userID:''
+      userID:'',
+      chksession : false,
+      sessionstatus : ''
     }
     this.cardStateClick = ''
   }
@@ -43,8 +47,10 @@ class App extends Component {
         pageDashboard: !pageState.pageDashboard
       };
     });
+    this.setState(this.state)
   };
   handelLogout = event =>{
+    this.state.userID = ''
     event.preventDefault()
     $.ajax({
       type: "POST",
@@ -101,32 +107,76 @@ class App extends Component {
            }
            this.state.appLoadMatch.push(obj);
          }
-         this.setState({dataLength: this.state.appLoadMatch.length})///Dont delete
+         this.setState(this.state)
        }
      },250);
      localStorage.clear()
    }
-
+   checksession = () =>{
+     $.ajax({
+       type: "POST",
+      //url: "http://127.0.0.1/php/login.php",
+      url: "http://pds.in.th/phpadmin/loadsession.php",
+      dataType: 'json',
+      data: {},
+      xhrFields: { withCredentials: true },
+      success: function(data) {
+        //console.log(data)
+        localStorage['chk']=data.status;
+       }
+      });
+      setTimeout(()=>{
+        if(localStorage['chk']){
+          var chksessions = localStorage['chk'];
+          this.state.sessionstatus = chksessions;
+          console.log(chksessions);
+          if(this.state.sessionstatus === 'valid session'){
+             this.state.chksession = true
+          }else{
+             this.state.chksession = false
+           }
+          }
+      },250);
+      localStorage.clear()
+   };
   render() {
-    if(this.state.pageLogin){
-      return (
-        <Login
-          userID = {this.getUserID}
-          loadMatch = {this.handleLoadMatch}
-          pageLoginClick = {this.goToAnotherPage}/>
-      );
-    }else if (this.state.pageDashboard) {
-      return(
-        <Dashboard
-          userID = {this.state.userID}
-          logOut = {this.handelLogout}
-          loadMatch = {this.handleLoadMatch}
-          getCardTargetID = {this.getCardTargetID}
-          sentCardTargetID = {this.state.detailData}
-          loadMatchData = {this.state.appLoadMatch}
-          pageDashboardClick = {this.goToAnotherPage}/>
-      );
+    this.checksession()
+    if(this.state.pageLogin && !this.state.chksession){
+      <Redirect to="/" />
+    }else if (this.state.pageDashboard && this.state.chksession) {
+      <Redirect to="/home" />
     }
+    return (
+      <Router>
+        <div>
+          {(this.state.pageLogin)?
+            (<Redirect to="/" />):
+            (this.state.pageDashboard)?
+            (<Redirect to="/home" />):(null)}
+          <Route
+            exact path="/"
+            render={()=>
+              <Login
+                session = {this.state.chksession}
+                userID = {this.getUserID}
+                loadMatch = {this.handleLoadMatch}
+                pageLoginClick = {this.goToAnotherPage}/>
+            }/>
+          <Route
+            path="/home"
+            render={()=>
+              <Dashboard
+                userID = {this.state.userID}
+                logOut = {this.handelLogout}
+                loadMatch = {this.handleLoadMatch}
+                getCardTargetID = {this.getCardTargetID}
+                sentCardTargetID = {this.state.detailData}
+                loadMatchData = {this.state.appLoadMatch}
+                pageDashboardClick = {this.goToAnotherPage}/>
+            }/>
+        </div>
+      </Router>
+    );
   }
 }
 

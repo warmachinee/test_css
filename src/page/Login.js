@@ -1,10 +1,22 @@
 import React, { Component } from 'react'
 import '../css/App.css'
+import {Link, Redirect} from 'react-router-dom'
+import {BrowserRouter as Router, Route} from 'react-router-dom'
 import $ from 'jquery';
 
+import '../component/TopNav/TopNavLogin.css'
+
+import logo from '../component/img/logo.svg'
 import TopNavLogin from '../component/TopNav/TopNavLogin'
 import LoginForm from '../component/Form/LoginForm'
+import ProfileLogin from '../component/img/baseline-account_circle-24px-login.svg'
 
+import EditText from '../component/EditText/EditText'
+import Switch from '../component/Switch/Switch'
+import EditTextImg from '../component/EditText/EditTextImg'
+import Button from '../component/Button/Button'
+import LoginCard from '../component/Card/LoginCard'
+import RegisCard from '../component/Card/RegisCard'
 
 class Login extends Component{
   constructor(props){
@@ -24,6 +36,7 @@ class Login extends Component{
         phoneNumber:'',
       },
     }
+
   }
   state = {
     userID:'',
@@ -50,7 +63,6 @@ class Login extends Component{
   }
   inputPasswordRegis = (Password) =>{
     this.state.regisData.password = Password
-    console.log(this.state.regisData.password)
   }
   sendUserID =() =>{
     this.props.userID(this.state.userID)
@@ -118,7 +130,7 @@ class Login extends Component{
       console.log(this.state.userID," ::",this.getResultLogin());
       this.sendUserID();
       this.props.pageLoginClick();
-      setTimeout(this.props.loadMatch,500);
+      setTimeout(this.props.loadMatch,500)
     }else{
       console.log(this.getResultLogin());
       alert('Login Fail')
@@ -148,25 +160,66 @@ class Login extends Component{
   }
   render(){
     return(
-      <div>
-        <TopNavLogin
-          submitLogin = {this.handleSubmit}
-          inputUsername = {this.inputUsernameLogin}
-          inputPassword = {this.inputPasswordLogin}/>
-        <div className="maincontentlogin">
-          <LoginForm
-            submitLogin = {this.handleSubmit}
-            submitRegis = {this.handleSubmitRegis}
-            inputUsername = {this.inputUsernameLogin}
-            inputPassword = {this.inputPasswordLogin}
-            inputUsernameRegis = {this.inputUsernameRegis}
-            inputPasswordRegis = {this.inputPasswordRegis}
-            inputFullnameRegis = {this.inputFullnameRegis}
-            inputLastnameRegis = {this.inputLastnameRegis}
-            inputPhoneRegis = {this.inputPhoneRegis}
-            loginClick = {this.props.pageLoginClick}/>
+      <Router>
+        <div>
+            <div>
+              <header className="topnavlogin">
+                <nav className="topnavlogin__nav">
+                  <div className="topnavlogin__logo">
+                    <a href="#"><img src={logo}></img></a>
+                  </div>
+                  <div className="spacer"></div>
+                  <div>{(this.props.session)?("Valid"):("InValid")}</div>
+                  <div className="spacer"></div>
+                  <div className="topnavlogin__edittext">
+                    <EditText type="text" placeholder="Enter Email"
+                      editTextValue={this.inputUsernameLogin}/>
+                    <EditText type="password" placeholder="Password"
+                      editTextValue={this.inputPasswordLogin}/>
+                  </div>
+                  <div className="topnavlogin__signin">
+                    <form onSubmit={this.handleSubmit}>
+                      <button>Sign in</button>
+                    </form>
+                  </div>
+                  <div className="topnavlogin__signup">
+                    <Link to='/register'
+                      className="signupbtn">Sign up</Link>
+                  </div>
+                </nav>
+              </header>
+            </div>
+          <div className="maincontentlogin">
+              <div className="form__grid">
+                <div className="spacer"></div>
+                <div className="form__middle__card">
+                  <div className="spacer"></div>
+                <Route
+                    path="/"
+                    render={()=>
+                      <LoginCard
+                        inputUsername={this.inputUsernameLogin}
+                        inputPassword={this.inputPasswordLogin}
+                        submitLogin={this.handleSubmit}/>
+                    }/>
+                <Route
+                  path="/register"
+                  render={()=>
+                    <RegisCard
+                      inputUsernameRegis={this.inputUsernameRegis}
+                      inputPasswordRegis={this.inputPasswordRegis}
+                      inputFullnameRegis={this.inputFullnameRegis}
+                      inputLastnameRegis={this.inputLastnameRegis}
+                      inputPhoneRegis={this.inputPhoneRegis}
+                      submitRegis={this.handleSubmitRegis}/>
+                  }/>
+                  <div className="spacer"></div>
+                </div>
+                <div className="spacer"></div>
+              </div>
+          </div>
         </div>
-      </div>
+      </Router>
     );
   }
 }

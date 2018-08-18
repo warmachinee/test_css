@@ -16,9 +16,9 @@ const menu ={
   Notifications: ['Notifications','การแจ้งเตือน'],
   Profile: ['Profile','โปรไฟล์'],
   Dashboard: ['DASHBOARD','แดชบอร์ด'],
-  Public: ['PUBLIC','สาธารณะ'],
-  Running: ['Running','กำลังเล่น'],
-  History: ['HISTORY','ประวัติ'],
+  Public: ['Public Match ','แมทช์สาธารณะ'],
+  Running: ['Running Match','แมทช์ที่กำลังเล่น'],
+  History: ['History','ประวัติ'],
   Logout: ['Log out','ออกจากระบบ'],
   LogOutBtnClass: ['sidenav-btn','sidenav-btn thailang']
 }
@@ -95,7 +95,7 @@ const sideNav = props =>{
           </a>
         </li>
         <form>
-          <li style={{position: 'fixed',bottom: '3rem',left: '10rem'}}>
+          <li style={{position: 'fixed',bottom: '3rem',left: '12.5rem'}}>
             <button
               className={menu.LogOutBtnClass[i]}
               style={{position: 'fixed',left: '3rem'}}

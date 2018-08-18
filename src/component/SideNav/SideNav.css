@@ -1,7 +1,7 @@
 .sidenav {
     height: 100%;
     min-height: 40rem;
-    width: 15rem;
+    width: 20rem;
     position: absolute;
     top:0;
 
@@ -54,7 +54,7 @@
   transition: 0.2s;
 
   position: fixed;
-  left: 4.25rem;
+  left: 6.75rem;
   top: 3.5rem;
 }
 .sidenav .change__lang{
@@ -74,7 +74,7 @@
 .sidenav li a img{
   display: block;
   float: left;
-  margin-left: 2rem;
+  margin-left: 4.5rem;
   margin-right: 1rem;
 }
 .sidenav li a .text{

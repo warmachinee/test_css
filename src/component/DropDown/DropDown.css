@@ -50,6 +50,15 @@
   -moz-flex: 1;
   flex: 1;
 }
+.noti__items .middle__request{
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+}
+.middle__request.noti__text{
+
+}
 .noti__items .noti__text{
   padding: .5rem 1rem .25rem;
   width: 100%;

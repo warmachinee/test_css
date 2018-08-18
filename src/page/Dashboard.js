@@ -351,6 +351,7 @@ class Dashboard extends Component {
   }
 
   HandlerLoadMatchUserDetail = (data) =>{
+    console.log("in HandlerLoadMatchUserDetail");
     const userhost = data.userhost
     this.state.UserHostID = data.userhost
     let userhostIndex;
@@ -517,6 +518,7 @@ class Dashboard extends Component {
         }
         for(var i=0;i < this.state.detailMatchFromLoadUser.length;i++){
           this.state.tempHole.push({
+            userid: this.state.detailMatchFromLoadUser[i].userid,
             teamno: this.state.detailMatchFromLoadUser[i].teamno,
             holescore: this.state.detailMatchFromLoadHoleScore[i]
           })
@@ -573,14 +575,14 @@ class Dashboard extends Component {
           }
           this.state.detailMatchFromLoadField.push(obj)
         }
-        /*console.log("detailMatchFromLoad :::",this.state.detailMatchFromLoad)
-        console.log("detailMatchFromLoadUser :::",this.state.detailMatchFromLoadUser)*/
+        //console.log("detailMatchFromLoad :::",this.state.detailMatchFromLoad)
+        console.log("detailMatchFromLoadUser :::",this.state.detailMatchFromLoadUser)
         console.log("detailMatchFromLoadHoleScore :::",this.state.detailMatchFromLoadHoleScore)
         console.log("tempHole ",this.state.tempHole);
-        /*
         console.log("detailMatchFromLoadField :::",this.state.detailMatchFromLoadField)
-        console.log("detailMatchFromLoadUserHost :::",this.state.detailMatchFromLoadUserHost)*/
-        console.log("detailMatchFromLoadUserHostScore :::",this.state.detailMatchFromLoadUserHostScore)
+        //console.log("detailMatchFromLoadUserHost :::",this.state.detailMatchFromLoadUserHost)
+        //console.log("detailMatchFromLoadUserHostScore :::",this.state.detailMatchFromLoadUserHostScore)
+        this.setState(this.state)
       }
     },300)
     localStorage.clear()
@@ -938,7 +940,6 @@ class Dashboard extends Component {
     this.state.inviteAction = ''*/
   }
   getCardTargetID =(value)=>{
-    //console.log(value);
     this.HandlerLoadMatchUserDetail(value)
     this.dashboardRefresh=false;
     this.matchDetailStateToggle()
@@ -1039,6 +1040,7 @@ class Dashboard extends Component {
             <DropDown
               getActivityRequest = {this.getActivityRequest}
               activityRequest = {this.state.activityRequestMap}
+              notiClick = {this.getNotiClick}
               notiState = {this.state.notiToggle} />
               {this.props.loadMatchData.map((number,i) =>
                 <Card
@@ -1124,6 +1126,7 @@ class Dashboard extends Component {
             <DropDown
               getActivityRequest = {this.getActivityRequest}
               activityRequest = {this.state.activityRequestMap}
+              notiClick = {this.getNotiClick}
               notiState = {this.state.notiToggle} />
               {this.state.historyFromLoad.map((data)=>
                 <HistoryCard
@@ -1200,6 +1203,7 @@ class Dashboard extends Component {
             <DropDown
               getActivityRequest = {this.getActivityRequest}
               activityRequest = {this.state.activityRequestMap}
+              notiClick = {this.getNotiClick}
               notiState = {this.state.notiToggle} />
 
             <MatchDetail
@@ -1282,6 +1286,7 @@ class Dashboard extends Component {
             <DropDown
               getActivityRequest = {this.getActivityRequest}
               activityRequest = {this.state.activityRequestMap}
+              notiClick = {this.getNotiClick}
               notiState = {this.state.notiToggle} />
             {this.state.runningFromLoad.map((number,i) =>
                 <Card
@@ -1367,6 +1372,7 @@ class Dashboard extends Component {
               <DropDown
                 getActivityRequest = {this.getActivityRequest}
                 activityRequest = {this.state.activityRequestMap}
+                notiClick = {this.getNotiClick}
                 notiState = {this.state.notiToggle} />
               {this.state.publicFromLoad.map((number,i) =>
                   <Card
