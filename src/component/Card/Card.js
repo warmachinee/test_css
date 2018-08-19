@@ -43,6 +43,7 @@ class Card extends React.Component{
     this.props.addScoreClick()
   }
   detailRoom = (Data)=>{
+    console.log(Data);
     if(Data.type === 'public' ){
       console.log("Type Room Public:::",Data.type)
       var geturl;
@@ -63,14 +64,13 @@ class Card extends React.Component{
       setTimeout(()=>{
         if(localStorage['response']){
           var response = localStorage['response'];
-          if(response === 'pass'){}
+          if(response === 'pass'){
+            this.props.targetClickID(Data)
+          }
           else{
             alert(response)
           }
         }
-        //console.log(response);
-        this.props.targetClickID(Data)
-        //alert(response)
       },250)
     }else{
       //console.log("Type Room Private:::",Data.type)

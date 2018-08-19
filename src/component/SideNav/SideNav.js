@@ -39,71 +39,62 @@ const sideNav = props =>{
           switchClick={props.langClick}
           switchLang={props.lang}/>
       </div>
-      <div className="sideimg">
-        <img src={logo}></img>
+      <div className="sidelogo">
+        <div className="space"></div>
+        <div className="sideimg">
+          <img src={logo}></img>
+        </div>
+        <div className="space"></div>
       </div>
-      <div className="space"></div>
-      <ul className="fromtopnav">
-        <li>
-          <a>
-            <img className="icon" src={ic_noti_side} />
-            <div className="text">
-              <button onClick={props.notiClick}>{menu.Notifications[i]}</button>
-            </div>
-          </a>
-        </li>
-        <li>
-          <a>
-            <img className="icon" src={ic_profile_side} />
-            <div className="text">
-              <button>{menu.Profile[i]}</button>
-            </div>
-          </a>
-        </li>
-      </ul>
-      <ul>
-        <li>
-          <a>
-            <img className="icon" src={ic_dashboard} />
-            <div className="text">
-              <button onClick={props.dashboardPageClick}>{menu.Dashboard[i]}</button>
-            </div>
-          </a>
-        </li>
-        <li>
-          <a>
-            <img className="icon" src={ic_dashboard} />
-            <div className="text">
-              <button onClick={props.publicPageClick}>{menu.Public[i]}</button>
-            </div>
-          </a>
-        </li>
-        <li>
-          <a>
-            <img className="icon" src={ic_dashboard} />
-            <div className="text">
-              <button onClick={props.runningPageClick}>{menu.Running[i]}</button>
-            </div>
-          </a>
-        </li>
-        <li>
-          <a>
-            <img className="icon" src={ic_history} />
-            <div className="text">
-              <button onClick={props.historyPageClick}>{menu.History[i]}</button>
-            </div>
-          </a>
-        </li>
+      <div className="fromtopnav">
+        <div className="sidenav__item">
+          <img className="icon" src={ic_noti_side} />
+          <div className="text">
+            <button onClick={props.notiClick}>{menu.Notifications[i]}</button>
+          </div>
+        </div>
+        <div className="sidenav__item">
+          <img className="icon" src={ic_profile_side} />
+          <div className="text">
+            <button>{menu.Profile[i]}</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div className="sidenav__item">
+          <img className="icon" src={ic_dashboard} />
+          <div className="text">
+            <button onClick={props.dashboardPageClick}>{menu.Dashboard[i]}</button>
+          </div>
+        </div>
+        <div className="sidenav__item">
+          <img className="icon" src={ic_dashboard} />
+          <div className="text">
+            <button onClick={props.publicPageClick}>{menu.Public[i]}</button>
+          </div>
+        </div>
+        <div className="sidenav__item">
+          <img className="icon" src={ic_dashboard} />
+          <div className="text">
+            <button onClick={props.runningPageClick}>{menu.Running[i]}</button>
+          </div>
+        </div>
+        <div className="sidenav__item">
+          <img className="icon" src={ic_history} />
+          <div className="text">
+            <button onClick={props.historyPageClick}>{menu.History[i]}</button>
+          </div>
+        </div>
+      </div>
         <form>
-          <li style={{position: 'fixed',bottom: '3rem',left: '12.5rem'}}>
+          <div style={{position: 'fixed',bottom: '3rem',left: '12.5rem'}}>
             <button
               className={menu.LogOutBtnClass[i]}
               style={{position: 'fixed',left: '3rem'}}
               onClick={props.logOut}>{menu.Logout[i]}
             </button>
-          </li>
+          </div>
         </form>
-      </ul>
     </nav>
   );
 };

@@ -11,8 +11,8 @@ class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      pageLogin: true,
-      pageDashboard: false,
+      pageLogin: false,
+      pageDashboard: true,
       appLoadMatch:[],
       dataLength:0,
       detailData:[
@@ -27,7 +27,8 @@ class App extends Component {
       ],
       userID:'',
       chksession : false,
-      sessionstatus : ''
+      sessionstatus : '',
+      logoutClickState: false
     }
     this.cardStateClick = ''
   }
@@ -44,13 +45,15 @@ class App extends Component {
     this.setState( (pageState)=>{
       return {
         pageLogin: !pageState.pageLogin,
-        pageDashboard: !pageState.pageDashboard
+        pageDashboard: !pageState.pageDashboard,
+        logoutClickState: false
       };
     });
     this.setState(this.state)
   };
   handelLogout = event =>{
     this.state.userID = ''
+    this.state.appLoadMatch = []
     event.preventDefault()
     $.ajax({
       type: "POST",
@@ -61,6 +64,7 @@ class App extends Component {
      success: function(data) {
       }
      });
+     this.setState({logoutClickState: true})
      setTimeout(this.goToAnotherPage,500)
   }
   handleLoadMatch = event => {
@@ -141,18 +145,19 @@ class App extends Component {
    };
   render() {
     this.checksession()
-    if(this.state.pageLogin && !this.state.chksession){
-      <Redirect to="/" />
-    }else if (this.state.pageDashboard && this.state.chksession) {
-      <Redirect to="/home" />
-    }
     return (
       <Router>
         <div>
-          {(this.state.pageLogin)?
-            (<Redirect to="/" />):
-            (this.state.pageDashboard)?
-            (<Redirect to="/home" />):(null)}
+          {(this.state.pageDashboard && this.state.chksession)?
+          (<Redirect to="/home" />):(
+            (this.state.pageLogin && this.state.chksession)?
+            (<Redirect to="/" />):(<Redirect to="/home" />)
+          )}
+          {(this.state.chksession && (window.location.pathname === '/home') && this.state.pageLogin)?
+          (<Redirect to="/home" />):(null)}
+          {(this.state.logoutClickState)?
+            (<Redirect to="/" />):(null)}
+
           <Route
             exact path="/"
             render={()=>
@@ -162,18 +167,19 @@ class App extends Component {
                 loadMatch = {this.handleLoadMatch}
                 pageLoginClick = {this.goToAnotherPage}/>
             }/>
-          <Route
-            path="/home"
-            render={()=>
-              <Dashboard
-                userID = {this.state.userID}
-                logOut = {this.handelLogout}
-                loadMatch = {this.handleLoadMatch}
-                getCardTargetID = {this.getCardTargetID}
-                sentCardTargetID = {this.state.detailData}
-                loadMatchData = {this.state.appLoadMatch}
-                pageDashboardClick = {this.goToAnotherPage}/>
-            }/>
+            <Route
+              path="/home"
+              render={()=>
+                <Dashboard
+                  userID = {this.state.userID}
+                  logOut = {this.handelLogout}
+                  loadMatch = {this.handleLoadMatch}
+                  getCardTargetID = {this.getCardTargetID}
+                  sentCardTargetID = {this.state.detailData}
+                  loadMatchData = {this.state.appLoadMatch}
+                  pageDashboardClick = {this.goToAnotherPage}/>
+              }/>
+
         </div>
       </Router>
     );

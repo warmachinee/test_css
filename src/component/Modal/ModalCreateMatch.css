@@ -7,15 +7,16 @@
   -moz-flex-direction: row;
   flex-direction: row;
 }
-
 .modal-creatematch{
   position: fixed;
   height: 100%;
   width: 100%;
+
   display: -webkit-flex;
   display: -ms-flex;
   display: -moz-flex;
   display: flex;
+
   z-index: 200;
 }
 .modal-creatematch .modal-creatematch__grid{
@@ -43,7 +44,45 @@
   height: 40rem;
 }
 .modal-creatematch__card .modal-creatematch__items{
-  margin: 1rem 2rem;
+  margin: 1rem 10%;
+}
+.creatematch__matchname{
+  width: 80%;
+  margin: 1rem 10%;
+}
+.roomtype__scoretype{
+  border: 1px black solid;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+}
+.roomtype__scoretype .creatematch__switchpub{
+  width: 40%;
+  margin: 1rem 2rem 1rem 10%;
+}
+.roomtype__scoretype .creatematch__typeroom{
+  width: 40%;
+  margin: 1rem 10% 1rem 2rem;
+}
+.locationselect{
+  width: 40%;
+  margin: 1rem 2rem 1rem 10%;
+}
+.team__deaprt{
+  border: 1px black solid;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+}
+.team__deaprt .creatematch__team{
+  width: 40%;
+  margin: 1rem 0 1rem 5%;
+}
+.team__deaprt .creatematch__depart{
+  width: 40%;
+  margin: 1rem 5% 1rem 2rem;
 }
 .spacer{
   -webkit-flex: 1;

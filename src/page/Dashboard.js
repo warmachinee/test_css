@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Link, Redirect} from 'react-router-dom'
 import ReactDom from 'react-dom';
 import $ from 'jquery'
 import '../css/App.css'
@@ -23,7 +24,7 @@ class Dashboard extends Component {
     super(props)
     this.dashboardRefresh = false;
     this.state = {
-      createModalIsOpen: false,
+      createModalIsOpen: true,
       addpeopleModalIsOpen: false,
       addscoreModalIsOpen: false,
       roomPasswordModal:false,
@@ -69,6 +70,7 @@ class Dashboard extends Component {
         date:'',
         teamnum:'',
         departnum:'',
+        typescore:0
       },
       invitePlayer:'',
       inviteMatchID:'',
@@ -271,6 +273,9 @@ class Dashboard extends Component {
     }else{
       this.state.matchModalData.departnum = departnum
     }
+  }
+  createSetTypeScore=(typescore)=>{
+    this.state.matchModalData.typescore = typescore
   }
 
   HandlerResultRequest = (data) => {
@@ -809,6 +814,7 @@ class Dashboard extends Component {
        "date": this.state.matchModalData.date,
        "teamnum": this.state.matchModalData.teamnum,
        "departnum": this.state.matchModalData.departnum,
+       "typescore": this.state.matchModalData.typescore
      },
      xhrFields: { withCredentials: true },
      success: function(data) {
@@ -1085,6 +1091,7 @@ class Dashboard extends Component {
             createSetDate = {this.createSetDate}
             createSetTeamNumber = {this.createSetTeamNumber}
             createSetDepartmentNumber = {this.createSetDepartmentNumber}
+            createSetTypeScore = {this.createSetTypeScore}
 
             publicShow = {this.createSetPublicShow}
             fieldDetail = {this.state.fieldFromLoad}
@@ -1163,6 +1170,7 @@ class Dashboard extends Component {
             createSetDate = {this.createSetDate}
             createSetTeamNumber = {this.createSetTeamNumber}
             createSetDepartmentNumber = {this.createSetDepartmentNumber}
+            createSetTypeScore = {this.createSetTypeScore}
 
             publicShow = {this.createSetPublicShow}
             fieldDetail = {this.state.fieldFromLoad}
@@ -1245,6 +1253,7 @@ class Dashboard extends Component {
             createSetDate = {this.createSetDate}
             createSetTeamNumber = {this.createSetTeamNumber}
             createSetDepartmentNumber = {this.createSetDepartmentNumber}
+            createSetTypeScore = {this.createSetTypeScore}
 
             publicShow = {this.createSetPublicShow}
             fieldDetail = {this.state.fieldFromLoad}
@@ -1332,6 +1341,7 @@ class Dashboard extends Component {
             createSetDate = {this.createSetDate}
             createSetTeamNumber = {this.createSetTeamNumber}
             createSetDepartmentNumber = {this.createSetDepartmentNumber}
+            createSetTypeScore = {this.createSetTypeScore}
 
             publicShow = {this.createSetPublicShow}
             fieldDetail = {this.state.fieldFromLoad}
@@ -1418,6 +1428,7 @@ class Dashboard extends Component {
               createSetDate = {this.createSetDate}
               createSetTeamNumber = {this.createSetTeamNumber}
               createSetDepartmentNumber = {this.createSetDepartmentNumber}
+              createSetTypeScore = {this.createSetTypeScore}
 
               publicShow = {this.createSetPublicShow}
               fieldDetail = {this.state.fieldFromLoad}

@@ -98,7 +98,7 @@ class Login extends Component{
         //console.log("this.state.userID :::",this.state.userID);
       }
       this.LoginAction()
-    },300)
+    },1000)
   }
   handleSubmitRegis =()=> {
     var geturl;
@@ -152,7 +152,6 @@ class Login extends Component{
   getResultLogin=()=>{
     var result = localStorage['response'];
     return result;
-    //return 'Success'
   }
   getResultRegis=()=>{
     var result = localStorage['response'];
@@ -194,14 +193,10 @@ class Login extends Component{
                 <div className="spacer"></div>
                 <div className="form__middle__card">
                   <div className="spacer"></div>
-                <Route
-                    path="/"
-                    render={()=>
-                      <LoginCard
-                        inputUsername={this.inputUsernameLogin}
-                        inputPassword={this.inputPasswordLogin}
-                        submitLogin={this.handleSubmit}/>
-                    }/>
+                    <LoginCard
+                      inputUsername={this.inputUsernameLogin}
+                      inputPassword={this.inputPasswordLogin}
+                      submitLogin={this.handleSubmit}/>
                 <Route
                   path="/register"
                   render={()=>

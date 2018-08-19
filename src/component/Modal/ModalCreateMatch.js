@@ -20,7 +20,9 @@ class ModalCreateMatch extends React.Component{
       clickedFieldCourt:[],
       FieldCourt:[],
       courtNumber:[],
-      clickedFieldID:''
+      typescore:0,
+      clickedFieldID:'',
+      roomPassword:''
     }
     this.showDropdownMenu = this.showDropdownMenu.bind(this);
     this.hideDropdownMenu = this.hideDropdownMenu.bind(this);
@@ -46,7 +48,8 @@ class ModalCreateMatch extends React.Component{
     this.props.createSetMatchName(matchname);
   }
   createSetTypeRoom=(typeroom)=>{
-    this.props.createSetTypeRoom(typeroom);
+    this.state.roomPassword = typeroom
+    this.props.createSetTypeRoom(this.state.roomPassword);
   }
   createSetDate=(date)=>{
     this.props.createSetDate(date);
@@ -56,6 +59,9 @@ class ModalCreateMatch extends React.Component{
   }
   createSetDepartmentNumber=(departnum)=>{
     this.props.createSetDepartmentNumber(departnum);
+  }
+  createSetTypeScore=(typescore)=>{
+    this.props.createSetTypeScore(this.state.typescore)
   }
   getField = (value)=>{
     this.state.clickedFieldID = value
@@ -108,21 +114,30 @@ class ModalCreateMatch extends React.Component{
     this.state.clickedFieldDetail[2] = this.state.courtNumber[1]
     console.log("this.state.courtNumber ::",this.state.courtNumber)
   }
+
+  getTypeScore = (type)=>{
+    this.state.typescore = type
+  }
   addMatch=()=>{
-    console.log("matchModalData ::: ",this.props.matchModalData)
+    console.log("matchModalData",this.props.matchModalData)
     this.createSetFieldId()
     this.createSetPublicShow()
-
+    this.createSetTypeScore()
     this.state.clickedFieldDetail = []
-    if(
-      this.props.matchModalData.matchname &&
-      this.props.matchModalData.fieldid &&
-      this.props.matchModalData.date){
-        this.props.addMatch();
-        this.props.modalClose();
-      }else{
-        alert('Please complete the information!!!')
-      }
+    if(this.state.roomPassword.length >= 4){
+      if(
+        this.props.matchModalData.matchname &&
+        this.props.matchModalData.fieldid &&
+        this.props.matchModalData.date){
+          //this.props.addMatch();
+          //this.props.modalClose();
+        }else{
+          alert('Please complete the information!!!')
+        }
+    }else{
+      alert('Room password 4-digit at least')
+    }
+
   }
   showFieldFromLoad = () => {
     if(!this.createModalRefresh ){
@@ -131,8 +146,6 @@ class ModalCreateMatch extends React.Component{
       for(var i = 0;i < this.props.fieldDetail.length ;i++){
         this.state.field.push(this.props.fieldDetail[i]);
       }
-      console.log('this.state.field ::',this.state.field);
-      console.log("this.state.clickedFieldID",this.state.clickedFieldID);
       this.setState(this.state);
     }
   }
@@ -142,10 +155,8 @@ class ModalCreateMatch extends React.Component{
     }else{
       this.state.publicShow = 0
     }
-    console.log("this.state.publicShow:::",this.state.publicShow);
   }
   render(){
-
     if(this.props.modalState){
       setTimeout(this.showFieldFromLoad,500);
       return(
@@ -155,16 +166,26 @@ class ModalCreateMatch extends React.Component{
           <div className="modal-creatematch__grid">
             <div className="spacer"></div>
             <div className="modal-creatematch__card">
-              <div className="modal-creatematch__items">
+              <div className="creatematch__matchname">
                 <label>Match name</label>
                 <EditTextImg type="text" placeholder="Match name" formType="username"
                   editTextValue={this.createSetMatchName}/>
               </div>
-              <div className="modal-creatematch__items">
-                <p>Public</p>
-                <SwitchToggle switchToggleState={this.switchToggleState}/>
+              <div className="roomtype__scoretype">
+                <div className="creatematch__switchpub">
+                  <p>Public</p>
+                  <SwitchToggle switchToggleState={this.switchToggleState}/>
+                </div>
+                <div className="creatematch__typeroom">
+                  <p>Score type</p>
+                  <select onChange={(e)=>this.getTypeScore(e.target.value)}>
+                    <option value={0}>Par</option>
+                    <option value={1}>Stable Ford</option>
+                    <option value={2}>{"36 System"}</option>
+                  </select>
+                </div>
               </div>
-              <div className="modal-creatematch__items">
+              <div className="locationselect">
                 <label>{'Location'}</label>
                   <div  className="dropdown__item">
                    <button onClick={this.showDropdownMenu}>Select Field</button>
@@ -191,15 +212,17 @@ class ModalCreateMatch extends React.Component{
                     </select>
                   </div>
               </div>
-              <div className="modal-creatematch__items">
-                <label>Team</label>
-                <EditTextImg type="number" formType="username" placeholder="How many team?"
-                  editTextValue={this.createSetTeamNumber}/>
-              </div>
-              <div className="modal-creatematch__items">
-                <label>Department</label>
-                <EditTextImg type="number" formType="department" placeholder="How many Department?"
-                  editTextValue={this.createSetDepartmentNumber}/>
+              <div className="team__deaprt">
+                <div className="creatematch__team">
+                  <label>{"Team (Number)"}</label>
+                  <EditTextImg type="number" formType="username" placeholder="0"
+                    editTextValue={this.createSetTeamNumber}/>
+                </div>
+                <div className="creatematch__depart">
+                  <label>{"Department (Number)"}</label>
+                  <EditTextImg type="number" formType="department" placeholder="0"
+                    editTextValue={this.createSetDepartmentNumber}/>
+                </div>
               </div>
               <div className="modal-creatematch__items">
                 <label>{'Date'}</label>
