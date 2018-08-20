@@ -22,7 +22,9 @@ class EditTextImg extends React.Component{
         return(
           <div className="edittextimg__grid">
             <img src={ic_person}></img>
-            <input type={this.props.type} placeholder={this.props.placeholder} onChange={(e)=>this.editTextValue(e.target.value)}/>
+            <input type={this.props.type} placeholder={this.props.placeholder}
+              onKeyPress = {this.props.onKeyPress}
+              onChange={(e)=>this.editTextValue(e.target.value)}/>
           </div>
         );
         break;
@@ -30,7 +32,9 @@ class EditTextImg extends React.Component{
         return(
           <div className="edittextimg__grid">
             <img src={ic_lock}></img>
-            <input type={this.props.type} placeholder={this.props.placeholder} onChange={(e)=>this.editTextValue(e.target.value)}/>
+            <input type={this.props.type} placeholder={this.props.placeholder}
+              onKeyPress = {this.props.onKeyPress}
+              onChange={(e)=>this.editTextValue(e.target.value)}/>
           </div>
         );
         break;
@@ -38,7 +42,9 @@ class EditTextImg extends React.Component{
         return(
           <div className="edittextimg__grid">
             <img src={ic_email}></img>
-            <input type={this.props.type} placeholder={this.props.placeholder} onChange={(e)=>this.editTextValue(e.target.value)}/>
+            <input type={this.props.type} placeholder={this.props.placeholder}
+              onKeyPress = {this.props.onKeyPress}
+              onChange={(e)=>this.editTextValue(e.target.value)}/>
           </div>
         );
         break;
@@ -46,7 +52,9 @@ class EditTextImg extends React.Component{
         return(
           <div className="edittextimg__grid">
             <img src={ic_phone}></img>
-            <input type={this.props.type} placeholder={this.props.placeholder} onChange={(e)=>this.editTextValue(e.target.value)}/>
+            <input type={this.props.type} placeholder={this.props.placeholder}
+              onKeyPress = {this.props.onKeyPress}
+              onChange={(e)=>this.editTextValue(e.target.value)}/>
           </div>
         );
         break;
@@ -54,7 +62,9 @@ class EditTextImg extends React.Component{
         return(
           <div className="edittextimg__grid">
             <img src={ic_department}></img>
-            <input type={this.props.type} placeholder={this.props.placeholder} onChange={(e)=>this.editTextValue(e.target.value)}/>
+            <input type={this.props.type} placeholder={this.props.placeholder}
+              onKeyPress = {this.props.onKeyPress}
+              onChange={(e)=>this.editTextValue(e.target.value)}/>
           </div>
         );
         break;
@@ -62,7 +72,9 @@ class EditTextImg extends React.Component{
         return(
           <div className="edittextimg__grid">
             <img src={ic_racket}></img>
-            <input type={this.props.type} placeholder={this.props.placeholder} onChange={(e)=>this.editTextValue(e.target.value)}/>
+            <input type={this.props.type} placeholder={this.props.placeholder}
+              onKeyPress = {this.props.onKeyPress}
+              onChange={(e)=>this.editTextValue(e.target.value)}/>
           </div>
         );
         break;
@@ -70,7 +82,9 @@ class EditTextImg extends React.Component{
         return(
           <div className="edittextimg__grid">
             <img src={ic_person}></img>
-            <input type="text" placeholder="EditTextImg" onChange={(e)=>this.editTextValue(e.target.value)}/>
+            <input type="text" placeholder="EditTextImg"
+              onKeyPress = {this.props.onKeyPress}
+              onChange={(e)=>this.editTextValue(e.target.value)}/>
           </div>
         );
       }

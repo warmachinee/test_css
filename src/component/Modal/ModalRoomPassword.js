@@ -52,7 +52,7 @@ class ModalRoomPassword extends React.Component{
           <ModalBackDrop click = {this.props.modalClick}/>
           <div className="spacer"></div>
           <div className="modal-roompassword__grid">
-            <div className="spacer"></div>
+            <div onClick = {this.props.modalClick} className="spacer"></div>
             <div className="modal-roompassword__card">
               <div className="roompassword__item">
 
@@ -69,7 +69,7 @@ class ModalRoomPassword extends React.Component{
               </div>
 
             </div>
-            <div className="spacer"></div>
+            <div onClick = {this.props.modalClick} className="spacer"></div>
           </div>
           <div className="spacer"></div>
         </div>

@@ -7,12 +7,16 @@ import EditText from '../EditText/EditText'
 import EditTextImg from '../EditText/EditTextImg'
 import Button from '../Button/Button'
 import SwitchToggle from '../Switch/SwitchToggle'
+import SelectField from './SelectField'
+import CreateField from './CreateField'
 
 class ModalCreateMatch extends React.Component{
   constructor(props){
     super(props)
     this.createModalRefresh = false;
     this.state={
+      selectFieldState: false,
+      createFieldState: false,
       field:[],
       dataLength:0,
       publicShow: 0,
@@ -24,19 +28,6 @@ class ModalCreateMatch extends React.Component{
       clickedFieldID:'',
       roomPassword:''
     }
-    this.showDropdownMenu = this.showDropdownMenu.bind(this);
-    this.hideDropdownMenu = this.hideDropdownMenu.bind(this);
-  }
-  showDropdownMenu(event) {
-      event.preventDefault();
-      this.setState({ displayMenu: true }, () => {
-      document.addEventListener('click', this.hideDropdownMenu);
-      });
-    }
-  hideDropdownMenu() {
-      this.setState({ displayMenu: false }, () => {
-        document.removeEventListener('click', this.hideDropdownMenu);
-      });
   }
   createSetFieldId=()=>{
     this.props.createSetFieldId(this.state.clickedFieldDetail);
@@ -156,6 +147,16 @@ class ModalCreateMatch extends React.Component{
       this.state.publicShow = 0
     }
   }
+  selectFieldToggle = ()=>{
+    this.setState((state)=>{
+      return {selectFieldState: !state.selectFieldState}
+    })
+  }
+  createFieldToggle = ()=>{
+    this.setState((state)=>{
+      return {createFieldState: !state.createFieldState}
+    })
+  }
   render(){
     if(this.props.modalState){
       setTimeout(this.showFieldFromLoad,500);
@@ -164,7 +165,7 @@ class ModalCreateMatch extends React.Component{
           <ModalBackDrop click = {this.props.modalClick}/>
           <div className="spacer"></div>
           <div className="modal-creatematch__grid">
-            <div className="spacer"></div>
+            <div onClick = {this.props.modalClick} className="spacer"></div>
             <div className="modal-creatematch__card">
               <div className="creatematch__matchname">
                 <label>Match name</label>
@@ -186,31 +187,11 @@ class ModalCreateMatch extends React.Component{
                 </div>
               </div>
               <div className="locationselect">
-                <label>{'Location'}</label>
-                  <div  className="dropdown__item">
-                   <button onClick={this.showDropdownMenu}>Select Field</button>
-                    { this.state.displayMenu ? (
-                      <div className="dropdown__item">
-                      {this.state.field.map((d) =>
-                        <button onClick={
-                            (e)=>{
-                              this.getField(d.fieldid)
-                            }
-                          }>{d.fieldname}</button>
-                        )}
-                      </div>
-                    ):(null)}
-                    <select onChange={(e)=>this.getCourt(e.target.value,0)}>
-                      {this.state.FieldCourt.map((data,i)=>
-                        <option value={data}>{data}</option>
-                      )}
-                    </select>
-                    <select onChange={(e)=>this.getCourt(e.target.value,1)}>
-                      {this.state.FieldCourt.map((data,i)=>
-                        <option value={data}>{data}</option>
-                      )}
-                    </select>
-                  </div>
+                <label className="locationselect__label">{'Location'}</label>
+                <button onClick = {this.selectFieldToggle}
+                  className="creatematch__selectfield">Select Field</button>
+                <button onClick = {this.createFieldToggle}
+                  className="creatematch__selectfield">Create match</button>
               </div>
               <div className="team__deaprt">
                 <div className="creatematch__team">
@@ -239,9 +220,16 @@ class ModalCreateMatch extends React.Component{
               <button onClick = {this.props.modalClose}>Close</button>
               <button onClick = {this.addMatch}>Create</button>
             </div>
-            <div className="spacer"></div>
+            <div onClick = {this.props.modalClick} className="spacer"></div>
           </div>
           <div className="spacer"></div>
+          <SelectField
+            field = {this.state.field}
+            modalClick = {this.selectFieldToggle}
+            modalState = {this.state.selectFieldState}/>
+          <CreateField
+            modalClick = {this.createFieldToggle}
+            modalState = {this.state.createFieldState}/>
         </div>
       );
     }

@@ -26,7 +26,7 @@ class ModalAddScore extends React.Component{
           <ModalBackDrop click = {this.props.modalClick}/>
           <div className="spacer"></div>
           <div className="modal-addscore__grid">
-            <div className="spacer"></div>
+            <div onClick = {this.props.modalClick} className="spacer"></div>
             <div className="modal-addscore__card">
               <div className="holefill">
                 <input type="text" placeholder="Hole1" onChange={(e)=>this.getScore(e.target.value,0)}></input>
@@ -52,7 +52,7 @@ class ModalAddScore extends React.Component{
               <Button btnLabel="Close" btnOnClick = {this.props.closeAddScoreModal}></Button>
               <Button btnLabel="Save" btnOnClick={this.calScore}></Button>
             </div>
-            <div className="spacer"></div>
+            <div onClick = {this.props.modalClick} className="spacer"></div>
           </div>
           <div className="spacer"></div>
         </div>

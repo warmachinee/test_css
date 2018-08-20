@@ -22,7 +22,7 @@ class ModalEditTeam extends React.Component{
           <ModalBackDrop click = {this.props.modalClick}/>
           <div className="spacer"></div>
           <div className="modal-editteamname__grid">
-            <div className="spacer"></div>
+            <div onClick = {this.props.modalClick} className="spacer"></div>
             <div className="modal-editteamname__card">
               <div className="editteamname__item">
                 <label>Team name</label>
@@ -35,7 +35,7 @@ class ModalEditTeam extends React.Component{
                 <button onClick = {this.props.updateTNDN}>Edit</button>
               </div>
             </div>
-            <div className="spacer"></div>
+            <div onClick = {this.props.modalClick} className="spacer"></div>
           </div>
           <div className="spacer"></div>
         </div>

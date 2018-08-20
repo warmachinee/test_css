@@ -22,7 +22,7 @@ class ModalAddPeople extends React.Component{
           <ModalBackDrop click = {this.props.modalClick}/>
           <div className="spacer"></div>
           <div className="modal-addpeople__grid">
-            <div className="spacer"></div>
+            <div onClick = {this.props.modalClick} className="spacer"></div>
             <div className="modal-addpeople__card">
               <label>Player name</label>
               <EditTextImg type="text" placeholder="Player name" editTextValue={this.addPeople}/>
@@ -30,7 +30,7 @@ class ModalAddPeople extends React.Component{
               <Button btnLabel="Close" btnOnClick = {this.props.modalClick}></Button>
               <Button btnLabel="Add" btnOnClick={this.props.addRequestPlayer}></Button>
             </div>
-            <div className="spacer"></div>
+            <div onClick = {this.props.modalClick} className="spacer"></div>
           </div>
           <div className="spacer"></div>
         </div>

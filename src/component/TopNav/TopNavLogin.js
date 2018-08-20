@@ -18,6 +18,12 @@ class TopNavLogin extends React.Component{
   inputPassword=(val)=>{
     this.props.inputPassword(val);
   }
+  handleKeyPress = (target) => {
+    if(target.charCode === 13){
+      console.log("Key press");
+      this.props.submitLogin()
+    }
+  }
   render(){
     return(
       <Router>
@@ -30,12 +36,14 @@ class TopNavLogin extends React.Component{
               <div className="spacer"></div>
               <div className="topnavlogin__edittext">
                 <EditText type="text" placeholder="Enter Email"
+                  onKeyPress = {this.handleKeyPress}
                   editTextValue={this.inputUsername}/>
                 <EditText type="password" placeholder="Password"
+                  onKeyPress = {this.handleKeyPress}
                   editTextValue={this.inputPassword}/>
               </div>
               <div className="topnavlogin__signin">
-                <form onSubmit={this.props.submitLogin}>
+                <form onSubmit = {this.props.submitLogin}>
                   <button>Sign in</button>
                 </form>
               </div>

@@ -31,7 +31,7 @@ class ModalMatchResult extends React.Component{
           <ModalBackDrop click = {this.props.modalClick}/>
           <div className="spacer"></div>
           <div className="modal-matchresult__grid">
-            <div className="spacer"></div>
+            <div onClick = {this.props.modalClick} className="spacer"></div>
             <div className="modal-matchresult__card">
               <label>Match Result</label>
               <div className="match__result__box">
@@ -70,7 +70,7 @@ class ModalMatchResult extends React.Component{
               <Button btnLabel="Close" btnOnClick = {this.props.modalClick}></Button>
               <Button btnLabel="Edit" btnOnClick = {this.showData}></Button>
             </div>
-            <div className="spacer"></div>
+            <div onClick = {this.props.modalClick} className="spacer"></div>
           </div>
           <div className="spacer"></div>
         </div>

@@ -24,7 +24,7 @@ class Dashboard extends Component {
     super(props)
     this.dashboardRefresh = false;
     this.state = {
-      createModalIsOpen: true,
+      createModalIsOpen: false,
       addpeopleModalIsOpen: false,
       addscoreModalIsOpen: false,
       roomPasswordModal:false,

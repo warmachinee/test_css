@@ -68,7 +68,6 @@ class Login extends Component{
     this.props.userID(this.state.userID)
   }
   handleSubmit = event => {
-    event.preventDefault();
     var geturl;
     geturl = $.ajax({
       type: "POST",
@@ -157,6 +156,11 @@ class Login extends Component{
     var result = localStorage['response'];
     return result;
   }
+  handleKeyPress = (target) => {
+    if(target.charCode === 13){
+      this.handleSubmit()
+    }
+  }
   render(){
     return(
       <Router>
@@ -172,8 +176,10 @@ class Login extends Component{
                   <div className="spacer"></div>
                   <div className="topnavlogin__edittext">
                     <EditText type="text" placeholder="Enter Email"
+                      handleKeyPress = {this.handleKeyPress}
                       editTextValue={this.inputUsernameLogin}/>
                     <EditText type="password" placeholder="Password"
+                      handleKeyPress = {this.handleKeyPress}
                       editTextValue={this.inputPasswordLogin}/>
                   </div>
                   <div className="topnavlogin__signin">

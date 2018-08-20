@@ -10,6 +10,11 @@ class LoginCard extends React.Component{
   constructor(props){
     super(props)
   }
+  handleKeyPress = (target) => {
+    if(target.charCode === 13){
+      this.props.submitLogin()
+    }
+  }
   render(){
     return(
       <div className="form__card">
@@ -23,10 +28,12 @@ class LoginCard extends React.Component{
           </div>
           <div className="form__card__items">
             <EditTextImg type="text" placeholder="Enter Username" formType="username"
+              onKeyPress = {this.handleKeyPress}
               editTextValue={this.props.inputUsername}/>
           </div>
           <div className="form__card__items">
             <EditTextImg type="password" placeholder="Password" formType="password"
+              onKeyPress = {this.handleKeyPress}
               editTextValue={this.props.inputPassword}/>
           </div>
           <div className="form__card__items">

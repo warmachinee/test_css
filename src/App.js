@@ -11,8 +11,8 @@ class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      pageLogin: false,
-      pageDashboard: true,
+      pageLogin: true,
+      pageDashboard: false,
       appLoadMatch:[],
       dataLength:0,
       detailData:[
@@ -151,7 +151,7 @@ class App extends Component {
           {(this.state.pageDashboard && this.state.chksession)?
           (<Redirect to="/home" />):(
             (this.state.pageLogin && this.state.chksession)?
-            (<Redirect to="/" />):(<Redirect to="/home" />)
+            (<Redirect to="/" />):(null)
           )}
           {(this.state.chksession && (window.location.pathname === '/home') && this.state.pageLogin)?
           (<Redirect to="/home" />):(null)}

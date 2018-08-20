@@ -9,12 +9,18 @@ class EditText extends React.Component{
   editTextValue=(val)=>{
     this.props.editTextValue(val);
   }
-
-
+  handleKeyPress =(e)=>{
+    this.sendCharCode(e.charCode)
+  }
+  sendCharCode = (code)=>{
+    this.props.keyPress(code)
+  }
   render(){
     return(
       <div>
-        <input type={this.props.type} placeholder={this.props.placeholder} onChange={(e)=>this.editTextValue(e.target.value)}/>
+        <input type={this.props.type} placeholder={this.props.placeholder}
+          onKeyPress = {this.props.handleKeyPress}
+          onChange={(e)=>this.editTextValue(e.target.value)}/>
       </div>
     );
   }
