@@ -13,7 +13,6 @@ class App extends Component {
     this.state = {
       pageLogin: true,
       pageDashboard: false,
-      firstDash: true,
       appLoadMatch:[],
       dataLength:0,
       detailData:[
@@ -125,30 +124,30 @@ class App extends Component {
       data: {},
       xhrFields: { withCredentials: true },
       success: function(data) {
-        //console.log(data)
-        localStorage['chk']=data.status;
+        console.log(data)
+        localStorage['chk'] = data.status;
+        localStorage['id'] = data.id;
        }
       });
       setTimeout(()=>{
-        if(localStorage['chk']){
+        if(localStorage['id']){
           var chksessions = localStorage['chk'];
+          var id = localStorage['id'];
           this.state.sessionstatus = chksessions;
-          console.log(chksessions);
+          this.state.userID = parseInt(id)
+          console.log(id," : ",chksessions);
           if(this.state.sessionstatus === 'valid session'){
              this.state.chksession = true
           }else{
              this.state.chksession = false
            }
           }
-      },250);
+      },300);
       localStorage.clear()
    }
-   firstLoadDash = () =>{
-     if(this.state.firstDash){
-       this.state.firstDash = false
-       this.handleLoadMatch()
-     }
-   }
+  componentWillMount(){
+    this.checksession()
+  }
   render() {
     this.checksession()
     return (
@@ -163,7 +162,6 @@ class App extends Component {
           (<Redirect to="/home" />):(null)}
           {(this.state.logoutClickState)?
             (<Redirect to="/" />):(null)}
-
           <Route
             exact path="/"
             render={()=>
