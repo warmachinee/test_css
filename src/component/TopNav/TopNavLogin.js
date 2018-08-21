@@ -43,9 +43,7 @@ class TopNavLogin extends React.Component{
                   editTextValue={this.inputPassword}/>
               </div>
               <div className="topnavlogin__signin">
-                <form onSubmit = {this.props.submitLogin}>
-                  <button>Sign in</button>
-                </form>
+                <button onClick={this.props.submitLogin}>Sign in</button>
               </div>
               <div className="topnavlogin__signup">
                 <Link to='/register' component={this.props.regisCard}

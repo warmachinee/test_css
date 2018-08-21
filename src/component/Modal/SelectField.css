@@ -21,7 +21,16 @@
 .selectfield__grid .selectfield__card{
   background: white;
   min-width: 30rem;
-  height: 30rem;
+  height: 35rem;
+}
+.selectfield__card .selectfield__switch{
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+  border: 1px solid black;
+  width: 100%;
+  padding: .5rem 2rem;
 }
 .selectfield__card .selectfield__fieldlist{
   display: -webkit-flex;
@@ -45,8 +54,23 @@
   padding: 1rem 2rem;
 }
 .selectfield__fieldlist .selectfield__fielditem{
+  border: 1px solid black;
   width: 100%;
-  padding: 2rem .5rem;
+  min-height: 4rem;
+  padding: .5rem .5rem;
+
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+}
+.selectfield__fielditem .selectfield__fielditem__field{
+  height: 100%;
+  width: 100%;
+}
+.selectfield__fielditem .selectfield__fielditem__edit{
+  width: 4rem;
+  height: 100%;
 }
 .selectfield__card .selectfield__fielddetail{
   display: -webkit-flex;
@@ -54,9 +78,36 @@
   display: -moz-flex;
   display: flex;
 
+  -webkit-flex-wrap: wrap;
+  -moz-flex-wrap: wrap;
+  flex-wrap: wrap;
+
   height: 5rem;
   border: 1px solid black;
   padding: 1rem 2rem;
+}
+.selectfield__fielddetail .selectfield__fielddetail__option{
+  margin: 1rem 2rem;
+}
+.selectfield__card .selectfield__edit__fieldname{
+  border: 1px solid black;
+  width: 100%;
+  min-height: 4rem;
+  padding: 1rem 2rem;
+}
+.selectfield__card .selectfield__edit__hole{
+  border: 1px solid black;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+}
+.selectfield__edit__hole .selectfield__edit__hole__item{
+  width: 27rem;
+}
+.selectfield__edit__hole__item input{
+  width: 3rem;
+  height: 3rem;
 }
 .spacer{
   -webkit-flex: 1;

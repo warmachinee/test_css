@@ -38,6 +38,8 @@ class Dashboard extends Component {
       data:[],
       dataLength:0,
       fieldFromLoad:[],
+      customFieldFromLoad:[],
+      customFieldFromLoadHoleScore:[],
       cardTargetData:[{
         matchid:'',
         userTarget:'',
@@ -173,6 +175,10 @@ class Dashboard extends Component {
       return {createModalIsOpen: !state.createModalIsOpen}
     });
   }
+  toggleCreateModalLoad =()=>{
+    this.HandlerLoadField()
+    this.toggleCreateModal()
+  }
   closeCreateMatchModal = () =>{
     this.setState({
       createModalIsOpen: false,
@@ -214,6 +220,7 @@ class Dashboard extends Component {
       return {addpeopleModalIsOpen: !state.addpeopleModalIsOpen}
     });
   }
+
   getCalScoreMatchID=(MatchID)=>{
     this.state.calScoreMatchID = MatchID
   }
@@ -343,14 +350,8 @@ class Dashboard extends Component {
           //this.setState({activityRequest: obj})
           this.state.activityRequest.push(obj);
         }
-
-        //this.setState({dataLength: this.state.fieldFromLoad.length})//-------
       }
-      //console.log("this.state.activityRequest :::",this.state.activityRequest)
       this.getNotiClick()
-      //this.historyPageToggle()
-      //this.dashboardRefresh = false
-      //this.showHistoryFromLoad()
     },500)
     localStorage.clear()
   }
@@ -661,7 +662,8 @@ class Dashboard extends Component {
 
   HandlerLoadField = (event) => {
     this.state.fieldFromLoad = []
-    console.log("Click HandlerLoadField");
+    this.state.customFieldFromLoad = []
+    this.state.customFieldFromLoadHoleScore = []
     var geturl;
     geturl = $.ajax({
       type: "POST",
@@ -674,6 +676,20 @@ class Dashboard extends Component {
        localStorage['fieldname']=data.fieldname;
        localStorage['cordnum']=data.cordnum;
        //console.log(data);
+     }
+    });
+    var geturl2;
+    geturl2 = $.ajax({
+      type: "POST",
+     url: "http://pds.in.th/phpadmin/loadcustomfield.php",
+     dataType: 'json',
+     data: {},
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+       localStorage['cus__fieldid']=data.fieldid;
+       localStorage['cus__fieldname']=data.fieldname;
+       localStorage['holescore']=data.holescore;
+       console.log(data);
      }
     });
     setTimeout(()=>{
@@ -693,7 +709,44 @@ class Dashboard extends Component {
           this.state.fieldFromLoad.push(obj);
         }
       }
-      this.toggleCreateModal()
+      if(localStorage['cus__fieldid']){
+        var cus__fieldid = localStorage['cus__fieldid'];
+        var cus__fieldname = localStorage['cus__fieldname'];
+        var holescore = localStorage['holescore'];
+
+        cus__fieldid = cus__fieldid.split(",",cus__fieldid.length)
+        cus__fieldname = cus__fieldname.split(",",cus__fieldname.length)
+        holescore = holescore.split(",",holescore.length)
+
+        for(var i = 0;i < cus__fieldid.length;i++){
+          var obj = {
+            fieldid: cus__fieldid[i],
+            fieldname: cus__fieldname[i],
+          }
+          this.state.customFieldFromLoad.push(obj);
+        }
+        let holescoreTempCus = [];
+        let holescoreTempCusHole = [];
+        let holescoreTempCusHCP = [];
+        for(var i = 0;i < holescore.length;i++){
+          holescoreTempCus.push(holescore[i])
+          if((i+1)%36===0){
+            for(var j = 0;j < 18;j++){
+              holescoreTempCusHole.push(holescoreTempCus[j])
+            }
+            for(var j = 18;j < 36;j++){
+              holescoreTempCusHCP.push(holescoreTempCus[j])
+            }
+            this.state.customFieldFromLoadHoleScore.push({
+              holescore: holescoreTempCusHole,
+              hcp: holescoreTempCusHCP
+            });
+            holescoreTempCus = []
+            holescoreTempCusHole = []
+            holescoreTempCusHCP = []
+          }
+        }
+      }
     },500)
     localStorage.clear()
   }
@@ -991,7 +1044,9 @@ class Dashboard extends Component {
       this.setState(this.state);
     }
   }
-
+  refresh = () =>{
+    this.setState(this.state)
+  }
   refreshData=()=>{
     setTimeout(()=>{
       //console.log("refresh");
@@ -1026,7 +1081,7 @@ class Dashboard extends Component {
         <div>
           <TopNav
             userID = {this.props.userID}
-            loadField = {this.HandlerLoadField}
+            loadField = {this.toggleCreateModalLoad}
             drawerClickHandler = {this.drawerToggleClickHandler}
             notiClick = {this.HandlerActivityRequest}
             />
@@ -1083,6 +1138,8 @@ class Dashboard extends Component {
             modalClick = {this.toggleAddpeopleModal}
             modalState = {this.state.addpeopleModalIsOpen} />
           <ModalCreateMatch
+            refresh = {this.refresh}
+            loadField = {this.HandlerLoadField}
             addMatch = {this.HandlerAddMatch}
             modalClick = {this.toggleCreateModal}
             createSetFieldId = {this.createSetFieldId}
@@ -1095,6 +1152,8 @@ class Dashboard extends Component {
 
             publicShow = {this.createSetPublicShow}
             fieldDetail = {this.state.fieldFromLoad}
+            customFieldDetail = {this.state.customFieldFromLoad}
+            customFieldDetailScore = {this.state.customFieldFromLoadHoleScore}
             matchModalData = {this.state.matchModalData}
             modalClose = {this.closeCreateMatchModal}
             modalState = {this.state.createModalIsOpen}/>
@@ -1113,7 +1172,7 @@ class Dashboard extends Component {
         <div>
           <TopNav
             userID = {this.props.userID}
-            loadField = {this.HandlerLoadField}
+            loadField = {this.toggleCreateModalLoad}
             drawerClickHandler = {this.drawerToggleClickHandler}
             notiClick = {this.HandlerActivityRequest}
             />
@@ -1162,6 +1221,8 @@ class Dashboard extends Component {
             modalState = {this.state.addpeopleModalIsOpen} />
 
           <ModalCreateMatch
+            refresh = {this.refresh}
+            loadField = {this.HandlerLoadField}
             addMatch = {this.HandlerAddMatch}
             modalClick = {this.toggleCreateModal}
             createSetFieldId = {this.createSetFieldId}
@@ -1174,6 +1235,8 @@ class Dashboard extends Component {
 
             publicShow = {this.createSetPublicShow}
             fieldDetail = {this.state.fieldFromLoad}
+            customFieldDetail = {this.state.customFieldFromLoad}
+            customFieldDetailScore = {this.state.customFieldFromLoadHoleScore}
             matchModalData = {this.state.matchModalData}
             modalClose = {this.closeCreateMatchModal}
             modalState = {this.state.createModalIsOpen}/>
@@ -1191,7 +1254,7 @@ class Dashboard extends Component {
         <div>
           <TopNav
             userID = {this.props.userID}
-            loadField = {this.HandlerLoadField}
+            loadField = {this.toggleCreateModalLoad}
             drawerClickHandler = {this.drawerToggleClickHandler}
             notiClick = {this.HandlerActivityRequest}
             />
@@ -1245,6 +1308,8 @@ class Dashboard extends Component {
             modalState = {this.state.addpeopleModalIsOpen} />
 
           <ModalCreateMatch
+            refresh = {this.refresh}
+            loadField = {this.HandlerLoadField}
             addMatch = {this.HandlerAddMatch}
             modalClick = {this.toggleCreateModal}
             createSetFieldId = {this.createSetFieldId}
@@ -1257,6 +1322,8 @@ class Dashboard extends Component {
 
             publicShow = {this.createSetPublicShow}
             fieldDetail = {this.state.fieldFromLoad}
+            customFieldDetail = {this.state.customFieldFromLoad}
+            customFieldDetailScore = {this.state.customFieldFromLoadHoleScore}
             matchModalData = {this.state.matchModalData}
             modalClose = {this.closeCreateMatchModal}
             modalState = {this.state.createModalIsOpen}/>
@@ -1275,7 +1342,7 @@ class Dashboard extends Component {
         <div>
           <TopNav
             userID = {this.props.userID}
-            loadField = {this.HandlerLoadField}
+            loadField = {this.toggleCreateModalLoad}
             drawerClickHandler = {this.drawerToggleClickHandler}
             notiClick = {this.HandlerActivityRequest}
             />
@@ -1333,6 +1400,8 @@ class Dashboard extends Component {
             modalState = {this.state.addpeopleModalIsOpen} />
 
           <ModalCreateMatch
+            refresh = {this.refresh}
+            loadField = {this.HandlerLoadField}
             addMatch = {this.HandlerAddMatch}
             modalClick = {this.toggleCreateModal}
             createSetFieldId = {this.createSetFieldId}
@@ -1345,6 +1414,8 @@ class Dashboard extends Component {
 
             publicShow = {this.createSetPublicShow}
             fieldDetail = {this.state.fieldFromLoad}
+            customFieldDetail = {this.state.customFieldFromLoad}
+            customFieldDetailScore = {this.state.customFieldFromLoadHoleScore}
             matchModalData = {this.state.matchModalData}
             modalClose = {this.closeCreateMatchModal}
             modalState = {this.state.createModalIsOpen}/>
@@ -1362,7 +1433,7 @@ class Dashboard extends Component {
           <div>
             <TopNav
               userID = {this.props.userID}
-              loadField = {this.HandlerLoadField}
+              loadField = {this.toggleCreateModalLoad}
               drawerClickHandler = {this.drawerToggleClickHandler}
               notiClick = {this.HandlerActivityRequest}
               />
@@ -1420,6 +1491,8 @@ class Dashboard extends Component {
               modalState = {this.state.addpeopleModalIsOpen} />
 
             <ModalCreateMatch
+              refresh = {this.refresh}
+              loadField = {this.HandlerLoadField}
               addMatch = {this.HandlerAddMatch}
               modalClick = {this.toggleCreateModal}
               createSetFieldId = {this.createSetFieldId}
@@ -1432,6 +1505,8 @@ class Dashboard extends Component {
 
               publicShow = {this.createSetPublicShow}
               fieldDetail = {this.state.fieldFromLoad}
+              customFieldDetail = {this.state.customFieldFromLoad}
+              customFieldDetailScore = {this.state.customFieldFromLoadHoleScore}
               matchModalData = {this.state.matchModalData}
               modalClose = {this.closeCreateMatchModal}
               modalState = {this.state.createModalIsOpen}/>

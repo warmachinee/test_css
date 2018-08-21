@@ -13,6 +13,7 @@ class App extends Component {
     this.state = {
       pageLogin: true,
       pageDashboard: false,
+      firstDash: true,
       appLoadMatch:[],
       dataLength:0,
       detailData:[
@@ -49,7 +50,6 @@ class App extends Component {
         logoutClickState: false
       };
     });
-    this.setState(this.state)
   };
   handelLogout = event =>{
     this.state.userID = ''
@@ -142,7 +142,13 @@ class App extends Component {
           }
       },250);
       localStorage.clear()
-   };
+   }
+   firstLoadDash = () =>{
+     if(this.state.firstDash){
+       this.state.firstDash = false
+       this.handleLoadMatch()
+     }
+   }
   render() {
     this.checksession()
     return (

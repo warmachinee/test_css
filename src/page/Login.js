@@ -183,9 +183,7 @@ class Login extends Component{
                       editTextValue={this.inputPasswordLogin}/>
                   </div>
                   <div className="topnavlogin__signin">
-                    <form onSubmit={this.handleSubmit}>
-                      <button>Sign in</button>
-                    </form>
+                    <button onClick = {this.handleSubmit}>Sign in</button>
                   </div>
                   <div className="topnavlogin__signup">
                     <Link to='/register'

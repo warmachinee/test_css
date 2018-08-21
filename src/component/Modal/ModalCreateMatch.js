@@ -18,11 +18,13 @@ class ModalCreateMatch extends React.Component{
       selectFieldState: false,
       createFieldState: false,
       field:[],
+      customField:[],
       dataLength:0,
       publicShow: 0,
       clickedFieldDetail:[],
       clickedFieldCourt:[],
       FieldCourt:[],
+      FieldScoreDetail:[],
       courtNumber:[],
       typescore:0,
       clickedFieldID:'',
@@ -57,6 +59,7 @@ class ModalCreateMatch extends React.Component{
   getField = (value)=>{
     this.state.clickedFieldID = value
     this.state.clickedFieldDetail = []
+    this.state.FieldScoreDetail = []
     this.state.clickedFieldDetail[0] = this.state.clickedFieldID
     var geturl;
     geturl = $.ajax({
@@ -69,41 +72,40 @@ class ModalCreateMatch extends React.Component{
      xhrFields: { withCredentials: true },
      success: function(data) {
        localStorage['fieldcord']=data.fieldcord;
+       localStorage['fieldscore']=data.fieldscore;
+       localStorage['fieldHscore']=data.fieldHscore;
        console.log(data);
      }
     });
     setTimeout(()=>{
       if(localStorage['fieldcord']){
         var fieldcord = localStorage['fieldcord'];
+        var fieldscore = localStorage['fieldscore'];
+        var fieldHscore = localStorage['fieldHscore'];
+
         fieldcord = fieldcord.split(",",fieldcord.length)
-        //this.state.clickedFieldDetail = []
-        //this.state.clickedFieldDetail.push(this.state.clickedFieldID)
+        fieldscore = fieldscore.split(",",fieldscore.length)
+        fieldHscore = fieldHscore.split(",",fieldHscore.length)
+
         this.state.FieldCourt = []
         for(var i = 0;i < fieldcord.length;i++){
-          /*var obj = {
-            fieldcord: fieldcord[i]
-          }*/
           this.state.FieldCourt.push(fieldcord[i]);
         }
-        //this.state.clickedFieldCourt.push(fieldcord[i]);
-        console.log("this.state.clickedFieldID.push(obj) :::",this.state.FieldCourt)
-        //this.setState({dataLength: this.state.fieldFromLoad.length})//-------
+        for(var i = 0;i < fieldscore.length;i++){
+          this.state.FieldScoreDetail.push({
+            fieldscore: fieldscore[i],
+            fieldHscore: fieldHscore[i]
+          })
+        }
       }
-      this.createModalRefresh = false;
-      this.showFieldFromLoad()
+      this.setState(this.state)
     },500)
     localStorage.clear()
   }
-  getCourt = (Court,i)=>{
-    //this.state.clickedFieldCourt = []
-    this.state.courtNumber[i] = Court
-    if(this.state.courtNumber[0]===this.state.courtNumber[1]){
-      alert("Please select different court")
+  sendFieldDetail=(data)=>{
+    for(var i = 0;i < data.length;i++){
+      this.state.clickedFieldDetail.push(data[i])
     }
-    this.state.clickedFieldDetail[0] = this.state.clickedFieldID
-    this.state.clickedFieldDetail[1] = this.state.courtNumber[0]
-    this.state.clickedFieldDetail[2] = this.state.courtNumber[1]
-    console.log("this.state.courtNumber ::",this.state.courtNumber)
   }
 
   getTypeScore = (type)=>{
@@ -115,30 +117,32 @@ class ModalCreateMatch extends React.Component{
     this.createSetPublicShow()
     this.createSetTypeScore()
     this.state.clickedFieldDetail = []
-    if(this.state.roomPassword.length >= 4){
+    if(this.state.roomPassword.length <= 4){
       if(
         this.props.matchModalData.matchname &&
         this.props.matchModalData.fieldid &&
         this.props.matchModalData.date){
-          //this.props.addMatch();
-          //this.props.modalClose();
+          this.props.addMatch();
+          this.props.modalClose();
         }else{
           alert('Please complete the information!!!')
         }
     }else{
-      alert('Room password 4-digit at least')
+      if(this.state.roomPassword === undefined || this.state.roomPassword === "" || this.state.roomPassword === null){
+        alert('Room password 4-digit at least')
+      }else{
+        if(
+          this.props.matchModalData.matchname &&
+          this.props.matchModalData.fieldid &&
+          this.props.matchModalData.date){
+            this.props.addMatch();
+            this.props.modalClose();
+          }else{
+            alert('Please complete the information!!!')
+          }
+      }
     }
 
-  }
-  showFieldFromLoad = () => {
-    if(!this.createModalRefresh ){
-      this.createModalRefresh = true;
-      this.state.field=[]
-      for(var i = 0;i < this.props.fieldDetail.length ;i++){
-        this.state.field.push(this.props.fieldDetail[i]);
-      }
-      this.setState(this.state);
-    }
   }
   switchToggleState=(value)=>{
     if(value){
@@ -148,6 +152,7 @@ class ModalCreateMatch extends React.Component{
     }
   }
   selectFieldToggle = ()=>{
+    this.props.loadField()
     this.setState((state)=>{
       return {selectFieldState: !state.selectFieldState}
     })
@@ -157,9 +162,24 @@ class ModalCreateMatch extends React.Component{
       return {createFieldState: !state.createFieldState}
     })
   }
+  createModalRefreshToggle = ()=>{
+    this.selectFieldToggle()
+  }
   render(){
     if(this.props.modalState){
-      setTimeout(this.showFieldFromLoad,500);
+      this.state.field=[]
+      this.state.customField = []
+      for(var i = 0;i < this.props.fieldDetail.length ;i++){
+        this.state.field.push(this.props.fieldDetail[i]);
+      }
+      for(var j = 0;j < this.props.customFieldDetail.length ;j++){
+        this.state.customField.push({
+          fieldid: this.props.customFieldDetail[j].fieldid,
+          fieldname: this.props.customFieldDetail[j].fieldname,
+          holescore: this.props.customFieldDetailScore[j].holescore,
+          hcp: this.props.customFieldDetailScore[j].hcp
+        })
+      }
       return(
         <div className="modal-creatematch">
           <ModalBackDrop click = {this.props.modalClick}/>
@@ -191,7 +211,7 @@ class ModalCreateMatch extends React.Component{
                 <button onClick = {this.selectFieldToggle}
                   className="creatematch__selectfield">Select Field</button>
                 <button onClick = {this.createFieldToggle}
-                  className="creatematch__selectfield">Create match</button>
+                  className="creatematch__selectfield">Create Custom Field</button>
               </div>
               <div className="team__deaprt">
                 <div className="creatematch__team">
@@ -225,9 +245,15 @@ class ModalCreateMatch extends React.Component{
           <div className="spacer"></div>
           <SelectField
             field = {this.state.field}
+            fieldScore = {this.state.FieldScoreDetail}
+            fieldCourt = {this.state.FieldCourt}
+            getFieldDetail = {this.sendFieldDetail}
+            getField = {this.getField}
+            customField = {this.state.customField}
             modalClick = {this.selectFieldToggle}
             modalState = {this.state.selectFieldState}/>
           <CreateField
+            loadField = {this.props.loadField}
             modalClick = {this.createFieldToggle}
             modalState = {this.state.createFieldState}/>
         </div>
