@@ -153,6 +153,9 @@ class ModalCreateMatch extends React.Component{
   }
   selectFieldToggle = ()=>{
     this.props.loadField()
+    setTimeout(()=>{
+      this.props.refresh()
+    },500)
     this.setState((state)=>{
       return {selectFieldState: !state.selectFieldState}
     })
@@ -244,6 +247,7 @@ class ModalCreateMatch extends React.Component{
           </div>
           <div className="spacer"></div>
           <SelectField
+            refresh = {this.props.refresh}
             field = {this.state.field}
             fieldScore = {this.state.FieldScoreDetail}
             fieldCourt = {this.state.FieldCourt}

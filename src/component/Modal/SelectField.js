@@ -19,11 +19,61 @@ class SelectField extends React.Component{
       clickedCourt:[],
       editCustomFieldID:'',
       editCustomFieldName:'',
+      editedCustomFieldName:'',
       editCustomHolescore:[],
       editCustomHCP:[],
+      scoreSet:[],
       hole:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18],
       confirmCancel: false,
     }
+  }
+  getScore=(score,hole)=>{
+    this.state.scoreSet[hole]=score
+  }
+  editCustomFieldName =(data)=>{
+    this.state.editedCustomFieldName = data
+  }
+  updateCustomField = ()=>{
+    var editedScoreset = this.state.scoreSet
+    var editedFieldName = this.state.editedCustomFieldName
+    for(var i =0;i < 18;i++){
+      if(editedScoreset[i] === -1){
+        editedScoreset[i] = this.state.editCustomHolescore[i]
+      }
+    }
+    for(var j = 18;j < 36;j++){
+      if(editedScoreset[j] === -1){
+        editedScoreset[j] = this.state.editCustomHCP[j-18]
+      }
+    }
+    if(this.state.editedCustomFieldName === "" || this.state.editedCustomFieldName === undefined || this.state.editedCustomFieldName === null){
+      editedFieldName = this.state.editCustomFieldName
+    }
+    var geturl;
+    geturl = $.ajax({
+      type: "POST",
+     url: "http://pds.in.th/phpadmin/updatecustomfield.php",
+     dataType: 'json',
+     data: {
+       fieldid: this.state.editCustomFieldID,
+       fieldname: editedFieldName,
+       arrscore: editedScoreset
+     },
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+       localStorage['status']=data.status;
+       console.log(data);
+     }
+    });
+    setTimeout(()=>{
+      if(localStorage['status'] === 'update customfield success'){
+        alert(localStorage['status'])
+        this.toggleSelectUpdate()
+      }else{
+        alert(localStorage['status'])
+      }
+    },200)
+    localStorage.clear()
   }
   getField =(data)=>{
     this.props.getField(data.fieldid)
@@ -43,8 +93,6 @@ class SelectField extends React.Component{
     this.state.editCustomFieldName = data.fieldname
     this.state.editCustomHolescore = data.holescore
     this.state.editCustomHCP = data.hcp
-    console.log("editCustomHolescore",this.state.editCustomHolescore);
-    console.log("editCustomHCP",this.state.editCustomHCP);
     this.toggleSelectUpdate()
   }
   toggleSelectUpdate = ()=>{
@@ -76,10 +124,12 @@ class SelectField extends React.Component{
   }
   switchToggleState=(value)=>{
     this.state.court = []
+    setTimeout(this.props.refresh,500)
     this.setState({
       switchToggleCus: value,
       fieldname: 'no field'
     })
+
   }
   confirmSelect = () =>{
     if(this.state.clickedCourt.length!==2){
@@ -133,7 +183,6 @@ class SelectField extends React.Component{
     }
   }
   render(){
-    console.log("this.props.customField",this.props.customField);
     this.state.field = []
     if(this.state.switchToggleCus){
       for(var i = 0;i < this.props.customField.length;i++){
@@ -144,7 +193,6 @@ class SelectField extends React.Component{
         this.state.field.push(this.props.field[i])
       }
     }
-    console.log("field",this.state.field);
     if(this.props.modalState){
       return(
         <div className="selectfield">
@@ -223,6 +271,10 @@ class SelectField extends React.Component{
         </div>
       );
     }else if(this.state.editCustomField){
+      this.state.scoreSet = []
+      for(var i = 0;i < 36;i++){
+        this.state.scoreSet.push(-1)
+      }
       return(
         <div className="selectfield">
           <ModalBackDrop2 click = {this.toggleSelectUpdate}/>
@@ -231,7 +283,8 @@ class SelectField extends React.Component{
             <div onClick = {this.toggleSelectUpdate} className="spacer"></div>
             <div className="selectfield__card">
               <div className="selectfield__edit__fieldname">
-                <input type="text" placeholder={this.state.editCustomFieldName}/>
+                <input type="text" placeholder={this.state.editCustomFieldName}
+                  onChange={(e)=>this.editCustomFieldName(e.target.value)}/>
                 <button onClick={this.confirmCancelToggle}>Delete</button>
                 {
                   (this.state.confirmCancel)?
@@ -249,7 +302,8 @@ class SelectField extends React.Component{
                 <div className="selectfield__edit__hole__item">
                   <p>Hole score</p>
                   {this.state.editCustomHolescore.map((d,i)=>
-                    <input type="text" placeholder={i}></input>
+                    <input type="number" min="0" placeholder={i}
+                      onChange={(e)=>this.getScore(e.target.value,i)}></input>
                   )}
                 </div>
                 <div className="spacer"></div>
@@ -260,14 +314,15 @@ class SelectField extends React.Component{
                 <div className="selectfield__edit__hole__item">
                   <p>HCP</p>
                   {this.state.editCustomHCP.map((d,i)=>
-                    <input type="text" placeholder={i}></input>
+                    <input type="number" min="0" placeholder={i}
+                      onChange={(e)=>this.getScore(e.target.value,i+18)}></input>
                   )}
                 </div>
 
                 <div className="spacer"></div>
               </div>
-              <button onClick={()=>this.toggleSelectUpdate()}>Cancel</button>
-              <button >Update</button>
+              <button onClick = {()=>this.toggleSelectUpdate()}>Cancel</button>
+              <button onClick = {this.updateCustomField}>Update</button>
             </div>
             <div onClick = {this.toggleSelectUpdate} className="spacer"></div>
           </div>

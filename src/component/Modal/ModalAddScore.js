@@ -16,7 +16,6 @@ class ModalAddScore extends React.Component{
   getScore=(score,hole)=>{
     this.state.scoreSet[hole*2]=hole+1
     this.state.scoreSet[hole*2+1]=score
-    console.log(this.state.scoreSet);
   }
   calScore=()=>{
     this.props.calculateScore(this.state.scoreSet)
