@@ -301,28 +301,22 @@ class MatchDetail extends React.Component{
           <div className="space"></div>
           <div className="detail__gridtop">
             {/*---------------------------------------------------------------*/}
-            <div className="detail__label">
-              <div className="detail__matchname">
-                <div className="detail__matchname__label">matchname</div>
-              </div>
-              <div className="detail__fieldname">
-                <div className="detail__fieldname__label">
-                  <img className="detail__fieldname__icon" src={ic_location} />
-                  <div className="detail__fieldname__text">fieldname</div>
-                </div>
-                <div className="space"></div>
-              </div>
-              <div className="detail__datematch">
-                <div className="detail__datematch__text">01-01-0101</div>
-                <div className="space"></div>
-              </div>
-            </div>
-            {/*-------*/}
             {this.props.detail.map((data,i)=>
               <div className="detail__label">
-                <div className="detail__matchname">{data.matchname}</div>
-                <div className="detail__fieldname">{data.fieldname}</div>
-                <div className="detail__datematch">{data.datematch}</div>
+                  <div className="detail__matchname">
+                    <div className="detail__matchname__label">{data.matchname}</div>
+                  </div>
+                  <div className="detail__fieldname">
+                    <div className="detail__fieldname__label">
+                      <img className="detail__fieldname__icon" src={ic_location} />
+                      <div className="detail__fieldname__text">{data.fieldname}</div>
+                    </div>
+                    <div className="space"></div>
+                  </div>
+                  <div className="detail__datematch">
+                    <div className="detail__datematch__text">{data.datematch}</div>
+                    <div className="space"></div>
+                  </div>
               </div>
             )}
             {/*-------*/}
@@ -352,18 +346,10 @@ class MatchDetail extends React.Component{
             <div className="detail__labelgrid__in">{"IN"}</div>
             <div className="detail__labelgrid__in">{"OUT"}</div>
             <div className="detail__labelgrid__gross">{"GROSS"}</div>
-            <div className="detail__labelgrid__name">Name</div>
           </div>
 
-          <div className="detail__griduserhost">
-            <div className="detail__userhostname"></div>
-            <div className="detail__userhostin"></div>
-            <div className="detail__userhostout"></div>
-            <div className="detail__userhostgross"></div>
-          </div>
           <div className="detail__card">
             <div className="detail__gridfield">
-              asdasd
             </div>
 
             {this.props.detailUserhost.map((data)=>
@@ -419,24 +405,12 @@ class MatchDetail extends React.Component{
                         <div className="detail__usernameout">{data.out}</div>
                         <div className="detail__usernamegross">{data.gross}</div>
 
-                        <div className="detail__username">fullname userid</div>
-                        <div className="detail__usernamein">in</div>
-                        <div className="detail__usernameout">out</div>
-                        <div className="detail__usernamegross">gross</div>
                       </div>
                     </div>
                     )}
                 </div>
               </div>
             )}
-            <div className="detail__teambox">
-              <div className="detail__username">
-                <div className="detail__username__name">fullname userid</div>
-                <div className="detail__usernamein">in</div>
-                <div className="detail__usernameout">out</div>
-                <div className="detail__usernamegross">gross</div>
-              </div>
-            </div>
 
             {this.props.detailUser.filter(
               (item)=>{

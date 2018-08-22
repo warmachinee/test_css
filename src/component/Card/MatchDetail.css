@@ -194,6 +194,9 @@
   width: 2rem;
   width: 2rem;
 }
+.detail__controller__result .detail__controller__icon a{
+  cursor: pointer;
+}
 .detail__labelgrid{
   position: -webkit-sticky;
   position: sticky;

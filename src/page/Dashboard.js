@@ -365,9 +365,9 @@ class Dashboard extends Component {
           //this.setState({activityRequest: obj})
           this.state.activityRequest.push(obj);
         }
+        this.getNotiClick()
       }
     },500)
-    this.getNotiClick()
     localStorage.clear()
   }
 

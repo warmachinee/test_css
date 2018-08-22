@@ -127,8 +127,7 @@ class App extends Component {
            }
            this.state.appLoadMatch.push(obj);
          }
-         this.state.chksession = true
-         this.setState(this.state)
+         this.setState({chksession: true})
        }
      },250);
      localStorage.clear()
