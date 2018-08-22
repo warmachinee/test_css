@@ -111,26 +111,19 @@ class ModalCreateMatch extends React.Component{
   getTypeScore = (type)=>{
     this.state.typescore = type
   }
-  addMatch=()=>{
-    console.log("matchModalData",this.props.matchModalData)
+  MatchHandle=()=>{
+    //console.log("matchModalData",this.props.matchModalData)
     this.createSetFieldId()
     this.createSetPublicShow()
     this.createSetTypeScore()
     this.state.clickedFieldDetail = []
-    if(this.state.roomPassword.length <= 4){
-      if(
-        this.props.matchModalData.matchname &&
-        this.props.matchModalData.fieldid &&
-        this.props.matchModalData.date){
-          this.props.addMatch();
-          this.props.modalClose();
-        }else{
-          alert('Please complete the information!!!')
-        }
+    if(this.props.updateMatchState){
+      console.log("Update");
+      this.props.updateMatch()
+      //this.props.modalClose();
     }else{
-      if(this.state.roomPassword === undefined || this.state.roomPassword === "" || this.state.roomPassword === null){
-        alert('Room password 4-digit at least')
-      }else{
+      if(this.state.roomPassword.length <= 4){
+        console.log("Create");
         if(
           this.props.matchModalData.matchname &&
           this.props.matchModalData.fieldid &&
@@ -140,16 +133,31 @@ class ModalCreateMatch extends React.Component{
           }else{
             alert('Please complete the information!!!')
           }
+      }else{
+        console.log("Create");
+        if(this.state.roomPassword === undefined || this.state.roomPassword === "" || this.state.roomPassword === null){
+          alert('Room password 4-digit at least')
+        }else{
+          if(
+            this.props.matchModalData.matchname &&
+            this.props.matchModalData.fieldid &&
+            this.props.matchModalData.date){
+              this.props.addMatch();
+              this.props.modalClose();
+            }else{
+              alert('Please complete the information!!!')
+            }
+        }
       }
     }
-
   }
   switchToggleState=(value)=>{
     if(value){
-      this.state.publicShow = 1
+      this.setState({publicShow: 1})
     }else{
-      this.state.publicShow = 0
+      this.setState({publicShow: 0})
     }
+    console.log(this.state.publicShow);
   }
   selectFieldToggle = ()=>{
     this.props.loadField()
@@ -168,6 +176,13 @@ class ModalCreateMatch extends React.Component{
   createModalRefreshToggle = ()=>{
     this.selectFieldToggle()
   }
+  modalToggle =()=>{
+    if(this.props.updateMatchState){
+      this.props.modalClick("update")
+    }else{
+      this.props.modalClick("create")
+    }
+  }
   render(){
     if(this.props.modalState){
       this.state.field=[]
@@ -185,10 +200,10 @@ class ModalCreateMatch extends React.Component{
       }
       return(
         <div className="modal-creatematch">
-          <ModalBackDrop click = {this.props.modalClick}/>
+          <ModalBackDrop click = {this.modalToggle}/>
           <div className="spacer"></div>
           <div className="modal-creatematch__grid">
-            <div onClick = {this.props.modalClick} className="spacer"></div>
+            <div onClick = {this.modalToggle} className="spacer"></div>
             <div className="modal-creatematch__card">
               <div className="creatematch__matchname">
                 <label>Match name</label>
@@ -197,20 +212,22 @@ class ModalCreateMatch extends React.Component{
               </div>
               <div className="roomtype__scoretype">
                 <div className="creatematch__switchpub">
-                  <p>Public</p>
+                  {(this.state.publicShow)?(
+                    <p>Public</p>
+                  ):(<p>Private</p>)}
                   <SwitchToggle switchToggleState={this.switchToggleState}/>
                 </div>
                 <div className="creatematch__typeroom">
                   <p>Score type</p>
                   <select onChange={(e)=>this.getTypeScore(e.target.value)}>
-                    <option value={0}>Par</option>
-                    <option value={1}>Stable Ford</option>
-                    <option value={2}>{"36 System"}</option>
+                    <option value={0}>Stableford</option>
+                    <option value={1}>{"36 System"}</option>
+                    <option value={2}>Par</option>
                   </select>
                 </div>
               </div>
               <div className="locationselect">
-                <label className="locationselect__label">{'Location'}</label>
+                <label className="locationselect__label">{'Court'}</label>
                 <button onClick = {this.selectFieldToggle}
                   className="creatematch__selectfield">Select Field</button>
                 <button onClick = {this.createFieldToggle}
@@ -218,12 +235,12 @@ class ModalCreateMatch extends React.Component{
               </div>
               <div className="team__deaprt">
                 <div className="creatematch__team">
-                  <label>{"Team (Number)"}</label>
+                  <label>{"Team (Amount)"}</label>
                   <EditTextImg type="number" formType="username" placeholder="0"
                     editTextValue={this.createSetTeamNumber}/>
                 </div>
                 <div className="creatematch__depart">
-                  <label>{"Department (Number)"}</label>
+                  <label>{"Department (Amount)"}</label>
                   <EditTextImg type="number" formType="department" placeholder="0"
                     editTextValue={this.createSetDepartmentNumber}/>
                 </div>
@@ -241,9 +258,10 @@ class ModalCreateMatch extends React.Component{
               <div className="modal-creatematch__items"></div>
               <div className="modal-creatematch__items"></div>
               <button onClick = {this.props.modalClose}>Close</button>
-              <button onClick = {this.addMatch}>Create</button>
+              {(this.props.updateMatchState)?
+                (<button onClick = {this.MatchHandle}>Update</button>):(<button onClick = {this.MatchHandle}>Create</button>)}
             </div>
-            <div onClick = {this.props.modalClick} className="spacer"></div>
+            <div onClick = {this.modalToggle} className="spacer"></div>
           </div>
           <div className="spacer"></div>
           <SelectField

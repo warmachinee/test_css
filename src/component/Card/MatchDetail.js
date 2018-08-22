@@ -21,15 +21,18 @@ class MatchDetail extends React.Component{
         teamno:'',
         matchid:''
       },
+      typeScore:0,
       resultMatchFromLoad:[],
       resultMatchFromLoadUser:[],
       resultMatchFromLoadHoleScore:[],
       tempHole:{
         teamno:'',
         matchid:''
-      }
+      },
+      userMapID:''
     }
   }
+
   modalMatchResultClick =() =>{
     this.state.resultMatchFromLoad = []
     this.state.resultMatchFromLoadUser = []
@@ -49,8 +52,15 @@ class MatchDetail extends React.Component{
        localStorage['in']=data.in
        localStorage['out']=data.out
        localStorage['gross']=data.gross
-       localStorage['net']=data.net
-       localStorage['sf']=data.sf
+       if(parseInt(data.typescore) === 0){
+         localStorage['net']=data.net
+         localStorage['sf']=data.sf
+       }else if(parseInt(data.typescore) === 1){
+         localStorage['net']=data.net
+         localStorage['sf']=data.sf
+       }else if(parseInt(data.typescore) === 2){
+         localStorage['par']=data.par
+       }
        localStorage['holescore']=data.holescore
        localStorage['userid']=data.userid
        localStorage['typescore']=data.typescore
@@ -68,8 +78,17 @@ class MatchDetail extends React.Component{
         var inn = localStorage['in'];
         var outt = localStorage['out'];
         var gross = localStorage['gross'];
-        var net = localStorage['net'];
-        var sf = localStorage['sf'];
+
+        if(parseInt(localStorage['typescore']) === 0){
+          var net = localStorage['net']
+          var sf = localStorage['sf']
+        }else if(parseInt(localStorage['typescore']) === 1){
+          var net = localStorage['net']
+          var sf = localStorage['sf']
+        }else if(parseInt(localStorage['typescore']) === 2){
+          var par = localStorage['par']
+        }
+
         var holescore = localStorage['holescore'];
         var userid = localStorage['userid'];
         var teamnum = localStorage['teamnum'];
@@ -83,8 +102,17 @@ class MatchDetail extends React.Component{
         inn = JSON.parse("["+inn+"]")
         outt = JSON.parse("["+outt+"]")
         gross = JSON.parse("["+gross+"]")
-        net = JSON.parse("["+net+"]")
-        sf = JSON.parse("["+sf+"]")
+
+        if(parseInt(typescore) === 0){
+          net = JSON.parse("["+net+"]")
+          sf = JSON.parse("["+sf+"]")
+        }else if(parseInt(typescore) === 1){
+          net = JSON.parse("["+net+"]")
+          sf = JSON.parse("["+sf+"]")
+        }else if(parseInt(typescore) === 2){
+          par = JSON.parse("["+par+"]")
+        }
+
         holescore = holescore.split(",",holescore.length)
         userid = userid.split(",",userid.length)
         teamnum = teamnum.split(",",teamnum.length)
@@ -104,20 +132,51 @@ class MatchDetail extends React.Component{
         obj.teamnum = teamnum[0]
         obj.departnum = departnum[0]
         obj.typescore = typescore[0]
+        this.state.typeScore = typescore[0]
         this.state.resultMatchFromLoad.push(obj);
-        for(var i = 0;i < userid.length;i++){
-          var obj = {
-            in: inn[i],
-            out: outt[i],
-            gross: gross[i],
-            userid: userid[i],
-            net: net[i],
-            sf: sf[i],
-            teamno: teamno[i],
-            departno: departno[i]
+        if(parseInt(typescore) === 0){
+          for(var i = 0;i < userid.length;i++){
+            var obj = {
+              in: inn[i],
+              out: outt[i],
+              gross: gross[i],
+              userid: userid[i],
+              net: net[i],
+              sf: sf[i],
+              teamno: teamno[i],
+              departno: departno[i]
+            }
+            this.state.resultMatchFromLoadUser.push(obj);
           }
-          this.state.resultMatchFromLoadUser.push(obj);
+        }else if(parseInt(typescore) === 1){
+          for(var i = 0;i < userid.length;i++){
+            var obj = {
+              in: inn[i],
+              out: outt[i],
+              gross: gross[i],
+              userid: userid[i],
+              net: net[i],
+              sf: sf[i],
+              teamno: teamno[i],
+              departno: departno[i]
+            }
+            this.state.resultMatchFromLoadUser.push(obj);
+          }
+        }else if(parseInt(typescore) === 2){
+          for(var i = 0;i < userid.length;i++){
+            var obj = {
+              in: inn[i],
+              out: outt[i],
+              gross: gross[i],
+              userid: userid[i],
+              par: par[i],
+              teamno: teamno[i],
+              departno: departno[i]
+            }
+            this.state.resultMatchFromLoadUser.push(obj);
+          }
         }
+
         let holescoreTemp = [];
         for(var i = 0;i < holescore.length;i++){
           holescoreTemp.push(holescore[i])
@@ -128,6 +187,7 @@ class MatchDetail extends React.Component{
         }
 
       }
+      console.log("resultMatchFromLoadUser",this.state.resultMatchFromLoadUser);
       this.setState((state)=>{
         return {modalMatchResult: !state.modalMatchResult}
       })
@@ -139,17 +199,20 @@ class MatchDetail extends React.Component{
       return {modalEditTeam: !state.modalEditTeam}
     })
   }
-  setTeamTemp = (data)=>{
-    this.state.teamTemp = data;
+  setUserMapID = (data) =>{
+    this.state.userMapID = data
+  }
+  setTeamTemp = (data,i)=>{
+    this.state.teamTemp = parseInt(data.teamno);
     this.state.optionTemp = []
     this.state.optionTemp = this.props.setTeamData
   }
   setUpdateTeam = (data)=>{
     this.state.teamNumber = data
   }
-  setTeamno = (teamno,userid)=>{
-    this.state.tempHole.teamno = teamno
-    this.state.tempHole.userid = userid
+  setTeamno = (data)=>{
+    this.state.tempHole.teamno = data.teamno
+    this.state.tempHole.userid = data.userid
   }
   updateTeam =()=>{
     if(this.state.teamNumber === undefined || this.state.teamNumber === "" || this.state.teamNumber === null){
@@ -166,6 +229,7 @@ class MatchDetail extends React.Component{
         this.props.loadMatchDetail(this.props.matchDetailData)
       },500)
     }
+    this.setState(this.state)
   }
   HandlerUpdateTDbyUser=(matchid,teamno)=>{
     var geturl;
@@ -216,9 +280,17 @@ class MatchDetail extends React.Component{
   setTeamName = (data) =>{
     this.state.editTeamData.teamname = data
   }
+  refresh = ()=>{
+    this.setState(this.state)
+  }
   render(){
     //console.log("detailUser.userid",this.props.userID);
-    //console.log("userHostID",this.props.userHostID);
+    //console.log("userHostID",this.props.userHostID);this.props.matchDetailID
+    /*console.log("userID",this.props.userID);
+    console.log("detailUser",this.props.detailUser);
+    console.log("setTeamData",this.props.setTeamData);*/
+    const option = this.props.setTeamData
+    console.log(option);
     return(
       <div className="match__detail">
         <div className="space"></div>
@@ -235,6 +307,7 @@ class MatchDetail extends React.Component{
               )}
               <div className="detail__controller">
                 <button onClick={this.modalMatchResultClick}>Result</button>
+                <button onClick={()=>this.props.updateMatchToggle(this.props.matchDetailID)}>Edit Field</button>
               </div>
             </div>
             <div className="detail__gridfield">
@@ -257,29 +330,33 @@ class MatchDetail extends React.Component{
             {this.props.setTeamData.map((data,i)=>
               <div>
                 <p>{data.teamname}</p>
-                {(parseInt(this.props.userID) === this.props.userHostID)?
+                {(this.props.userID === this.props.userHostID)?
                   (
                     <button onClick={()=>{
                         this.editTeamName(data)
                       }}>edit</button>
                   ):(null)}
                 <div className="detail__teambox">
-                  {this.setTeamTemp(i)}
+                  {this.setTeamTemp(data,i)}
                   {this.props.detailUser.filter(
                       (item)=>{
-                        return this.state.teamTemp + 1 === item.teamno;
+                        return this.state.teamTemp === item.teamno;
                       }
                     ).map((data)=>
                     <div>
-                      {this.setTeamno(data.teamno,data.userid)}
                       <div className="detail__username">
                         <div className="detail__username">{data.fullname} {data.userid}
+                          {this.setTeamno(data)}
+                          {this.setUserMapID(data.userid)}
                           <select onChange={(e)=>this.setUpdateTeam(e.target.value)}>
-                            {this.state.optionTemp.map((data,i)=>
-                              <option value={data.teamno}>{data.teamno}</option>
-                            )}
+                            {(parseInt(this.state.userMapID) === this.props.userID)?
+                            (
+                              option.map((data,i)=>
+                                <option value={data.teamno}>{data.teamno}</option>
+                              )
+                            ):(null)}
                           </select>
-                          {(parseInt(this.state.tempHole.userid) === this.props.userID)?
+                          {(parseInt(this.state.userMapID) === this.props.userID)?
                           (
                             <button onClick={this.updateTeam} className="detail__choose">Choose team</button>
                           ):(null)}
@@ -308,12 +385,16 @@ class MatchDetail extends React.Component{
             ).map((data,i)=>
               <div className="detail__username">
                 <div className="detail__username">{data.fullname} {data.userid}
+                  {this.setUserMapID(data.userid)}
                   <select onChange={(e)=>this.setUpdateTeam(e.target.value)}>
-                    {this.state.optionTemp.map((data,i)=>
-                      <option value={data.teamno}>{data.teamno}</option>
-                    )}
+                    {(parseInt(this.state.userMapID) === this.props.userID)?
+                    (
+                      option.map((data,i)=>
+                        <option value={data.teamno}>{data.teamno}</option>
+                      )
+                    ):(null)}
                   </select>
-                  {(parseInt(this.state.tempHole.userid) === this.props.userHostID)?
+                  {(parseInt(this.state.userMapID) === this.props.userID)?
                   (
                     <button onClick={this.updateTeam} className="detail__choose">Choose team</button>
                   ):(null)}
@@ -335,6 +416,7 @@ class MatchDetail extends React.Component{
           modalState = {this.state.modalEditTeam}/>
         <ModalMatchResult
           setTeamData = {this.props.setTeamData}
+          typeScore = {this.state.typeScore}
           resultMatchFromLoad = {this.state.resultMatchFromLoad}
           resultMatchFromLoadUser = {this.state.resultMatchFromLoadUser}
           resultMatchFromLoadHoleScore = {this.state.resultMatchFromLoadHoleScore}

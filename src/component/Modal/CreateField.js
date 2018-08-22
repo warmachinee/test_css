@@ -74,8 +74,8 @@ class CreateField extends React.Component{
                 <div className="spacer"></div>
                 <div className="createfield__hole__item">
                   <p>Hole score</p>
-                  {this.state.hole.map((d)=>
-                    <input type="text" placeholder={d} onChange={(e)=>this.getHoleScore(e.target.value,d-1)}></input>
+                  {this.state.hole.map((d,i)=>
+                    <input type="text" placeholder={i+1} onChange={(e)=>this.getHoleScore(e.target.value,d-1)}></input>
                   )}
                 </div>
                 <div className="spacer"></div>
@@ -84,8 +84,8 @@ class CreateField extends React.Component{
                 <div className="spacer"></div>
                 <div className="createfield__hole__item">
                   <p>HCP score</p>
-                  {this.state.hcp.map((d)=>
-                    <input type="text" placeholder={d} onChange={(e)=>this.getHCPScore(e.target.value,d-1)}></input>
+                  {this.state.hcp.map((d,i)=>
+                    <input type="text" placeholder={i+1} onChange={(e)=>this.getHCPScore(e.target.value,d-1)}></input>
                   )}
                 </div>
                 <div className="spacer"></div>

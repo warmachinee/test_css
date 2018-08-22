@@ -17,7 +17,7 @@ import EditTextImg from '../component/EditText/EditTextImg'
 import Button from '../component/Button/Button'
 import LoginCard from '../component/Card/LoginCard'
 import RegisCard from '../component/Card/RegisCard'
-
+const cardLogin = null;
 class Login extends Component{
   constructor(props){
     super(props);
@@ -35,6 +35,7 @@ class Login extends Component{
         lastname:'',
         phoneNumber:'',
       },
+      chksession:''
     }
 
   }
@@ -161,6 +162,45 @@ class Login extends Component{
       this.handleSubmit()
     }
   }
+  checksession = () =>{
+    $.ajax({
+      type: "POST",
+     url: "http://pds.in.th/phpadmin/loadsession.php",
+     dataType: 'json',
+     data: {},
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+       //console.log(data)
+       localStorage['chk'] = data.status;
+       localStorage['id'] = data.id;
+      }
+     });
+     setTimeout(()=>{
+       if(localStorage['id']){
+           var chksessions = localStorage['chk'];
+           var id = localStorage['id'];
+           console.log(id," : ",chksessions);
+           if(chksessions === 'valid session'){
+             this.state.chksession = true
+           }else{
+             this.state.chksession = false
+           }
+           this.setState(this.state)
+         }
+     },300)
+     localStorage.clear()
+   }
+   homeClick = ()=>{
+     this.sendUserID();
+     this.props.pageLoginClick();
+     setTimeout(this.props.loadMatch,500)
+   }
+  componentWillMount(){
+    this.checksession()
+    setTimeout(()=>{
+      console.log(this.state.chksession);
+    },400)
+  }
   render(){
     return(
       <Router>
@@ -197,10 +237,17 @@ class Login extends Component{
                 <div className="spacer"></div>
                 <div className="form__middle__card">
                   <div className="spacer"></div>
+                  {(this.state.chksession)?(
+                    <div>
+                      <p>Logged in</p>
+                      <button onClick={this.homeClick}>Home</button>
+                    </div>
+                  ):(
                     <LoginCard
                       inputUsername={this.inputUsernameLogin}
                       inputPassword={this.inputPasswordLogin}
                       submitLogin={this.handleSubmit}/>
+                  )}
                 <Route
                   path="/register"
                   render={()=>

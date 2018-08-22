@@ -15,8 +15,8 @@ import Switch from '../Switch/Switch'
 const menu ={
   Notifications: ['Notifications','การแจ้งเตือน'],
   Profile: ['Profile','โปรไฟล์'],
-  Dashboard: ['DASHBOARD','แดชบอร์ด'],
-  Public: ['Public Match ','แมทช์สาธารณะ'],
+  Dashboard: ['My Match','แมทช์'],
+  Public: ['PUBLIC ','แมทช์สาธารณะ'],
   Running: ['Running Match','แมทช์ที่กำลังเล่น'],
   History: ['History','ประวัติ'],
   Logout: ['Log out','ออกจากระบบ'],

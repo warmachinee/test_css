@@ -43,9 +43,8 @@ class Card extends React.Component{
     this.props.addScoreClick()
   }
   detailRoom = (Data)=>{
-    console.log(Data);
+    //console.log(Data);
     if(Data.type === 'public' ){
-      console.log("Type Room Public:::",Data.type)
       var geturl;
       geturl = $.ajax({
        type: "POST",
@@ -78,7 +77,6 @@ class Card extends React.Component{
       this.props.roomPasswordClick()
     }
   }
-
   render(){
     let cardMatchName = "Match Name"
     let cardDate ="01/01/2012"
@@ -113,7 +111,7 @@ class Card extends React.Component{
             </div>
           </div>
           <div className="card-item-small">
-            <a className="card-edit"><img src={ic_edit}></img></a>
+            <a className="card-edit" onClick={()=>this.props.getCardTargetIDEdit(this.props.data)}><img src={ic_edit}></img></a>
             <div className="card-spacer"></div>
             <a className="card-games"><img src={ic_game}></img></a>
             <div className="card-spacer"></div>

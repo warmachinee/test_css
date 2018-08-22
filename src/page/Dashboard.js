@@ -23,11 +23,12 @@ class Dashboard extends Component {
   constructor(props){
     super(props)
     this.dashboardRefresh = false;
+    this.refreshMatchDetail = React.createRef()
     this.state = {
       createModalIsOpen: false,
       addpeopleModalIsOpen: false,
       addscoreModalIsOpen: false,
-      roomPasswordModal:false,
+      roomPasswordModal: false,
       sideDrawerOpen: false,
       notiToggle: false,
       languageState: false,
@@ -35,6 +36,8 @@ class Dashboard extends Component {
       matchRunningState: false,
       historyPage: false,
       publicPageState:false,
+      updateMatchState: false,
+      currentCardData:{},
       data:[],
       dataLength:0,
       fieldFromLoad:[],
@@ -64,6 +67,7 @@ class Dashboard extends Component {
       tempHole:[],
       dashUserID:'',
       UserHostID:'',
+      updateMatchMatchid:'',
       matchModalData:{
         fieldid:'',
         matchname:'',
@@ -77,7 +81,8 @@ class Dashboard extends Component {
       invitePlayer:'',
       inviteMatchID:'',
       inviteAction:'',
-      calScoreMatchID:''
+      calScoreMatchID:'',
+      chksession: ''
     }
   };
   historyPageToggle = () =>{
@@ -165,18 +170,34 @@ class Dashboard extends Component {
   backdropClickHander = () =>{
     this.setState({sideDrawerOpen: false});
   };
-  toggleCreateModal = () => {
-    this.setState((state)=>{
-      return {createModalIsOpen: !state.createModalIsOpen}
-    });
+  toggleCreateModal = (data) => {
+    if(data === "create"){
+      this.setState((state)=>{
+        return {createModalIsOpen: !state.createModalIsOpen}
+      });
+    }else if(data === "update"){
+      this.setState((state)=>{
+        return {
+          createModalIsOpen: !state.createModalIsOpen,
+          updateMatchState: !state.updateMatchState
+        }
+      });
+    }
+
   }
   toggleCreateModalLoad =()=>{
     this.HandlerLoadField()
-    this.toggleCreateModal()
+    this.toggleCreateModal("create")
+  }
+  updateMatchToggle = (matchid) =>{
+    this.state.updateMatchMatchid = matchid
+    this.HandlerLoadField()
+    this.toggleCreateModal("update")
   }
   closeCreateMatchModal = () =>{
     this.setState({
       createModalIsOpen: false,
+      updateMatchState: false,
       sideDrawerOpen: false,
       matchModalData:{}
     });
@@ -284,7 +305,6 @@ class Dashboard extends Component {
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     //url: "http://127.0.0.1/php/login.php",
      url: "http://pds.in.th/phpadmin/resultrequest.php",
      dataType: 'json',
      data: {
@@ -352,7 +372,6 @@ class Dashboard extends Component {
   }
 
   HandlerLoadMatchUserDetail = (data) =>{
-    console.log("in HandlerLoadMatchUserDetail");
     const userhost = data.userhost
     this.state.UserHostID = data.userhost
     let userhostIndex;
@@ -428,7 +447,7 @@ class Dashboard extends Component {
           this.state.setTeamData.push(obj2)
         }
       }
-      if(localStorage['matchname']=data.matchname){
+      if(localStorage['matchname']){
         var fieldid = localStorage['fieldid'];
         var matchname = localStorage['matchname'];
         var fieldname = localStorage['fieldname'];
@@ -549,7 +568,6 @@ class Dashboard extends Component {
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     //url: "http://127.0.0.1/php/login.php",
      url: "http://pds.in.th/phpadmin/loadmatchfielddetail.php",
      dataType: 'json',
      data: {
@@ -576,11 +594,11 @@ class Dashboard extends Component {
           }
           this.state.detailMatchFromLoadField.push(obj)
         }
-        //console.log("detailMatchFromLoad :::",this.state.detailMatchFromLoad)
-        console.log("detailMatchFromLoadUser :::",this.state.detailMatchFromLoadUser)
-        console.log("detailMatchFromLoadHoleScore :::",this.state.detailMatchFromLoadHoleScore)
+        console.log("detailMatchFromLoad ",this.state.detailMatchFromLoad)
+        //console.log("detailMatchFromLoadUser :::",this.state.detailMatchFromLoadUser)
+        //console.log("detailMatchFromLoadHoleScore :::",this.state.detailMatchFromLoadHoleScore)
         console.log("tempHole ",this.state.tempHole);
-        console.log("detailMatchFromLoadField :::",this.state.detailMatchFromLoadField)
+        //console.log("detailMatchFromLoadField :::",this.state.detailMatchFromLoadField)
         //console.log("detailMatchFromLoadUserHost :::",this.state.detailMatchFromLoadUserHost)
         //console.log("detailMatchFromLoadUserHostScore :::",this.state.detailMatchFromLoadUserHostScore)
         this.setState(this.state)
@@ -593,7 +611,6 @@ class Dashboard extends Component {
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     //url: "http://127.0.0.1/php/login.php",
      url: "http://pds.in.th/phpadmin/userupdatescore.php",
      dataType: 'json',
      data: {
@@ -626,7 +643,6 @@ class Dashboard extends Component {
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     //url: "http://127.0.0.1/php/login.php",
      url: "http://pds.in.th/phpadmin/sendrequest.php",
      dataType: 'json',
      data: {
@@ -807,6 +823,7 @@ class Dashboard extends Component {
        localStorage['userhost'] = data.userhost;
        localStorage['fieldname'] = data.fieldname;
        localStorage['date'] = data.date;
+       localStorage['type'] = data.type;
      }
     });
     setTimeout(()=>{
@@ -817,12 +834,14 @@ class Dashboard extends Component {
         var userhost = localStorage['userhost'];
         var fieldname = localStorage['fieldname'];
         var date = localStorage['date'];
+        var type = localStorage['type']
 
         matchid = JSON.parse("["+matchid+"]")
         matchname = matchname.split(",",matchname.length)
         userhost= JSON.parse("["+userhost+"]")
         fieldname= fieldname.split(",",fieldname.length)
         date= date.split(",",date.length)
+        type= type.split(",",type.length)
 
         for(var i = 0;i < matchid.length;i++){
           var obj = {
@@ -830,7 +849,8 @@ class Dashboard extends Component {
             matchname: matchname[i],
             userhost: userhost[i],
             fieldname: fieldname[i],
-            date: date[i]
+            date: date[i],
+            type: type[i]
           }
           this.state.runningFromLoad.push(obj);
         }
@@ -840,7 +860,80 @@ class Dashboard extends Component {
     },500)
     localStorage.clear()
   }
-
+  HandlerUpdateMatch = (data) =>{
+    if(this.state.matchModalData.fieldid[0] === undefined){
+      this.state.matchModalData.fieldid[0] = this.state.detailMatchFromLoad[0].fieldid.toString()
+    }
+    if(this.state.matchModalData.matchname === "" || this.state.matchModalData.matchname === undefined || this.state.matchModalData.matchname === null){
+      this.state.matchModalData.matchname = this.state.detailMatchFromLoad[0].matchname
+    }
+    if(this.state.matchModalData.typeroom === "" || this.state.matchModalData.typeroom === undefined || this.state.matchModalData.typeroom  === null){
+      this.state.matchModalData.typeroom = 0
+    }
+    if(this.state.matchModalData.date === "" || this.state.matchModalData.date === undefined || this.state.matchModalData.date === null){
+      this.state.matchModalData.date = this.state.detailMatchFromLoad[0].datematch
+    }
+    if(this.state.matchModalData.teamnum === "" || this.state.matchModalData.teamnum === undefined || this.state.matchModalData.teamnum === null){
+      this.state.matchModalData.teamnum  = this.state.detailMatchFromLoad[0].teamnum
+    }
+    if(this.state.matchModalData.departnum === "" || this.state.matchModalData.departnum === undefined || this.state.matchModalData.departnum === null){
+      this.state.matchModalData.departnum = this.state.detailMatchFromLoad[0].departnum
+    }
+    console.log("detailMatchFromLoad",this.state.detailMatchFromLoad);
+    var geturl;
+    geturl = $.ajax({
+      type: "POST",
+     url: "http://pds.in.th/phpadmin/updatematch.php",
+     dataType: 'json',
+     data: {
+       "fieldid": this.state.matchModalData.fieldid[0],
+       "cordA": this.state.matchModalData.fieldid[1],
+       "cordB": this.state.matchModalData.fieldid[2],
+       "matchid": this.state.updateMatchMatchid,
+       "matchname": this.state.matchModalData.matchname,
+       "typescore": this.state.matchModalData.typescore,
+       "typeroom": this.state.matchModalData.typeroom,
+       "publicshow": this.state.matchModalData.publicshow,
+       "date": this.state.matchModalData.date,
+       "teamnum": this.state.matchModalData.teamnum,
+       "departnum": this.state.matchModalData.departnum,
+     },
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+       localStorage['status']=data.status;
+       //console.log(data);
+     }
+    });
+    setTimeout(()=>{
+      if(localStorage['status']){
+        if(localStorage['status'] === "updatematch success"){
+          this.HandlerLoadMatchUserDetail(this.state.currentCardData)
+        }else{
+          alert(localStorage['status'])
+        }
+      }
+    },1300)
+    this.setState({
+      createModalIsOpen: false,
+      updateMatchState: false,
+      sideDrawerOpen: false,
+      matchModalData:{}
+    });
+    if(
+      this.state.matchDetailState === true &&
+      this.state.historyPage === false &&
+      this.state.matchRunningState === false &&
+      this.state.publicPageState === false
+    ){
+      this.refreshMatchDetail.current.refresh()
+    }else{
+      this.setState({updateMatchState: false})
+      this.setState(this.state)
+    }
+  }
+  refresh = ()=>{
+    this.setState(this.state)
+  }
   HandlerAddMatch = event => {
     this.createSetTypeRoom(this.state.matchModalData.typeroom)
     this.createSetTeamNumber(this.state.matchModalData.teamnum)
@@ -848,7 +941,6 @@ class Dashboard extends Component {
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     //url: "http://127.0.0.1/php/login.php",
      url: "http://pds.in.th/phpadmin/creatematch.php",
      dataType: 'json',
      data: {
@@ -872,6 +964,7 @@ class Dashboard extends Component {
       var response = localStorage['response'];
     }
     setTimeout(this.refreshData,300);
+    localStorage.clear()
   }
 
   HandlerLoadPublicMatch = event => {
@@ -985,12 +1078,18 @@ class Dashboard extends Component {
     }else{
       this.HanderlSendRequest()
     }
-    //
-    /*this.state.invitePlayer = ''
-    this.state.inviteMatchID = ''
-    this.state.inviteAction = ''*/
+  }
+  getCardTargetIDEdit = (value)=>{
+    this.state.currentCardData = value
+    //console.log("currentCardData",this.state.currentCardData);
+    this.HandlerLoadMatchUserDetail(value)
+    this.dashboardRefresh=false;
+    this.updateMatchToggle(value.matchid)
+
   }
   getCardTargetID =(value)=>{
+    this.state.currentCardData = value
+    //console.log("currentCardData",this.state.currentCardData);
     this.HandlerLoadMatchUserDetail(value)
     this.dashboardRefresh=false;
     this.matchDetailStateToggle()
@@ -1059,7 +1158,6 @@ class Dashboard extends Component {
   checksession = () =>{
     $.ajax({
       type: "POST",
-     //url: "http://127.0.0.1/php/login.php",
      url: "http://pds.in.th/phpadmin/loadsession.php",
      dataType: 'json',
      data: {},
@@ -1076,15 +1174,28 @@ class Dashboard extends Component {
          var id = localStorage['id'];
          this.state.dashUserID = parseInt(id)
          console.log(id," : ",chksessions);
+         if(chksessions === 'valid session'){
+           this.state.chksession = true
+         }else{
+           this.state.chksession = false
+         }
          }
      },300)
      localStorage.clear()
    }
    componentWillMount(){
      this.checksession()
+     this.props.dashPage()/*
+     setTimeout(()=>{
+       if((window.location.pathname === '/home') && this.state.chksession){
+         console.log("session true /home");
+       }else{
+         console.log("Please login")
+         this.props.appPage()
+       }
+     },400)*/
    }
   render() {
-    console.log(this.state.dashUserID);
     let backDrop;
     if(this.state.sideDrawerOpen){
       backDrop = <BackDrop click={this.backdropClickHander}/>;
@@ -1132,6 +1243,10 @@ class Dashboard extends Component {
                 getCardTargetData={this.getCardTargetData}
                 targetClickID={this.getCardTargetID}
                 loadDetail = {this.loadDetail}
+                updateMatchToggle = {this.updateMatchToggle}
+                getCardTargetIDEdit = {this.getCardTargetIDEdit}
+                matchDetailID = {number.matchid}
+                loadMatchDetail = {this.HandlerLoadMatchUserDetail}
                 getRoomDetailToAccess = {this.getRoomDetailToAccess}
                 getCalScoreMatchID={this.getCalScoreMatchID}
                 matchDetailClick = {this.matchDetailStateToggle}
@@ -1164,6 +1279,7 @@ class Dashboard extends Component {
                 this.state.publicPageState === false
               )?(
                 <MatchDetail
+                  ref = {this.refreshMatchDetail}
                   userID={this.state.dashUserID}
                   userHostID = {this.state.UserHostID}
                   loadMatchDetail = {this.HandlerLoadMatchUserDetail}
@@ -1171,6 +1287,7 @@ class Dashboard extends Component {
                   matchDetailData = {this.state.matchDetailData}
                   setTeamData={this.state.setTeamData}
                   detail={this.state.detailMatchFromLoad}
+                  updateMatchToggle = {this.updateMatchToggle}
                   detailUserhost={this.state.detailMatchFromLoadUserHost}
                   detailUser={this.state.detailMatchFromLoadUser}
                   tempHole = {this.state.tempHole}
@@ -1193,6 +1310,10 @@ class Dashboard extends Component {
                         getCardTargetData={this.getCardTargetData}
                         targetClickID={this.getCardTargetID}
                         loadDetail = {this.loadDetail}
+                        loadMatchDetail = {this.HandlerLoadMatchUserDetail}
+                        getCardTargetIDEdit = {this.getCardTargetIDEdit}
+                        updateMatchToggle = {this.updateMatchToggle}
+                        matchDetailID = {this.state.matchDetailID}
                         getRoomDetailToAccess = {this.getRoomDetailToAccess}
                         getCalScoreMatchID={this.getCalScoreMatchID}
                         matchDetailClick = {this.matchDetailStateToggle}
@@ -1218,6 +1339,10 @@ class Dashboard extends Component {
                           getCardTargetData={this.getCardTargetData}
                           targetClickID={this.getCardTargetID}
                           loadDetail = {this.loadDetail}
+                          loadMatchDetail = {this.HandlerLoadMatchUserDetail}
+                          getCardTargetIDEdit = {this.getCardTargetIDEdit}
+                          updateMatchToggle = {this.updateMatchToggle}
+                          matchDetailID = {this.state.matchDetailID}
                           getRoomDetailToAccess = {this.getRoomDetailToAccess}
                           getCalScoreMatchID={this.getCalScoreMatchID}
                           matchDetailClick = {this.matchDetailStateToggle}
@@ -1251,6 +1376,10 @@ class Dashboard extends Component {
           refresh = {this.refresh}
           loadField = {this.HandlerLoadField}
           addMatch = {this.HandlerAddMatch}
+          updateMatchState = {this.state.updateMatchState}
+          updateMatch = {this.HandlerUpdateMatch}
+          updateMatchMatchid = {this.state.updateMatchMatchid}
+
           modalClick = {this.toggleCreateModal}
           createSetFieldId = {this.createSetFieldId}
           createSetMatchName = {this.createSetMatchName}

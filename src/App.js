@@ -50,6 +50,19 @@ class App extends Component {
       };
     });
   };
+  dashPage = () =>{
+    this.state.pageLogin = false
+    this.state.pageDashboard = true
+  };
+  appPage = () =>{
+    this.setState( (pageState)=>{
+      return {
+        pageLogin: true,
+        pageDashboard: false,
+        logoutClickState: true
+      };
+    });
+  }
   handelLogout = event =>{
     this.state.userID = ''
     this.state.appLoadMatch = []
@@ -64,7 +77,9 @@ class App extends Component {
       }
      });
      this.setState({logoutClickState: true})
-     setTimeout(this.goToAnotherPage,500)
+     setTimeout(()=>{
+       this.goToAnotherPage()
+     },500)
   }
   handleLoadMatch = event => {
     $.ajax({
@@ -124,7 +139,7 @@ class App extends Component {
       data: {},
       xhrFields: { withCredentials: true },
       success: function(data) {
-        console.log(data)
+        //console.log(data)
         localStorage['chk'] = data.status;
         localStorage['id'] = data.id;
        }
@@ -135,7 +150,7 @@ class App extends Component {
           var id = localStorage['id'];
           this.state.sessionstatus = chksessions;
           this.state.userID = parseInt(id)
-          console.log(id," : ",chksessions);
+          //console.log(id," : ",chksessions);
           if(this.state.sessionstatus === 'valid session'){
              this.state.chksession = true
           }else{
@@ -147,9 +162,11 @@ class App extends Component {
    }
   componentWillMount(){
     this.checksession()
+
   }
   render() {
     this.checksession()
+
     return (
       <Router>
         <div>
@@ -175,6 +192,9 @@ class App extends Component {
               path="/home"
               render={()=>
                 <Dashboard
+                  dashPage = {this.dashPage}
+                  appPage = {this.appPage}
+                  pageDashboard = {this.state.pageDashboard}
                   userID = {this.state.userID}
                   logOut = {this.handelLogout}
                   loadMatch = {this.handleLoadMatch}
