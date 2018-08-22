@@ -35,7 +35,7 @@ class Login extends Component{
         lastname:'',
         phoneNumber:'',
       },
-      chksession:''
+      chksession:false
     }
 
   }
@@ -129,8 +129,8 @@ class Login extends Component{
     if(this.getResultLogin()==='Success'){
       console.log(this.state.userID," ::",this.getResultLogin());
       this.sendUserID();
-      this.props.pageLoginClick();
-      setTimeout(this.props.loadMatch,500)
+      this.props.loadMatch();
+      setTimeout(this.props.pageLoginClick,350)
     }else{
       console.log(this.getResultLogin());
       alert('Login Fail')

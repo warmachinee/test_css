@@ -17,6 +17,7 @@ body{
   top: 4rem;
   -ms-overflow-y: scroll;
   overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 .maincontentlogin{
   position: fixed;

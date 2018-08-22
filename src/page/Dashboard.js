@@ -330,7 +330,7 @@ class Dashboard extends Component {
     setTimeout(this.CreateMatchAction,1000);
   }
 
-  HandlerActivityRequest = event =>{
+  HandlerActivityRequest = ()=>{
     this.state.activityRequest = []
     var geturl;
     geturl = $.ajax({
@@ -366,8 +366,8 @@ class Dashboard extends Component {
           this.state.activityRequest.push(obj);
         }
       }
-      this.getNotiClick()
     },500)
+    this.getNotiClick()
     localStorage.clear()
   }
 

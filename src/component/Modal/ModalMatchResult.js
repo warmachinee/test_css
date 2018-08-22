@@ -22,11 +22,11 @@ class ModalMatchResult extends React.Component{
   }
   render(){
     const teamTmp = [
-        0: {
+        {
             teamname: "Team : 1",
             teamno: "1"
         },
-        1: {
+        {
             teamname: "Team : 2",
             teamno: "2"
         }
@@ -50,6 +50,13 @@ class ModalMatchResult extends React.Component{
                     )
                   )}
               </label>
+              <div className="match__result__box">
+                <div className="match__result__box__teamname">Team name</div>
+                <div className="match__result__box__in">IN</div>
+                <div className="match__result__box__out">OUT</div>
+                <div className="match__result__box__gross">GROSS</div>
+                <div className="match__result__box__par">PAR</div>
+              </div>
                 {(this.props.typeScore === '0')?(
                   <div className="match__result__box">
                     <div className="match__result__box__teamname">Team name</div>
@@ -84,12 +91,20 @@ class ModalMatchResult extends React.Component{
                 )}
 
                 {/*this.props.setTeamData*/}
-                {/*teamTmp.map((d)=>
+                {teamTmp.map((d)=>
                   <div>
-                    <p>test</p>
-                    <p>{d}</p>
+                    <p>{d.teamname}</p>
+                      <div className="detail__teambox">
+                        <div className="match__result__box__user">
+                          <div className="result__box__userid">userid</div>
+                          <div className="result__box__in">in</div>
+                          <div className="result__box__out">out</div>
+                          <div className="result__box__gross">gross</div>
+                          <div className="result__box__par">par</div>
+                        </div>
+                      </div>
                   </div>
-                )*/}
+                )}
 
               {this.props.setTeamData.map((data,i)=>
                 <div>

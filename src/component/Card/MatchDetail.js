@@ -3,6 +3,9 @@ import ReactDom from 'react-dom'
 import $ from 'jquery'
 import './MatchDetail.css'
 
+import ic_location from '../img/baseline-place-24px.svg'
+import ic_edit from '../img/baseline-edit-24px-white.svg'
+
 import ModalEditTeam from '../Modal/ModalEditTeam'
 import ModalMatchResult from '../Modal/ModalMatchResult'
 
@@ -290,35 +293,79 @@ class MatchDetail extends React.Component{
     console.log("detailUser",this.props.detailUser);
     console.log("setTeamData",this.props.setTeamData);*/
     const option = this.props.setTeamData
-    console.log(option);
+    //console.log(option);
     return(
       <div className="match__detail">
         <div className="space"></div>
         <div className="detail__grid">
           <div className="space"></div>
-          <div className="detail__card">
-            <div className="detail__gridtop">
-              {this.props.detail.map((data,i)=>
-                <div className="detail__label">
-                  <div className="detail__matchname">{data.matchname}</div>
-                  <div className="detail__fieldname">{data.fieldname}</div>
-                  <div className="detail__datematch">{data.datematch}</div>
+          <div className="detail__gridtop">
+            {/*---------------------------------------------------------------*/}
+            <div className="detail__label">
+              <div className="detail__matchname">
+                <div className="detail__matchname__label">matchname</div>
+              </div>
+              <div className="detail__fieldname">
+                <div className="detail__fieldname__label">
+                  <img className="detail__fieldname__icon" src={ic_location} />
+                  <div className="detail__fieldname__text">fieldname</div>
                 </div>
-              )}
-              <div className="detail__controller">
-                <button onClick={this.modalMatchResultClick}>Result</button>
-                <button onClick={()=>this.props.updateMatchToggle(this.props.matchDetailID)}>Edit Field</button>
+                <div className="space"></div>
+              </div>
+              <div className="detail__datematch">
+                <div className="detail__datematch__text">01-01-0101</div>
+                <div className="space"></div>
               </div>
             </div>
-            <div className="detail__gridfield">
+            {/*-------*/}
+            {this.props.detail.map((data,i)=>
+              <div className="detail__label">
+                <div className="detail__matchname">{data.matchname}</div>
+                <div className="detail__fieldname">{data.fieldname}</div>
+                <div className="detail__datematch">{data.datematch}</div>
+              </div>
+            )}
+            {/*-------*/}
+            <div className="detail__controller">
+              <div className="space"></div>
+              <div className="detail__controller__edit">
+                <div className="space"></div>
+                <a onClick={()=>this.props.updateMatchToggle(this.props.matchDetailID)}>
+                  <img className="detail__controller__icon" src={ic_edit}/>
+                </a>
+                <div className="space"></div>
+              </div>
+              <div className="space"></div>
+              <div className="detail__controller__result">
+                <div className="space"></div>
+                <a onClick={this.modalMatchResultClick}>
+                  <img className="detail__controller__icon" src={ic_edit}/>
+                </a>
+                <div className="space"></div>
+              </div>
+              <div className="space"></div>
+            </div>
+          </div>
+          {/*---------------------------------------------------------------*/}
+          <div className="detail__labelgrid">
+            <div className="detail__labelgrid__name">Name</div>
+            <div className="detail__labelgrid__in">{"IN"}</div>
+            <div className="detail__labelgrid__in">{"OUT"}</div>
+            <div className="detail__labelgrid__gross">{"GROSS"}</div>
+            <div className="detail__labelgrid__name">Name</div>
+          </div>
 
+          <div className="detail__griduserhost">
+            <div className="detail__userhostname"></div>
+            <div className="detail__userhostin"></div>
+            <div className="detail__userhostout"></div>
+            <div className="detail__userhostgross"></div>
+          </div>
+          <div className="detail__card">
+            <div className="detail__gridfield">
+              asdasd
             </div>
-            <div className="detail__griduserhost">
-              <div className="detail__userhostname">Name</div>
-              <div className="detail__userhostin">{"IN"}</div>
-              <div className="detail__userhostout">{"OUT"}</div>
-              <div className="detail__userhostgross">{"GROSS"}</div>
-            </div>
+
             {this.props.detailUserhost.map((data)=>
               <div className="detail__griduserhost">
                 <div className="detail__userhostname">{data.fullname} {data.userid}</div>
@@ -371,12 +418,25 @@ class MatchDetail extends React.Component{
                         <div className="detail__usernamein">{data.in}</div>
                         <div className="detail__usernameout">{data.out}</div>
                         <div className="detail__usernamegross">{data.gross}</div>
+
+                        <div className="detail__username">fullname userid</div>
+                        <div className="detail__usernamein">in</div>
+                        <div className="detail__usernameout">out</div>
+                        <div className="detail__usernamegross">gross</div>
                       </div>
                     </div>
                     )}
                 </div>
               </div>
             )}
+            <div className="detail__teambox">
+              <div className="detail__username">
+                <div className="detail__username__name">fullname userid</div>
+                <div className="detail__usernamein">in</div>
+                <div className="detail__usernameout">out</div>
+                <div className="detail__usernamegross">gross</div>
+              </div>
+            </div>
 
             {this.props.detailUser.filter(
               (item)=>{

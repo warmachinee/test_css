@@ -1,5 +1,5 @@
 .modal-creatematch{
-  position: fixed;
+  position: absolute;
   height: 100%;
   width: 100%;
 
@@ -15,10 +15,18 @@
   display: -ms-flex;
   display: -moz-flex;
   display: flex;
+
   -webkit-flex-direction: column;
   -moz-flex-direction: column;
   flex-direction: column;
+  width: 100%;
   z-index: 200;
+}
+.modal-creatematch__grid .modal-creatematch__gridcard{
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
 }
 .modal-creatematch__grid .modal-creatematch__card{
   -webkit-box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
@@ -30,9 +38,13 @@
   -o-transition: 0.2s;
   transition: 0.2s;
 
+  -ms-overflow-y: auto;
+  overflow-y: auto;
+
+  width: 100%;
+  height: 100%;
+  max-width: 30rem;
   background: white;
-  min-width: 30rem;
-  height: 40rem;
 }
 .modal-creatematch__card .modal-creatematch__items{
   margin: 1rem 10%;

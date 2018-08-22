@@ -86,15 +86,15 @@ const sideNav = props =>{
           </div>
         </div>
       </div>
-        <form>
-          <div style={{position: 'fixed',bottom: '3rem',left: '12.5rem'}}>
-            <button
-              className={menu.LogOutBtnClass[i]}
-              style={{position: 'fixed',left: '3rem'}}
-              onClick={props.logOut}>{menu.Logout[i]}
-            </button>
-          </div>
-        </form>
+      <div className="space"></div>
+      <div className="sidenav__logout">
+        <div className="space"></div>
+        <button
+          className={menu.LogOutBtnClass[i]}
+          onClick={props.logOut}>{menu.Logout[i]}
+        </button>
+        <div className="space"></div>
+      </div>
     </nav>
   );
 };

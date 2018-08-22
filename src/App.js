@@ -44,6 +44,7 @@ class App extends Component {
   goToAnotherPage = () =>{
     this.setState( (pageState)=>{
       return {
+        chksession: pageState.chksession,
         pageLogin: !pageState.pageLogin,
         pageDashboard: !pageState.pageDashboard,
         logoutClickState: false
@@ -78,6 +79,7 @@ class App extends Component {
      });
      this.setState({logoutClickState: true})
      setTimeout(()=>{
+       this.state.chksession = false
        this.goToAnotherPage()
      },500)
   }
@@ -125,6 +127,7 @@ class App extends Component {
            }
            this.state.appLoadMatch.push(obj);
          }
+         this.state.chksession = true
          this.setState(this.state)
        }
      },250);
@@ -165,7 +168,7 @@ class App extends Component {
 
   }
   render() {
-    this.checksession()
+    //this.checksession()
 
     return (
       <Router>

@@ -1,6 +1,6 @@
 .match__detail{
   width: 100%;
-  height: 100%;
+  height: 90%;
   display: -webkit-flex;
   display: -ms-flex;
   display: -moz-flex;
@@ -8,18 +8,22 @@
 }
 .match__detail .detail__grid{
   height: 100%;
-  width: 80%;
-  min-width: 30rem;
+  width: 100%;
+  max-width: 30rem;
+  margin-top: 5%;
+
   display: -webkit-flex;
   display: -ms-flex;
   display: -moz-flex;
   display: flex;
 
-  -webkit-flex-direction: column;
-  -moz-flex-direction: column;
-  flex-direction: column;
+  -webkit-flex-wrap: wrap;
+  -moz-flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 .detail__grid .detail__card{
+  border: 1px solid black;
+  margin-top: 2rem;
   -webkit-box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
   -moz-box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
   box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
@@ -28,6 +32,10 @@
   -moz-transition: 0.2s;
   -o-transition: 0.2s;
   transition: 0.2s;
+
+  -ms-overflow-y: auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 
   width: 100%;
   height: 80%;
@@ -48,7 +56,10 @@
 .detail__choose{
   cursor: pointer;
 }
-.detail__card .detail__gridtop{
+.detail__grid .detail__gridtop{
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
   width: 100%;
   height: 7rem;
   display: -webkit-flex;
@@ -63,11 +74,17 @@
   -webkit-flex-wrap: wrap;
   -moz-flex-wrap: wrap;
   flex-wrap: wrap;
+
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
 }
 .detail__gridtop .detail__label{
-  border: 1px black solid;
+  border:solid 1px black;
+  background-color: #f1f9ff;
   height: 100%;
-  width: 60%;
+  width: 70%;
   display: -webkit-flex;
   display: -ms-flex;
   display: -moz-flex;
@@ -77,29 +94,151 @@
   flex-wrap: wrap;
 }
 .detail__label .detail__matchname{
-  border: 1px black solid;
-  height: 50%;
+  height: 65%;
   width: 100%;
+
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  flex-direction: column;
+}
+.detail__matchname .detail__matchname__label{
+  font-size: 1.5rem;
+  margin: 2rem 1rem 0 1rem;
+  overflow: hidden;
+  color: #2a4d69;
+  font-weight: bold;
 }
 .detail__label .detail__fieldname{
-  border: 1px black solid;
-  height: 50%;
+  height: 35%;
   width: 60%;
+
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  flex-direction: column;
+}
+.detail__fieldname .detail__fieldname__label{
+  margin: 0rem 1rem;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+}
+.detail__fieldname__label .detail__fieldname__icon{
+  height: 1.5rem;
+  width: 1.5rem;
+}
+.detail__fieldname__label .detail__fieldname__text{
+  font-size: 1rem;
+  margin-top: .5rem;
+  overflow: hidden;
+  color: #1b95fc;
+  opacity: .8;
+  font-size: 1rem;
+  font-weight: bold;
 }
 .detail__label .detail__datematch{
-  border: 1px black solid;
-  height: 50%;
+  margin-top: .8rem;
+  height: 35%;
   width: 40%;
+
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  flex-direction: column;
+}
+.detail__datematch .detail__datematch__text{
+  color: #333;
+  opacity: .7;
+  font-size: .7rem;
+  font-style: italic;
+  font-weight: bolder;
 }
 .detail__gridtop  .detail__controller{
+  background-color: #1b95fc;
   border: 1px black solid;
   height: 100%;
-  width: 40%;
+  width: 30%;
+
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  flex-direction: column;
 }
-.detail__card .detail__griduserhost{
+.detail__controller .detail__controller__edit,
+.detail__controller .detail__controller__result{
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+}
+.detail__controller__edit .detail__controller__icon,
+.detail__controller__result .detail__controller__icon{
+  width: 2rem;
+  width: 2rem;
+}
+.detail__labelgrid{
+  position: -webkit-sticky;
+  position: sticky;
+  top: 7rem;
+  width: 100%;
+  height: 2rem;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  flex-direction: row;
+
+  -webkit-flex-wrap: wrap;
+  -moz-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+.detail__labelgrid .detail__labelgrid__name{
+  border: 1px black solid;
+  height: 100%;
+  width: 55%;
+}
+.detail__labelgrid .detail__labelgrid__in{
+  border: 1px black solid;
+  height: 100%;
+  width: 15%;
+}
+.detail__labelgrid .detail__labelgrid__out{
+  border: 1px black solid;
+  height: 100%;
+  width: 15%;
+}
+.detail__labelgrid .detail__labelgrid__gross{
+  border: 1px black solid;
+  height: 100%;
+  width: 15%;
+}
+.detail__griduserhost{
+  position: -webkit-sticky;
+  position: sticky;
+  top: 9rem;
   width: 100%;
   height: 4rem;
-  background: #ccc;
   display: -webkit-flex;
   display: -ms-flex;
   display: -moz-flex;
@@ -149,7 +288,7 @@
   -moz-flex-wrap: wrap;
   flex-wrap: wrap;
 }
-.detail__username .detail__username{
+.detail__username .detail__username__name{
   border: 1px black solid;
   height: 100%;
   width: 55%;

@@ -204,62 +204,66 @@ class ModalCreateMatch extends React.Component{
           <div className="spacer"></div>
           <div className="modal-creatematch__grid">
             <div onClick = {this.modalToggle} className="spacer"></div>
-            <div className="modal-creatematch__card">
-              <div className="creatematch__matchname">
-                <label>Match name</label>
-                <EditTextImg type="text" placeholder="Match name" formType="username"
-                  editTextValue={this.createSetMatchName}/>
-              </div>
-              <div className="roomtype__scoretype">
-                <div className="creatematch__switchpub">
-                  {(this.state.publicShow)?(
-                    <p>Public</p>
-                  ):(<p>Private</p>)}
-                  <SwitchToggle switchToggleState={this.switchToggleState}/>
+            <div className="modal-creatematch__gridcard">
+              <div onClick = {this.modalToggle} className="spacer"></div>
+              <div className="modal-creatematch__card">
+                <div className="creatematch__matchname">
+                  <label>Match name</label>
+                  <EditTextImg type="text" placeholder="Match name" formType="username"
+                    editTextValue={this.createSetMatchName}/>
                 </div>
-                <div className="creatematch__typeroom">
-                  <p>Score type</p>
-                  <select onChange={(e)=>this.getTypeScore(e.target.value)}>
-                    <option value={0}>Stableford</option>
-                    <option value={1}>{"36 System"}</option>
-                    <option value={2}>Par</option>
-                  </select>
+                <div className="roomtype__scoretype">
+                  <div className="creatematch__switchpub">
+                    {(this.state.publicShow)?(
+                      <p>Public</p>
+                    ):(<p>Private</p>)}
+                    <SwitchToggle switchToggleState={this.switchToggleState}/>
+                  </div>
+                  <div className="creatematch__typeroom">
+                    <p>Score type</p>
+                    <select onChange={(e)=>this.getTypeScore(e.target.value)}>
+                      <option value={0}>Stableford</option>
+                      <option value={1}>{"36 System"}</option>
+                      <option value={2}>Par</option>
+                    </select>
+                  </div>
                 </div>
-              </div>
-              <div className="locationselect">
-                <label className="locationselect__label">{'Court'}</label>
-                <button onClick = {this.selectFieldToggle}
-                  className="creatematch__selectfield">Select Field</button>
-                <button onClick = {this.createFieldToggle}
-                  className="creatematch__selectfield">Create Custom Field</button>
-              </div>
-              <div className="team__deaprt">
-                <div className="creatematch__team">
-                  <label>{"Team (Amount)"}</label>
-                  <EditTextImg type="number" formType="username" placeholder="0"
-                    editTextValue={this.createSetTeamNumber}/>
+                <div className="locationselect">
+                  <label className="locationselect__label">{'Court'}</label>
+                  <button onClick = {this.selectFieldToggle}
+                    className="creatematch__selectfield">Select Field</button>
+                  <button onClick = {this.createFieldToggle}
+                    className="creatematch__selectfield">Create Custom Field</button>
                 </div>
-                <div className="creatematch__depart">
-                  <label>{"Department (Amount)"}</label>
-                  <EditTextImg type="number" formType="department" placeholder="0"
-                    editTextValue={this.createSetDepartmentNumber}/>
+                <div className="team__deaprt">
+                  <div className="creatematch__team">
+                    <label>{"Team (Amount)"}</label>
+                    <EditTextImg type="number" formType="username" placeholder="0"
+                      editTextValue={this.createSetTeamNumber}/>
+                  </div>
+                  <div className="creatematch__depart">
+                    <label>{"Department (Amount)"}</label>
+                    <EditTextImg type="number" formType="department" placeholder="0"
+                      editTextValue={this.createSetDepartmentNumber}/>
+                  </div>
                 </div>
+                <div className="modal-creatematch__items">
+                  <label>{'Date'}</label>
+                  <EditTextImg type="date" placeholder="Date" formType="username"
+                    editTextValue={this.createSetDate}/>
+                </div>
+                <div className="modal-creatematch__items">
+                  <label>Room password</label>
+                  <EditTextImg type="password" placeholder="Set password to access" formType="password"
+                    editTextValue={this.createSetTypeRoom}/>
+                </div>
+                <div className="modal-creatematch__items"></div>
+                <div className="modal-creatematch__items"></div>
+                <button onClick = {this.props.modalClose}>Close</button>
+                {(this.props.updateMatchState)?
+                  (<button onClick = {this.MatchHandle}>Update</button>):(<button onClick = {this.MatchHandle}>Create</button>)}
               </div>
-              <div className="modal-creatematch__items">
-                <label>{'Date'}</label>
-                <EditTextImg type="date" placeholder="Date" formType="username"
-                  editTextValue={this.createSetDate}/>
-              </div>
-              <div className="modal-creatematch__items">
-                <label>Room password</label>
-                <EditTextImg type="password" placeholder="Set password to access" formType="password"
-                  editTextValue={this.createSetTypeRoom}/>
-              </div>
-              <div className="modal-creatematch__items"></div>
-              <div className="modal-creatematch__items"></div>
-              <button onClick = {this.props.modalClose}>Close</button>
-              {(this.props.updateMatchState)?
-                (<button onClick = {this.MatchHandle}>Update</button>):(<button onClick = {this.MatchHandle}>Create</button>)}
+              <div onClick = {this.modalToggle} className="spacer"></div>
             </div>
             <div onClick = {this.modalToggle} className="spacer"></div>
           </div>
