@@ -9,6 +9,8 @@ import ic_noti_side from '../img/baseline-notifications-24px-white.svg'
 import ic_dashboard from '../img/baseline-dashboard-24px-white.svg'
 import ic_history from '../img/baseline-history-24px-white.svg'
 import ic_language from '../img/baseline-language-24px.svg'
+import ic_public from '../img/outline-public-24px.svg'
+import ic_process from '../img/outline-sync-24px.svg'
 
 import Switch from '../Switch/Switch'
 
@@ -24,9 +26,9 @@ const menu ={
 }
 
 const sideNav = props =>{
-  let i = 0;
+  let i = 1;
   if(props.lang){
-    i = 1
+    i = 0
   }
   let drawerClasses = 'sidenav';
   if(props.show){
@@ -56,7 +58,9 @@ const sideNav = props =>{
         <div className="sidenav__item">
           <img className="icon" src={ic_profile_side} />
           <div className="text">
-            <button>{menu.Profile[i]}</button>
+            <button onClick={()=>{
+                alert('Not available')
+              }}>{menu.Profile[i]}</button>
           </div>
         </div>
       </div>
@@ -68,13 +72,13 @@ const sideNav = props =>{
           </div>
         </div>
         <div className="sidenav__item">
-          <img className="icon" src={ic_dashboard} />
+          <img className="icon" src={ic_public} />
           <div className="text">
             <button onClick={props.publicPageClick}>{menu.Public[i]}</button>
           </div>
         </div>
         <div className="sidenav__item">
-          <img className="icon" src={ic_dashboard} />
+          <img className="icon" src={ic_process} />
           <div className="text">
             <button onClick={props.runningPageClick}>{menu.Running[i]}</button>
           </div>

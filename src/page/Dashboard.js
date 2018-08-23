@@ -33,7 +33,7 @@ class Dashboard extends Component {
       notiToggle: false,
       languageState: false,
       matchDetailState: false,
-      matchRunningState: false,
+      matchRunningState: !false,
       historyPage: false,
       publicPageState:false,
       updateMatchState: false,
@@ -56,6 +56,7 @@ class Dashboard extends Component {
       detailMatchFromLoadHoleScore:[],
       detailMatchFromLoadField:[],
       setTeamData:[],
+      setDepartData:[],
       runningFromLoad:[],
       publicFromLoad:[],
       activityRequest:[],
@@ -162,7 +163,6 @@ class Dashboard extends Component {
     for(var i = 0;i < this.state.activityRequest.length ;i++){
       this.state.activityRequestMap.push(this.state.activityRequest[i]);
     }
-    //console.log("this.state.getActivityRequest ::",this.state.activityRequestMap);
     this.setState((prev)=>{
       return{notiToggle: !prev.notiToggle}
     });
@@ -190,6 +190,7 @@ class Dashboard extends Component {
     this.toggleCreateModal("create")
   }
   updateMatchToggle = (matchid) =>{
+    console.log(matchid);
     this.state.updateMatchMatchid = matchid
     this.HandlerLoadField()
     this.toggleCreateModal("update")
@@ -365,8 +366,8 @@ class Dashboard extends Component {
           //this.setState({activityRequest: obj})
           this.state.activityRequest.push(obj);
         }
-        this.getNotiClick()
       }
+      this.getNotiClick()
     },500)
     localStorage.clear()
   }
@@ -378,6 +379,7 @@ class Dashboard extends Component {
     this.state.matchDetailID = data.matchid
     this.state.matchDetailData = data
     this.state.setTeamData = []
+    this.state.setDepartData = []
     this.state.tempHole = []
     this.state.detailMatchFromLoad = []
     this.state.detailMatchFromLoadUser = []
@@ -433,18 +435,47 @@ class Dashboard extends Component {
        localStorage['teamno2']=data.teamno
      }
     });
+    var geturl3;
+    geturl3 = $.ajax({
+      type: "POST",
+     url: "http://pds.in.th/phpadmin/setdepartmatch.php",
+     dataType: 'json',
+     data: {
+       "matchid": data.matchid,
+     },
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+       //console.log(data);
+       localStorage['departname2']=data.departname
+       localStorage['departno2']=data.departno
+     }
+    });
     setTimeout(()=>{
       if(localStorage['teamname2']){
         var teamname2 = localStorage['teamname2']
         var teamno2 = localStorage['teamno2']
+
         teamname2 = teamname2.split(",",teamname2.length)
         teamno2 = teamno2.split(",",teamno2.length)
         for(var i =0;i < teamname2.length;i++){
           var obj2 = {
             teamname: teamname2[i],
-            teamno: teamno2[i]
+            teamno: teamno2[i],
           }
           this.state.setTeamData.push(obj2)
+        }
+      }
+      if(localStorage['departname2']){
+        var departname2 = localStorage['departname2']
+        var departno2 = localStorage['departno2']
+        departname2 = departname2.split(",",departname2.length)
+        departno2 = departno2.split(",",departno2.length)
+        for(var i =0;i < departname2.length;i++){
+          var obj3 = {
+            departname: departname2[i],
+            departno: departno2[i],
+          }
+          this.state.setDepartData.push(obj3)
         }
       }
       if(localStorage['matchname']){
@@ -552,7 +583,7 @@ class Dashboard extends Component {
                 gross: gross[i],
                 userid: userid[i],
                 fullname: fullname[i],
-                lastname: lastname[i]
+                lastname: lastname[i],
               })
             this.state.detailMatchFromLoadUserHostScore.push(this.state.detailMatchFromLoadHoleScore[i])
             userhostIndex = i;
@@ -599,8 +630,8 @@ class Dashboard extends Component {
         //console.log("detailMatchFromLoadHoleScore :::",this.state.detailMatchFromLoadHoleScore)
         console.log("tempHole ",this.state.tempHole);
         //console.log("detailMatchFromLoadField :::",this.state.detailMatchFromLoadField)
-        //console.log("detailMatchFromLoadUserHost :::",this.state.detailMatchFromLoadUserHost)
-        //console.log("detailMatchFromLoadUserHostScore :::",this.state.detailMatchFromLoadUserHostScore)
+        console.log("detailMatchFromLoadUserHost :::",this.state.detailMatchFromLoadUserHost)
+        console.log("detailMatchFromLoadUserHostScore :::",this.state.detailMatchFromLoadUserHostScore)
         this.setState(this.state)
       }
     },300)
@@ -1194,6 +1225,7 @@ class Dashboard extends Component {
          this.props.appPage()
        }
      },400)*/
+     this.HandlerLoadRunning()
    }
   render() {
     let backDrop;
@@ -1233,7 +1265,8 @@ class Dashboard extends Component {
             this.state.matchRunningState === false &&
             this.state.publicPageState === false
           )?(
-            this.props.loadMatchData.map((number,i) =>
+            (this.props.loadMatchData.length)?
+            (this.props.loadMatchData.map((number,i) =>
               <Card
                 data={number}
                 userID={this.state.dashUserID}
@@ -1254,6 +1287,26 @@ class Dashboard extends Component {
                 addPeopleClick = {this.toggleAddpeopleModal}
                 addScoreClick = {this.toggleAddScoreModal}
                 />
+            )):(
+              <div className="no__match">
+                <div className="spacer"></div>
+                <div className="no__match__grid">
+                  <div className="spacer"></div>
+                  <div className="no__match__card">
+                    <div className="spacer"></div>
+                    <div className="no__match__card__grid">
+                      <div className="spacer"></div>
+                      <div className="no__match__card__content">
+                        No match available
+                      </div>
+                      <div className="spacer"></div>
+                    </div>
+                    <div className="spacer"></div>
+                  </div>
+                  <div className="spacer"></div>
+                </div>
+                <div className="spacer"></div>
+              </div>
             )
           ):(
             (
@@ -1262,7 +1315,8 @@ class Dashboard extends Component {
                 this.state.matchRunningState === false &&
                 this.state.publicPageState === false
             )?(
-              this.state.historyFromLoad.map((data)=>
+              (this.state.historyFromLoad.length)?
+              (this.state.historyFromLoad.map((data)=>
                 <HistoryCard
                   matchID = {data.matchid}
                   matchName = {data.matchname}
@@ -1270,6 +1324,26 @@ class Dashboard extends Component {
                   fieldName = {data.fieldname}
                   date = {data.date}
                   />
+              )):(
+                <div className="no__match">
+                  <div className="spacer"></div>
+                  <div className="no__match__grid">
+                    <div className="spacer"></div>
+                    <div className="no__match__card">
+                      <div className="spacer"></div>
+                      <div className="no__match__card__grid">
+                        <div className="spacer"></div>
+                        <div className="no__match__card__content">
+                          No match available
+                        </div>
+                        <div className="spacer"></div>
+                      </div>
+                      <div className="spacer"></div>
+                    </div>
+                    <div className="spacer"></div>
+                  </div>
+                  <div className="spacer"></div>
+                </div>
               )
             ):(
               (
@@ -1285,7 +1359,9 @@ class Dashboard extends Component {
                   loadMatchDetail = {this.HandlerLoadMatchUserDetail}
                   matchDetailID = {this.state.matchDetailID}
                   matchDetailData = {this.state.matchDetailData}
+                  detailMatchFromLoadField = {this.state.detailMatchFromLoadField}
                   setTeamData={this.state.setTeamData}
+                  setDepartData = {this.state.setDepartData}
                   detail={this.state.detailMatchFromLoad}
                   updateMatchToggle = {this.updateMatchToggle}
                   detailUserhost={this.state.detailMatchFromLoadUserHost}
@@ -1300,7 +1376,8 @@ class Dashboard extends Component {
                   this.state.matchRunningState === true &&
                   this.state.publicPageState === false
                 )?(
-                  this.state.runningFromLoad.map((number,i) =>
+                  (this.state.runningFromLoad.length)?
+                  (this.state.runningFromLoad.map((number,i) =>
                       <Card
                         data={number}
                         userID={this.state.dashUserID}
@@ -1321,6 +1398,26 @@ class Dashboard extends Component {
                         addPeopleClick = {this.toggleAddpeopleModal}
                         addScoreClick = {this.toggleAddScoreModal}
                         />
+                    )):(
+                      <div className="no__match">
+                        <div className="spacer"></div>
+                        <div className="no__match__grid">
+                          <div className="spacer"></div>
+                          <div className="no__match__card">
+                            <div className="spacer"></div>
+                            <div className="no__match__card__grid">
+                              <div className="spacer"></div>
+                              <div className="no__match__card__content">
+                                No match available
+                              </div>
+                              <div className="spacer"></div>
+                            </div>
+                            <div className="spacer"></div>
+                          </div>
+                          <div className="spacer"></div>
+                        </div>
+                        <div className="spacer"></div>
+                      </div>
                     )
                 ):(
                   (
@@ -1329,7 +1426,8 @@ class Dashboard extends Component {
                     this.state.matchRunningState === false &&
                     this.state.publicPageState === true
                   )?(
-                    this.state.publicFromLoad.map((number,i) =>
+                    (this.state.publicFromLoad.length)?
+                    (this.state.publicFromLoad.map((number,i) =>
                         <Card
                           data={number}
                           userID={this.state.dashUserID}
@@ -1350,6 +1448,26 @@ class Dashboard extends Component {
                           addPeopleClick = {this.toggleAddpeopleModal}
                           addScoreClick = {this.toggleAddScoreModal}
                           />
+                      )):(
+                        <div className="no__match">
+                          <div className="spacer"></div>
+                          <div className="no__match__grid">
+                            <div className="spacer"></div>
+                            <div className="no__match__card">
+                              <div className="spacer"></div>
+                              <div className="no__match__card__grid">
+                                <div className="spacer"></div>
+                                <div className="no__match__card__content">
+                                  No match available
+                                </div>
+                                <div className="spacer"></div>
+                              </div>
+                              <div className="spacer"></div>
+                            </div>
+                            <div className="spacer"></div>
+                          </div>
+                          <div className="spacer"></div>
+                        </div>
                       )
                   ):(null)
                 )

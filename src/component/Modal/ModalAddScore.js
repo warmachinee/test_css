@@ -29,14 +29,17 @@ class ModalAddScore extends React.Component{
           <div className="modal-addscore__grid">
             <div onClick = {this.props.closeAddScoreModal} className="spacer"></div>
             <div className="modal-addscore__card">
+              <div className="addscore__card__text">กรอกคะแนน</div>
               <div className="holefill">
                 {this.state.holeInput.map((d)=>
-                  <input type="number" min="0" placeholder={"hole"+(d+1)}
+                  <input type="number" min="0" placeholder={(d+1)}
                     onChange={(e)=>this.getScore(e.target.value,d)} />
                 )}
               </div>
-              <Button btnLabel="Close" btnOnClick = {this.props.closeAddScoreModal}></Button>
-              <Button btnLabel="Save" btnOnClick={this.calScore}></Button>
+              <div className="addscore__card__button">
+                <button className="addscore__card__close" onClick = {this.props.closeAddScoreModal}>Close</button>
+                <button className="addscore__card__save" onClick = {this.calScore}>Save</button>
+              </div>
             </div>
             <div onClick = {this.props.closeAddScoreModal} className="spacer"></div>
           </div>

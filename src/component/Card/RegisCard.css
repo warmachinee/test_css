@@ -98,12 +98,6 @@
   width: 4rem;
 }
 @media (min-width: 768px) {
-  .form__card{
-    display: none;
-  }
-  .form__card.regisinlogin{
-    display: none;
-  }
   .form__card.dis{
     display: -webkit-flex;
     display: -ms-flex;

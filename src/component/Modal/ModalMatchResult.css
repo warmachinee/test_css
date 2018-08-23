@@ -23,6 +23,7 @@
   -moz-flex-direction: column;
   flex-direction: column;
   z-index: 200;
+  width: 30rem;
 }
 .modal-matchresult__grid .modal-matchresult__card{
   display: -webkit-flex;
@@ -34,11 +35,33 @@
   -moz-flex-direction: column;
   flex-direction: column;
 
-  background: white;
+  background: #f1f9ff;
+  min-height: 0;
   width: 100%;
   max-width: 30rem;
-  min-height: 35rem;
-  z-index: 200;
+  -ms-overflow-y: auto;
+  overflow-y: auto;
+  -webkit-box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
+  -moz-box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
+  box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
+}
+.modal-matchresult__card .matchresult__label{
+  margin: 8% 5% 5% 10%;
+  font-size: 1.5rem;
+  letter-spacing: .1rem;
+  color: #2a4d69;
+  font-weight: bolder;
+}
+.modal-matchresult__card .matchresult__label__typescore{
+  margin: 8% 5% 5% 10%;
+  font-size: 1rem;
+  letter-spacing: .1rem;
+  color: #2a4d69;
+  font-weight: bolder;
 }
 .modal-matchresult__card .match__result__box,
 .modal-matchresult__card .match__result__box__user{
@@ -141,6 +164,29 @@
   width: 100%;
   min-height: 4rem;
   padding: 1rem;
+}
+.close__modalresult{
+  height: 4rem;
+  width: 80%;
+  margin: 2rem 10%;
+  border: none;
+  -webkit-border-radius: .5rem;
+  -moz-border-radius: .5rem;
+  border-radius: .5rem;
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
+
+  font-size: 1.25rem;
+  font-weight: bolder;
+  letter-spacing: .1rem;
+  background: #036ec8;
+  color: #f1f9ff;
+  cursor: pointer;
+}
+.close__modalresult:hover{
+  background: #025296;
 }
 .spacer{
   -webkit-flex: 1;

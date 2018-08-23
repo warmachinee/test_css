@@ -20,7 +20,7 @@ class DropDown extends React.Component{
   render(){
     if(this.props.notiState){
       const textAction = ['RequestFromHost','RequestFromUser'];
-      if(this.props.activityRequest.length !== 0){
+      if(this.props.activityRequest.length){
         return(
           <div>
             <BackDropTrans click={this.props.notiClick}/>

@@ -24,11 +24,14 @@ class ModalAddPeople extends React.Component{
           <div className="modal-addpeople__grid">
             <div onClick = {this.props.modalClick} className="spacer"></div>
             <div className="modal-addpeople__card">
-              <label>Player name</label>
-              <EditTextImg type="text" placeholder="Player name" editTextValue={this.addPeople}/>
-              <p>{this.props.matchTeamNumber}</p>
-              <Button btnLabel="Close" btnOnClick = {this.props.modalClick}></Button>
-              <Button btnLabel="Add" btnOnClick={this.props.addRequestPlayer}></Button>
+              <div className="addpeople__card__playername">Player name</div>
+              <div className="addpeople__card__input">
+                <EditTextImg type="text" placeholder="Player name" editTextValue={this.addPeople} formType="username"/>
+              </div>
+              <div className="addpeople__card__button">
+                <button className="addpeople__card__close" onClick = {this.props.modalClick}>Close</button>
+                <button className="addpeople__card__add" onClick = {this.props.addRequestPlayer}>Add</button>
+              </div>
             </div>
             <div onClick = {this.props.modalClick} className="spacer"></div>
           </div>

@@ -98,7 +98,7 @@ class Login extends Component{
         //console.log("this.state.userID :::",this.state.userID);
       }
       this.LoginAction()
-    },1000)
+    },350)
   }
   handleSubmitRegis =()=> {
     var geturl;
@@ -195,12 +195,18 @@ class Login extends Component{
      this.props.pageLoginClick();
      setTimeout(this.props.loadMatch,500)
    }
-  componentWillMount(){
-    this.checksession()
-    setTimeout(()=>{
-      console.log(this.state.chksession);
-    },400)
-  }
+   componentWillMount(){
+     this.checksession()
+     setTimeout(()=>{
+       console.log('home ::: ',this.state.chksession);
+     },350)
+   }
+
+   componentDidMount(){
+     setTimeout(()=>{
+       console.log('home Didmount ::: ',this.state.chksession);
+     },350)
+   }
   render(){
     return(
       <Router>
@@ -212,7 +218,6 @@ class Login extends Component{
                     <a href="#"><img src={logo}></img></a>
                   </div>
                   <div className="spacer"></div>
-                  <div>{(this.props.session)?("Valid"):("InValid")}</div>
                   <div className="spacer"></div>
                   <div className="topnavlogin__edittext">
                     <EditText type="text" placeholder="Enter Email"
@@ -237,17 +242,17 @@ class Login extends Component{
                 <div className="spacer"></div>
                 <div className="form__middle__card">
                   <div className="spacer"></div>
-                  {(this.state.chksession)?(
-                    <div>
-                      <p>Logged in</p>
-                      <button onClick={this.homeClick}>Home</button>
-                    </div>
-                  ):(
-                    <LoginCard
-                      inputUsername={this.inputUsernameLogin}
-                      inputPassword={this.inputPasswordLogin}
-                      submitLogin={this.handleSubmit}/>
-                  )}
+                    {(this.state.chksession)?(
+                      <div>
+                        <p>Logged in</p>
+                        <button onClick={this.homeClick}>Home</button>
+                      </div>
+                    ):((window.location.pathname !== '/register')?(
+                      <LoginCard
+                        inputUsername={this.inputUsernameLogin}
+                        inputPassword={this.inputPasswordLogin}
+                        submitLogin={this.handleSubmit}/>
+                    ):(null))}
                 <Route
                   path="/register"
                   render={()=>

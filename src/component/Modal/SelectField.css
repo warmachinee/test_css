@@ -17,20 +17,57 @@
   -moz-flex-direction: column;
   flex-direction: column;
   z-index: 251;
+  width: 30rem;
 }
 .selectfield__grid .selectfield__card{
-  background: white;
-  min-width: 30rem;
-  height: 35rem;
+  background: #f1f9ff;
+  min-height: 0;
+  width: 100%;
+  max-width: 30rem;
+  -ms-overflow-y: auto;
+  overflow-y: auto;
+  -webkit-box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
+  -moz-box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
+  box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
+}
+.selectfield__grid .selectfield__card{
+  -webkit-box-shadow: 0 0.5rem 1.5rem 0 rgba(0,0,0,0.4);
+  -moz-box-shadow: 0 0.5rem 1.5rem 0 rgba(0,0,0,0.4);
+  box-shadow: 0 0.5rem 1.5rem 0 rgba(0,0,0,0.4);
+}
+.selectfield__card .selectfield__card__label__grid{
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+}
+.selectfield__card__label__grid .selectfield__card__label{
+  margin: 8% 5% 5% 10%;
+  font-size: 1.5rem;
+  letter-spacing: .1rem;
+  color: #2a4d69;
+  font-weight: bolder;
 }
 .selectfield__card .selectfield__switch{
   display: -webkit-flex;
   display: -ms-flex;
   display: -moz-flex;
   display: flex;
-  border: 1px solid black;
   width: 100%;
-  padding: .5rem 2rem;
+  padding: 8% 5% 5% 2%;
+}
+.selectfield__switch .selectfield__switch__switch{
+  margin-right: 1rem;
+}
+.selectfield__switch .selectfield__switch__label{
+  margin-top: .5rem;
+  font-size: 1rem;
+  color: #2a4d69;
+  font-weight: bolder;
 }
 .selectfield__card .selectfield__fieldlist{
   display: -webkit-flex;
@@ -38,39 +75,79 @@
   display: -moz-flex;
   display: flex;
 
-  -webkit-flex-direction: column;
-  -moz-flex-direction: column;
-  flex-direction: column;
+  -webkit-flex-wrap: wrap;
+  -moz-flex-wrap: wrap;
+  flex-wrap: wrap;
 
-  width: 100%;
+  min-width: 0;
   height: 15rem;
-  border: 1px solid black;
   overflow: auto;
-  padding: 2rem;
+  padding: 1rem;
+  margin: 2rem 5%;
+  border:.16rem solid #036ec8;
 }
 .selectfield__card .selectfield___search{
-  border: 1px solid black;
   width: 100%;
-  padding: 1rem 2rem;
+  padding: 1rem 10%;
 }
 .selectfield__fieldlist .selectfield__fielditem{
-  border: 1px solid black;
   width: 100%;
-  min-height: 4rem;
-  padding: .5rem .5rem;
+  height: 4rem;
 
   display: -webkit-flex;
   display: -ms-flex;
   display: -moz-flex;
   display: flex;
+  padding: .25rem 1rem;
+}
+.selectfield__fielditem button{
+  width: 100%;
+
 }
 .selectfield__fielditem .selectfield__fielditem__field{
   height: 100%;
   width: 100%;
+  border: .16rem solid #025296;
+  background: inherit;
+  -webkit-border-radius: .5rem;
+  -moz-border-radius: .5rem;
+  border-radius: .5rem;
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
+  font-size: 1.25rem;
+  font-weight: bolder;
+  letter-spacing: .1rem;
+  cursor: pointer;
+  color: #2a4d69;
 }
+.selectfield__fielditem .selectfield__fielditem__field:hover{
+  background: #025296;
+  color: white;
+}
+
 .selectfield__fielditem .selectfield__fielditem__edit{
-  width: 4rem;
+  width: 2rem;
   height: 100%;
+  border: none;
+  background: inherit;
+  cursor: pointer;
+
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
+  color: #025296;
+  font-size: 1rem;
+  font-weight: bolder;
+}
+.selectfield__fielditem .selectfield__fielditem__edit:hover{
+  -webkit-transform: scale(1.25);
+  -ms-transform: scale(1.25);
+  -moz-transform: scale(1.25);
+  -o-transform: scale(1.25);
+  transform: scale(1.25);
 }
 .selectfield__card .selectfield__fielddetail{
   display: -webkit-flex;
@@ -83,24 +160,134 @@
   flex-wrap: wrap;
 
   height: 5rem;
-  border: 1px solid black;
   padding: 1rem 2rem;
 }
-.selectfield__fielddetail .selectfield__fielddetail__option{
-  margin: 1rem 2rem;
-}
-.selectfield__card .selectfield__edit__fieldname{
-  border: 1px solid black;
-  width: 100%;
-  min-height: 4rem;
-  padding: 1rem 2rem;
-}
-.selectfield__card .selectfield__edit__hole{
-  border: 1px solid black;
+.selectfield__fielddetail .selectfield__fielddetail__label{
   display: -webkit-flex;
   display: -ms-flex;
   display: -moz-flex;
   display: flex;
+
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  flex-direction: column;
+
+  font-size: 1rem;
+  color: #2a4d69;
+  font-weight: bolder;
+}
+.selectfield__fielddetail .selectfield__fielddetail__option{
+  margin: 0 2rem;
+}
+.selectfield__fielddetail__option select{
+  height: 2.5rem;
+  width: 4rem;
+  text-align: center;
+  font-weight: bolder;
+  color: #2a4d69;
+  border:#036ec8 .16rem solid;
+}
+.selectfield__fielddetail__option option{
+  height: 2.5rem;
+  width: 4rem;
+  text-align: center;
+  font-weight: bolder;
+  color: #2a4d69;
+  border:#036ec8 .16rem solid;
+}
+.selectfield__card .selectfield__edit__fieldname{
+  width: 100%;
+  min-height: 4rem;
+  padding: 1rem 10%;
+}
+.label__holescorehcp{
+  margin: 1rem 10%;
+  font-size: 1.5rem;
+  letter-spacing: .1rem;
+  color: #2a4d69;
+  font-weight: bolder;
+}
+.selectfield__edit__fieldname .selectfield__edit__card__label{
+  margin: 8% 5% 5% 0;
+  font-size: 1.5rem;
+  letter-spacing: .1rem;
+  color: #2a4d69;
+  font-weight: bolder;
+}
+.selectfield__edit__fieldname .selectfield__edit__card__delete{
+  border: none;
+  -webkit-border-radius: .5rem;
+  -moz-border-radius: .5rem;
+  border-radius: .5rem;
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
+
+  color: #2a4d69;
+  margin: 1rem 0;
+  font-size: 1rem;
+  font-weight: bolder;
+  letter-spacing: .1rem;
+  background: inherit;
+  cursor: pointer;
+}
+.selectfield__delete__cancel{
+  border: none;
+  -webkit-border-radius: .5rem;
+  -moz-border-radius: .5rem;
+  border-radius: .5rem;
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
+
+  color: #2a4d69;
+  margin: 1rem 0;
+  font-size: 1rem;
+  font-weight: bolder;
+  letter-spacing: .1rem;
+  background: inherit;
+  cursor: pointer;
+}
+.selectfield__delete__confirm{
+  border: none;
+  height: 2rem;
+  -webkit-border-radius: .5rem;
+  -moz-border-radius: .5rem;
+  border-radius: .5rem;
+
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
+
+  background: red;
+  color: white;
+  margin: 1rem 0;
+  font-size: 1rem;
+  font-weight: bolder;
+  letter-spacing: .1rem;
+  cursor: pointer;
+}
+.selectfield__edit__fieldname .selectfield__edit__card__delete:hover{
+  background: #ccc;
+}
+.selectfield__edit__card__delete .selectfield__edit__card__delete__cancel{
+  background: red;
+}
+.selectfield__card .selectfield__edit__hole{
+  border: .16rem solid #036ec8;
+  margin: 1rem 10%;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  flex-direction: column;
+  padding: 0rem 2rem;
 }
 .selectfield__edit__hole .selectfield__edit__hole__item{
   width: 27rem;
@@ -109,6 +296,62 @@
   width: 3rem;
   height: 3rem;
 }
+
+.selectfield__card .selectfield__card__button,
+.selectfield__card .selectfield__edit__card__button{
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+  padding: 0 5% 5% 5%;
+  height: 4.5rem;
+}
+.selectfield__card__button .selectfield__card__close,
+.selectfield__edit__card__button .selectfield__edit__card__close{
+  -webkit-border-radius: .5rem;
+  -moz-border-radius: .5rem;
+  border-radius: .5rem;
+  width: 50%;
+  border: none;
+  font-size: 1.25rem;
+  letter-spacing: .1rem;
+  background: inherit;
+  cursor: pointer;
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
+}
+.selectfield__card__button .selectfield__card__close:hover,
+.selectfield__edit__card__button .selectfield__edit__card__close:hover{
+  background: #ff3333;
+  opacity: .6;
+  color: white;
+}
+.selectfield__card__button .selectfield__card__add,
+.selectfield__edit__card__button .selectfield__edit__card__add{
+  width: 50%;
+  border: none;
+  -webkit-border-radius: .5rem;
+  -moz-border-radius: .5rem;
+  border-radius: .5rem;
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
+
+  font-size: 1.25rem;
+  font-weight: bolder;
+  letter-spacing: .1rem;
+  background: #036ec8;
+  color: #f1f9ff;
+  cursor: pointer;
+}
+.selectfield__card__button .selectfield__card__add:hover,
+.selectfield__edit__card__button .selectfield__edit__card__add:hover{
+  background: #025296;
+}
+
 .spacer{
   -webkit-flex: 1;
   -ms-flex: 1;

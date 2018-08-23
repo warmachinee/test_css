@@ -5,6 +5,7 @@ import './MatchDetail.css'
 
 import ic_location from '../img/baseline-place-24px.svg'
 import ic_edit from '../img/baseline-edit-24px-white.svg'
+import ic_result from '../img/outline-insert_drive_file-24px.svg'
 
 import ModalEditTeam from '../Modal/ModalEditTeam'
 import ModalMatchResult from '../Modal/ModalMatchResult'
@@ -16,9 +17,12 @@ class MatchDetail extends React.Component{
     this.state = {
       modalEditTeam: false,
       modalMatchResult: false,
+      scoreHideState: true,
       teamTemp:'',
       optionTemp:[],
-      teamNumber: '',
+      teamNumber: 1,
+      departNumber:1,
+      tempDepart:'',
       editTeamData:{
         teamname:'',
         teamno:'',
@@ -32,10 +36,13 @@ class MatchDetail extends React.Component{
         teamno:'',
         matchid:''
       },
-      userMapID:''
+      userMapID:'',
+      sortData:0
     }
   }
-
+  getSort = (data) =>{
+    this.setState({sortData: data})
+  }
   modalMatchResultClick =() =>{
     this.state.resultMatchFromLoad = []
     this.state.resultMatchFromLoadUser = []
@@ -46,7 +53,8 @@ class MatchDetail extends React.Component{
      url: "http://pds.in.th/phpadmin/matchresultscore.php",
      dataType: 'json',
      data: {
-       "matchid": this.props.matchDetailID
+       "matchid": this.props.matchDetailID,
+       "sort": 0
      },
      xhrFields: { withCredentials: true },
      success: function(data) {
@@ -71,6 +79,8 @@ class MatchDetail extends React.Component{
        localStorage['teamno']=data.teamno
        localStorage['departnum']=data.departnum
        localStorage['departno']=data.departno
+       localStorage['fullname']=data.full
+       localStorage['lastname']=data.last
        console.log(data);
      }
     });
@@ -99,6 +109,8 @@ class MatchDetail extends React.Component{
         var departnum = localStorage['departnum'];
         var departno = localStorage['departno'];
         var typescore = localStorage['typescore'];
+        var fullname = localStorage['fullname']
+        var lastname = localStorage['lastname']
 
         cordA = JSON.parse("["+cordA+"]")
         cordB = JSON.parse("["+cordB+"]")
@@ -123,6 +135,8 @@ class MatchDetail extends React.Component{
         departnum = departnum.split(",",departnum.length)
         departno = JSON.parse("["+departno+"]")
         typescore = typescore.split(",",typescore.length)
+        fullname = fullname.split(",",fullname.length)
+        lastname = lastname.split(",",lastname.length)
         var obj = {
           cordA:"",
           cordB:"",
@@ -147,7 +161,9 @@ class MatchDetail extends React.Component{
               net: net[i],
               sf: sf[i],
               teamno: teamno[i],
-              departno: departno[i]
+              departno: departno[i],
+              fullname: fullname[i],
+              lastname: lastname[i]
             }
             this.state.resultMatchFromLoadUser.push(obj);
           }
@@ -161,7 +177,9 @@ class MatchDetail extends React.Component{
               net: net[i],
               sf: sf[i],
               teamno: teamno[i],
-              departno: departno[i]
+              departno: departno[i],
+              fullname: fullname[i],
+              lastname: lastname[i]
             }
             this.state.resultMatchFromLoadUser.push(obj);
           }
@@ -174,7 +192,9 @@ class MatchDetail extends React.Component{
               userid: userid[i],
               par: par[i],
               teamno: teamno[i],
-              departno: departno[i]
+              departno: departno[i],
+              fullname: fullname[i],
+              lastname: lastname[i]
             }
             this.state.resultMatchFromLoadUser.push(obj);
           }
@@ -217,24 +237,23 @@ class MatchDetail extends React.Component{
     this.state.tempHole.teamno = data.teamno
     this.state.tempHole.userid = data.userid
   }
+  departNo = (data) =>{
+    this.state.departNumber = parseInt(data)
+  }
+  setDepartno=(data)=>{
+    this.state.tempDepart = data
+  }
+  printData = (data) =>{
+  }
   updateTeam =()=>{
-    if(this.state.teamNumber === undefined || this.state.teamNumber === "" || this.state.teamNumber === null){
-      this.state.teamNumber = 1
-      this.HandlerUpdateTDbyUser(this.props.matchDetailID,1)
-      setTimeout(()=>{
-        this.matchDetailRefresh=false;
-        this.props.loadMatchDetail(this.props.matchDetailData)
-      },500)
-    }else{
-      this.HandlerUpdateTDbyUser(this.props.matchDetailID,this.state.teamNumber)
-      setTimeout(()=>{
-        this.matchDetailRefresh=false;
-        this.props.loadMatchDetail(this.props.matchDetailData)
-      },500)
-    }
+    this.HandlerUpdateTDbyUser(this.props.matchDetailID,this.state.teamNumber,this.state.departNumber)
+    setTimeout(()=>{
+      this.matchDetailRefresh=false;
+      this.props.loadMatchDetail(this.props.matchDetailData)
+    },500)
     this.setState(this.state)
   }
-  HandlerUpdateTDbyUser=(matchid,teamno)=>{
+  HandlerUpdateTDbyUser=(matchid,teamno,departno)=>{
     var geturl;
     geturl = $.ajax({
       type: "POST",
@@ -243,7 +262,7 @@ class MatchDetail extends React.Component{
      data: {
        "matchid": matchid,
        "teamno": teamno,
-       "departno": "",
+       "departno": departno,
      },
      xhrFields: { withCredentials: true },
      success: function(data) {
@@ -280,6 +299,13 @@ class MatchDetail extends React.Component{
     this.state.editTeamData.teamno = data.teamno
     this.modalEditTeamClick()
   }
+  clickScore = ()=>{
+    this.setState((prevState)=>{
+      return {
+        scoreHideState: !prevState.scoreHideState,
+      };
+    });
+  }
   setTeamName = (data) =>{
     this.state.editTeamData.teamname = data
   }
@@ -293,16 +319,22 @@ class MatchDetail extends React.Component{
     console.log("detailUser",this.props.detailUser);
     console.log("setTeamData",this.props.setTeamData);*/
     const option = this.props.setTeamData
-    //console.log(option);
+    let drawerClassUser = 'detail__griduserhost hide';
+    if(this.state.scoreHideState){
+      drawerClassUser = 'detail__griduserhost'
+    }
+    const te = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
+    const testt = [1,2,3,4,5,6,7,8,9]
+    const testtt = [10,11,12,13,14,15,16,17,18]
     return(
       <div className="match__detail">
         <div className="space"></div>
         <div className="detail__grid">
-          <div className="space"></div>
-          <div className="detail__gridtop">
-            {/*---------------------------------------------------------------*/}
-            {this.props.detail.map((data,i)=>
-              <div className="detail__label">
+          <div className="detail__topbar">
+            <div className="detail__gridtop">
+              {/*---------------------------------------------------------------*/}
+              {this.props.detail.map((data,i)=>
+                <div className="detail__label">
                   <div className="detail__matchname">
                     <div className="detail__matchname__label">{data.matchname}</div>
                   </div>
@@ -314,52 +346,133 @@ class MatchDetail extends React.Component{
                     <div className="space"></div>
                   </div>
                   <div className="detail__datematch">
-                    <div className="detail__datematch__text">{data.datematch}</div>
+                    <div className="detail__datematch__text">Date &#8196; : &#8196; {data.datematch}</div>
                     <div className="space"></div>
                   </div>
+                </div>
+              )}
+              {/*-------*/}
+              <div className="detail__controller">
+                <div className="space"></div>
+                <div className="detail__controller__edit">
+                  <div className="space"></div>
+                  <a onClick={()=>this.props.updateMatchToggle(this.props.matchDetailID)}>
+                    <img className="detail__controller__icon" src={ic_edit}/>
+                  </a>
+                  <div className="space"></div>
+                </div>
+                <div className="space"></div>
+                <div className="detail__controller__result">
+                  <div className="space"></div>
+                  <a onClick={this.modalMatchResultClick}>
+                    <img className="detail__controller__icon" src={ic_result}/>
+                  </a>
+                  <div className="space"></div>
+                </div>
+                <div className="space"></div>
               </div>
-            )}
-            {/*-------*/}
-            <div className="detail__controller">
-              <div className="space"></div>
-              <div className="detail__controller__edit">
-                <div className="space"></div>
-                <a onClick={()=>this.props.updateMatchToggle(this.props.matchDetailID)}>
-                  <img className="detail__controller__icon" src={ic_edit}/>
-                </a>
-                <div className="space"></div>
-              </div>
-              <div className="space"></div>
-              <div className="detail__controller__result">
-                <div className="space"></div>
-                <a onClick={this.modalMatchResultClick}>
-                  <img className="detail__controller__icon" src={ic_edit}/>
-                </a>
-                <div className="space"></div>
-              </div>
-              <div className="space"></div>
             </div>
-          </div>
-          {/*---------------------------------------------------------------*/}
-          <div className="detail__labelgrid">
-            <div className="detail__labelgrid__name">Name</div>
-            <div className="detail__labelgrid__in">{"IN"}</div>
-            <div className="detail__labelgrid__in">{"OUT"}</div>
-            <div className="detail__labelgrid__gross">{"GROSS"}</div>
-          </div>
-
-          <div className="detail__card">
-            <div className="detail__gridfield">
+            {/*---------------------------------------------------------------*/}
+            <div className="detail__labelgrid__grid">
+              <div className="detail__labelgrid">
+                <div className="detail__labelgrid__top">
+                  <div className="detail__labelgrid__name">Name</div>
+                </div>
+                <div className="detail__labelgrid__bottom">
+                  <div className="detail__labelgrid__in">{"IN"}</div>
+                  <div className="detail__labelgrid__in">{"OUT"}</div>
+                  <div className="detail__labelgrid__gross">{"GROSS"}</div>
+                </div>
+              </div>
+              <div className="detail__labelgrid__holescore">
+                <div className="detail__holescore__left">
+                  <div className="detail__labelgrid__scorelabel">
+                    {testt.map((d)=>
+                      <p className="detail__labelgrid__score">
+                        <div className="space"></div>
+                        {d}
+                        <div className="space"></div>
+                      </p>
+                    )}
+                  </div>
+                  <div className="detail__labelgrid__score__grid">
+                    {this.props.detailMatchFromLoadField.filter(
+                      (item,i)=>{
+                        return (i < 9)
+                      }
+                    ).map((d)=>
+                      <p className="detail__labelgrid__score">
+                        <div className="space"></div>
+                        {d.fieldscore}
+                        <div className="space"></div>
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <div className="detail__holescore__left">
+                  <div className="detail__labelgrid__scorelabel">
+                    {testtt.map((d)=>
+                      <p className="detail__labelgrid__score">
+                        <div className="space"></div>
+                        {d}
+                        <div className="space"></div>
+                      </p>
+                    )}
+                  </div>
+                  <div className="detail__labelgrid__score__grid">
+                    {this.props.detailMatchFromLoadField.filter(
+                      (item,i)=>{
+                        return (i >= 9)
+                      }
+                    ).map((d)=>
+                      <p className="detail__labelgrid__score">
+                        <div className="space"></div>
+                        {d.fieldscore}
+                        <div className="space"></div>
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
 
             {this.props.detailUserhost.map((data)=>
-              <div className="detail__griduserhost">
-                <div className="detail__userhostname">{data.fullname} {data.userid}</div>
-                <div className="detail__userhostin">{data.in}</div>
-                <div className="detail__userhostout">{data.out}</div>
-                <div className="detail__userhostgross">{data.gross}</div>
+              <div className={drawerClassUser}>
+                {this.setTeamno(data)}
+                <div className="detail__userhostname">{data.fullname} {data.userid}
+                  <button onClick={this.clickScore}>toggle</button>
+                    {(this.props.setDepartData)?(
+                      <div>
+                        <select onChange={(e)=>this.departNo(e.target.value)}>
+                        {this.props.setDepartData.map((d)=>
+                          <option value={d.departno}>
+                            {d.departname}
+                          </option>
+                        )}
+                        </select>
+                        <button onClick={this.updateTeam}>set depart</button>
+                      </div>
+                    ):(null)}
+                </div>
+                <div className="detail__griduserhost__label">
+                  <div className="detail__userhostin">{data.in}</div>
+                  <div className="detail__userhostout">{data.out}</div>
+                  <div className="detail__userhostgross">{data.gross}</div>
+                </div>
+                <div className="detail__griduserhost__score">
+                  {this.props.holeScoreUserhost[0].map((d)=>
+                    <p className="griduserhost__score">
+                      <div className="space"></div>
+                      {d}
+                      <div className="space"></div>
+                    </p>
+                  )}
+                </div>
               </div>
             )}
+
+          </div>
+          <div className="detail__card">
             {this.props.setTeamData.map((data,i)=>
               <div>
                 <p>{data.teamname}</p>
@@ -376,49 +489,73 @@ class MatchDetail extends React.Component{
                         return this.state.teamTemp === item.teamno;
                       }
                     ).map((data)=>
-                    <div>
-                      <div className="detail__username">
-                        <div className="detail__username">{data.fullname} {data.userid}
-                          {this.setTeamno(data)}
-                          {this.setUserMapID(data.userid)}
-                          <select onChange={(e)=>this.setUpdateTeam(e.target.value)}>
-                            {(parseInt(this.state.userMapID) === this.props.userID)?
-                            (
-                              option.map((data,i)=>
-                                <option value={data.teamno}>{data.teamno}</option>
-                              )
-                            ):(null)}
-                          </select>
-                          {(parseInt(this.state.userMapID) === this.props.userID)?
-                          (
-                            <button onClick={this.updateTeam} className="detail__choose">Choose team</button>
-                          ):(null)}
-                          {this.props.tempHole.filter(
-                            (item)=>{
-                              return (this.state.tempHole.teamno === item.teamno) && (this.state.tempHole.userid === item.userid)
-                            }
-                          ).map((data)=>
-                          <div>{" "}{data.holescore}{" "}</div>
-                        )}
+                    <div className="detail__userdetailbox">
+                      <div className="detail__userdetailbox__label">
+                        <div className="detail__username">
+                          <div className="detail__username__name">
+                            <div className="detail__username__name__text">
+                              {data.fullname} {data.userid}
+                                {this.setTeamno(data)}
+                                {this.setUserMapID(data.userid)}
+                                <select onChange={(e)=>this.setUpdateTeam(e.target.value)}>
+                                  {(parseInt(this.state.userMapID) === this.props.userID)?
+                                  (
+                                    option.map((data,i)=>
+                                      <option value={data.teamno}>{data.teamno}</option>
+                                    )
+                                  ):(null)}
+                                </select>
+                                {(parseInt(this.state.userMapID) === this.props.userID)?
+                                (
+                                  <button onClick={this.updateTeam} className="detail__choose">Choose team</button>
+                                ):(null)}
+                            </div>
+                            <div className="detail__username__name__depart">
+                              {this.setDepartno(data.departno)}
+                              {this.props.setDepartData.filter(
+                                (item)=>{
+                                  return (parseInt(item.departno) === this.state.tempDepart)
+                                }
+                              ).map((d)=>
+                              <div>
+                                depart :
+                                {d.departname}
+                              </div>
+                            )}
+                            </div>
+                          </div>
+                          <div className="detail__usernamein">{data.in}</div>
+                          <div className="detail__usernameout">{data.out}</div>
+                          <div className="detail__usernamegross">{data.gross}</div>
                         </div>
-                        <div className="detail__usernamein">{data.in}</div>
-                        <div className="detail__usernameout">{data.out}</div>
-                        <div className="detail__usernamegross">{data.gross}</div>
-
                       </div>
+                      {this.props.tempHole.filter(
+                        (item)=>{
+                          return (parseInt(this.state.tempHole.teamno) === parseInt(item.teamno)) && (parseInt(this.state.tempHole.userid) === parseInt(item.userid))
+                        }
+                        ).map((data)=>
+                        <div className="detail__userdetailbox__score">
+                          {data.holescore.map((d)=>
+                            <p className="griduserhost__score">
+                              <div className="space"></div>
+                              {d}
+                              <div className="space"></div>
+                            </p>
+                          )}
+                        </div>
+                      )}
                     </div>
                     )}
                 </div>
               </div>
             )}
-
             {this.props.detailUser.filter(
               (item)=>{
                 return item.teamno === 0;
               }
             ).map((data,i)=>
               <div className="detail__username">
-                <div className="detail__username">{data.fullname} {data.userid}
+                <div className="detail__username__name">{data.fullname} {data.userid}
                   {this.setUserMapID(data.userid)}
                   <select onChange={(e)=>this.setUpdateTeam(e.target.value)}>
                     {(parseInt(this.state.userMapID) === this.props.userID)?
@@ -439,8 +576,9 @@ class MatchDetail extends React.Component{
               </div>
             )}
 
+
+
           </div>
-          <div className="space"></div>
         </div>
         <div className="space"></div>
         <ModalEditTeam
@@ -451,9 +589,12 @@ class MatchDetail extends React.Component{
         <ModalMatchResult
           setTeamData = {this.props.setTeamData}
           typeScore = {this.state.typeScore}
+          matchDetailID = {this.props.matchDetailID}
           resultMatchFromLoad = {this.state.resultMatchFromLoad}
           resultMatchFromLoadUser = {this.state.resultMatchFromLoadUser}
           resultMatchFromLoadHoleScore = {this.state.resultMatchFromLoadHoleScore}
+          modalMatchResultClick = {this.modalMatchResultClick}
+          getSort = {this.getSort}
           modalClick = {this.modalMatchResultClick}
           modalState = {this.state.modalMatchResult}/>
       </div>

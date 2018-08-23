@@ -28,7 +28,7 @@ class TopNav extends React.Component{
           <div className="topnav__items">
             <ul>
               <li><a onClick={this.props.notiClick} href="#"><img src={ic_noti}></img></a></li>
-              <li><a href="#"><img src={ic_profile}></img></a></li>
+              <li><a href="#" onClick={()=>{alert('Not available')}}><img src={ic_profile}></img></a></li>
             </ul>
           </div>
         </nav>

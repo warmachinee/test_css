@@ -4,6 +4,7 @@ import './SelectField.css'
 
 import ModalBackDrop2 from './ModalBackDrop2'
 import SwitchToggle from '../Switch/SwitchToggle'
+import EditTextImg from '../EditText/EditTextImg'
 
 class SelectField extends React.Component{
   constructor(props){
@@ -84,6 +85,7 @@ class SelectField extends React.Component{
           this.state.court.push(this.props.fieldCourt[i])
       }
       this.setState({fieldname: data.fieldname})
+      this.props.exportFieldName(this.state.fieldname)
     },700)
   }
   editCustomFieldToggle = (data) =>{
@@ -201,15 +203,20 @@ class SelectField extends React.Component{
           <div className="selectfield__grid">
             <div onClick = {this.toggleSelect} className="spacer"></div>
             <div className="selectfield__card">
-              <p>SelectField</p>
-              <div className="selectfield__switch">
-                <p>Show custom field</p>
-                <SwitchToggle switchToggleState={this.switchToggleState}/>
+              <div className="selectfield__card__label__grid">
+                <div className="selectfield__card__label">SelectField</div>
+                <div className="selectfield__switch">
+                  <div className="selectfield__switch__switch">
+                    <SwitchToggle switchToggleState={this.switchToggleState}/>
+                  </div>
+                  <div className="selectfield__switch__label">Show custom field</div>
+                </div>
               </div>
               <div className="selectfield___search">
-                <input type='text' onChange={this.setInputValue}></input>
+                <EditTextImg type='text' placeholder="Search field name" editTextValue={this.setInputValue} formType='search'/>
               </div>
               <div className="selectfield__fieldlist">
+
                 { (this.state.switchToggleCus)?
                   (this.state.field.filter(
                   (item)=>{
@@ -220,7 +227,7 @@ class SelectField extends React.Component{
                     <button className="selectfield__fielditem__field"
                       onClick={()=>this.getField(data)}>{data.fieldname}</button>
                     <button className="selectfield__fielditem__edit"
-                      onClick={()=>this.editCustomFieldToggle(data)}>edit</button>
+                      onClick={()=>this.editCustomFieldToggle(data)}>EDIT</button>
                   </div>
                 )):(
                   this.state.field.filter(
@@ -234,11 +241,13 @@ class SelectField extends React.Component{
                   </div>
                 )
                 )}
-                <button className="selectfield__fielditem__edit"
-                  onClick={()=>this.editCustomFieldToggle()}>edit</button>
               </div>
               <div className="selectfield__fielddetail">
-                <p>Field name : {this.state.fieldname}</p>
+                <div className="selectfield__fielddetail__label">
+                  <div className="spacer"></div>
+                  Field name : {this.state.fieldname}
+                  <div className="spacer"></div>
+                </div>
                   <div className="selectfield__fielddetail__option">
                     <select onChange={(e)=>this.getCourt(parseInt(e.target.value),0)}>
                       {this.state.court.filter(
@@ -262,8 +271,10 @@ class SelectField extends React.Component{
                     </select>
                   </div>
               </div>
-              <button onClick = {this.toggleSelect}>Cancel</button>
-              <button onClick = {this.confirmSelect}>Confirm</button>
+              <div className="selectfield__card__button">
+                <button className="selectfield__card__close" onClick = {this.toggleSelect}>Cancel</button>
+                <button className="selectfield__card__add" onClick = {this.confirmSelect}>Confirm</button>
+              </div>
             </div>
             <div onClick = {this.toggleSelect} className="spacer"></div>
           </div>
@@ -283,25 +294,30 @@ class SelectField extends React.Component{
             <div onClick = {this.toggleSelectUpdate} className="spacer"></div>
             <div className="selectfield__card">
               <div className="selectfield__edit__fieldname">
-                <input type="text" placeholder={this.state.editCustomFieldName}
-                  onChange={(e)=>this.editCustomFieldName(e.target.value)}/>
-                <button onClick={this.confirmCancelToggle}>Delete</button>
+                <div className="selectfield__edit__card__label">SelectField</div>
+                <EditTextImg type='text' placeholder={this.state.editCustomFieldName}
+                  editTextValue={this.editCustomFieldName} formType='search'/>
+
+                <button className ="selectfield__edit__card__delete" onClick={this.confirmCancelToggle}>Delete</button>
                 {
                   (this.state.confirmCancel)?
                   (
                     <div>
-                      <button onClick={this.handlerDeleteCustomField}>Confirm</button>
-                      <button onClick={this.confirmCancelToggle}>Cancel</button>
+                      <button className="selectfield__delete__confirm" onClick={this.handlerDeleteCustomField}>Confirm</button>
+                      <button className="selectfield__delete__cancel" onClick={this.confirmCancelToggle}>Cancel</button>
                     </div>
                   ):(null)
                 }
               </div>
-
               <div className="selectfield__edit__hole">
                 <div className="spacer"></div>
-                <div className="selectfield__edit__hole__item">
-                  <p>Hole score</p>
+                <div className="createfield__hole__item">
+                  <div className="createfield__hole__label">Hole score</div>
                   {this.state.editCustomHolescore.map((d,i)=>
+                    <input type="number" min="0" placeholder={i}
+                      onChange={(e)=>this.getScore(e.target.value,i)}></input>
+                  )}
+                  {this.state.hole.map((d,i)=>
                     <input type="number" min="0" placeholder={i}
                       onChange={(e)=>this.getScore(e.target.value,i)}></input>
                   )}
@@ -311,18 +327,24 @@ class SelectField extends React.Component{
 
               <div className="selectfield__edit__hole">
                 <div className="spacer"></div>
-                <div className="selectfield__edit__hole__item">
-                  <p>HCP</p>
+                <div className="createfield__hole__item">
+                  <div className="createfield__hole__label">HCP</div>
                   {this.state.editCustomHCP.map((d,i)=>
                     <input type="number" min="0" placeholder={i}
                       onChange={(e)=>this.getScore(e.target.value,i+18)}></input>
+                  )}
+                  {this.state.hole.map((d,i)=>
+                    <input type="number" min="0" placeholder={i}
+                      onChange={(e)=>this.getScore(e.target.value,i)}></input>
                   )}
                 </div>
 
                 <div className="spacer"></div>
               </div>
-              <button onClick = {()=>this.toggleSelectUpdate()}>Cancel</button>
-              <button onClick = {this.updateCustomField}>Update</button>
+              <div className="selectfield__edit__card__button">
+                <button className="selectfield__edit__card__close" onClick = {()=>this.toggleSelectUpdate()}>Cancel</button>
+                <button className="selectfield__edit__card__add" onClick = {this.updateCustomField}>Update</button>
+              </div>
             </div>
             <div onClick = {this.toggleSelectUpdate} className="spacer"></div>
           </div>

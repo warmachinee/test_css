@@ -54,20 +54,14 @@ class ModalRoomPassword extends React.Component{
           <div className="modal-roompassword__grid">
             <div onClick = {this.props.modalClick} className="spacer"></div>
             <div className="modal-roompassword__card">
-              <div className="roompassword__item">
-
+              <div className="roompassword__card__playername">Room password</div>
+              <div className="roompassword__card__input">
+                <EditTextImg type="text" placeholder="Enter password" editTextValue={this.roomPassword} formType="password"/>
               </div>
-              <div className="roompassword__item">
-                <label>Room password</label>
+              <div className="roompassword__card__button">
+                <button className="roompassword__card__close" onClick = {this.props.modalClick}>Close</button>
+                <button className="roompassword__card__add" onClick = {this.HandlerMatchAccess}>Enter</button>
               </div>
-              <div className="roompassword__item">
-                <EditTextImg type="password" placeholder="Enter password" editTextValue={this.roomPassword} formType="password"/>
-              </div>
-              <div className="roompassword__item">
-                <button onClick={this.HandlerMatchAccess}>Enter</button>
-                <button onClick = {this.props.modalClick} >Close</button>
-              </div>
-
             </div>
             <div onClick = {this.props.modalClick} className="spacer"></div>
           </div>

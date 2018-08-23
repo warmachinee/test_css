@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Delay from 'react-delay';
 import {Link, Redirect} from 'react-router-dom'
 import {BrowserRouter as Router, Route} from 'react-router-dom'
 import './css/App.css';
@@ -162,25 +163,52 @@ class App extends Component {
       },300);
       localStorage.clear()
    }
+
+
   componentWillMount(){
     this.checksession()
+    setTimeout(()=>{
+      console.log('main ::: ',this.state.chksession);
+    },350)
+    /*
+    {(this.state.pageDashboard && this.state.chksession)?
+    (<Redirect to="/home" />):(
+      (this.state.pageLogin && this.state.chksession)?
+      (<Redirect to="/" />):(null)
+    )}
+    {(this.state.chksession && (window.location.pathname === '/home') && this.state.pageLogin)?
+    (<Redirect to="/home" />):(null)}
+    {(this.state.logoutClickState)?
+      (<Redirect to="/" />):(null)}
+    */
+  }
 
+  componentDidMount(){
+    setTimeout(()=>{
+      console.log('main Didmount ::: ',this.state.chksession);
+      this.setState(this.state)
+    },350)
   }
   render() {
     //this.checksession()
 
     return (
+      <Delay wait={1000}>
       <Router>
         <div>
-          {(this.state.pageDashboard && this.state.chksession)?
-          (<Redirect to="/home" />):(
-            (this.state.pageLogin && this.state.chksession)?
-            (<Redirect to="/" />):(null)
-          )}
-          {(this.state.chksession && (window.location.pathname === '/home') && this.state.pageLogin)?
-          (<Redirect to="/home" />):(null)}
-          {(this.state.logoutClickState)?
-            (<Redirect to="/" />):(null)}
+          {(window.location.pathname === '/register')?
+            (<Redirect to="/register" />)
+            :(
+              (this.state.logoutClickState)?
+              (<Redirect to="/" />):(
+                (this.state.pageDashboard)?
+                (<Redirect to="/home" />):(
+                  ((this.state.chksession===true) && (window.location.pathname === '/home'))?
+                  (<Redirect to="/home" />):
+                  (<Redirect to="/" />)
+                )
+              )
+            )}
           <Route
             exact path="/"
             render={()=>
@@ -206,8 +234,19 @@ class App extends Component {
                   pageDashboardClick = {this.goToAnotherPage}/>
               }/>
 
+              <Route
+                path="/register"
+                render={()=>
+                  <Login
+                    session = {this.state.chksession}
+                    userID = {this.getUserID}
+                    loadMatch = {this.handleLoadMatch}
+                    pageLoginClick = {this.goToAnotherPage}/>
+                }/>
+
         </div>
       </Router>
+    </Delay>
     );
   }
 }

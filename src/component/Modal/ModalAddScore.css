@@ -17,16 +17,94 @@
   -moz-flex-direction: column;
   flex-direction: column;
   z-index: 200;
+  -ms-overflow-y: auto;
+  overflow-y: auto;
+}
+.holefill{
+  padding: 5%;
+}
+.modal-addscore__grid .addscore__card__text{
+  margin: 8% 5% 0 10%;
+  font-size: 1.5rem;
+  letter-spacing: .1rem;
+  color: #2a4d69;
+  font-weight: bolder;
+}
+.modal-addscore__grid .addscore__card__button{
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+  padding: 0 5% 5% 5%;
+  height: 5rem;
+}
+.addscore__card__button .addscore__card__close{
+  -webkit-border-radius: .5rem;
+  -moz-border-radius: .5rem;
+  border-radius: .5rem;
+  width: 50%;
+  border: none;
+  font-size: 1.25rem;
+  letter-spacing: .1rem;
+  background: inherit;
+  cursor: pointer;
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
+}
+.addscore__card__button .addscore__card__close:hover{
+  background: #ff3333;
+  opacity: .6;
+  color: white;
+}
+.addscore__card__button .addscore__card__save{
+  width: 50%;
+  border: none;
+  -webkit-border-radius: .5rem;
+  -moz-border-radius: .5rem;
+  border-radius: .5rem;
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
+
+  font-size: 1.25rem;
+  font-weight: bolder;
+  letter-spacing: .1rem;
+  background: #036ec8;
+  color: #f1f9ff;
+  cursor: pointer;
+}
+.addscore__card__button .addscore__card__save:hover{
+  background: #025296;
 }
 .holefill input{
-  width: 4rem;
-  height: 4rem;
+  margin: 2.5% 2.5%;
+  width: 2.5rem;
+  height: 2.5rem;
+  overflow: auto;
+  text-align: center;
 }
 .modal-addscore__grid .modal-addscore__card{
-
-  background: white;
-  width: 30rem;
-  height: 25rem;
+  background: #f1f9ff;
+  min-height: 0;
+  width: 100%;
+  max-width: 30rem;
+  -ms-overflow-y: auto;
+  overflow-y: auto;
+  -webkit-box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
+  -moz-box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
+  box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  transition: 0.2s;
+}
+.modal-addscore__grid .modal-addscore__card:hover{
+  -webkit-box-shadow: 0 0.5rem 1.5rem 0 rgba(0,0,0,0.4);
+  -moz-box-shadow: 0 0.5rem 1.5rem 0 rgba(0,0,0,0.4);
+  box-shadow: 0 0.5rem 1.5rem 0 rgba(0,0,0,0.4);
 }
 .spacer{
   -webkit-flex: 1;

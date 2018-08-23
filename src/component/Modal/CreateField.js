@@ -67,13 +67,14 @@ class CreateField extends React.Component{
             <div onClick = {this.props.modalClick} className="spacer"></div>
             <div className="createfield__card">
               <div className="createfield__fieldname">
-                <EditTextImg type="text" placeholder="Field name" formType="username"
+                <div className="createfield__fieldname__text">Create field</div>
+                <EditTextImg type="text" placeholder="Field name" formType="matchname"
                   editTextValue={this.createFieldSetFieldName}/>
               </div>
               <div className="createfield__hole">
                 <div className="spacer"></div>
                 <div className="createfield__hole__item">
-                  <p>Hole score</p>
+                  <div className="createfield__hole__label">Hole score</div>
                   {this.state.hole.map((d,i)=>
                     <input type="text" placeholder={i+1} onChange={(e)=>this.getHoleScore(e.target.value,d-1)}></input>
                   )}
@@ -83,15 +84,17 @@ class CreateField extends React.Component{
               <div className="createfield__hcp">
                 <div className="spacer"></div>
                 <div className="createfield__hole__item">
-                  <p>HCP score</p>
+                  <div className="createfield__hole__label">HCP score</div>
                   {this.state.hcp.map((d,i)=>
                     <input type="text" placeholder={i+1} onChange={(e)=>this.getHCPScore(e.target.value,d-1)}></input>
                   )}
                 </div>
                 <div className="spacer"></div>
               </div>
-              <button onClick = {this.props.modalClick}>Cancel</button>
-              <button onClick = {this.handleCreateCustomField}>Create</button>
+              <div className="createfield__card__button">
+                <button className="createfield__card__close" onClick = {this.props.modalClick}>Cancel</button>
+                <button className="createfield__card__add" onClick = {this.handleCreateCustomField}>Create</button>
+              </div>
             </div>
             <div onClick = {this.props.modalClick} className="spacer"></div>
           </div>
