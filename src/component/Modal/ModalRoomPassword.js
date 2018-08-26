@@ -56,7 +56,7 @@ class ModalRoomPassword extends React.Component{
             <div className="modal-roompassword__card">
               <div className="roompassword__card__playername">Room password</div>
               <div className="roompassword__card__input">
-                <EditTextImg type="text" placeholder="Enter password" editTextValue={this.roomPassword} formType="password"/>
+                <EditTextImg type="password" placeholder="Enter password" editTextValue={this.roomPassword} formType="password"/>
               </div>
               <div className="roompassword__card__button">
                 <button className="roompassword__card__close" onClick = {this.props.modalClick}>Close</button>

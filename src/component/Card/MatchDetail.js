@@ -41,9 +41,11 @@ class MatchDetail extends React.Component{
     }
   }
   getSort = (data) =>{
-    this.setState({sortData: data})
+    console.log(data);
+    this.state.sortData = data
+    this.setState(this.state)
   }
-  modalMatchResultClick =() =>{
+  modalMatchResultClick =(data) =>{
     this.state.resultMatchFromLoad = []
     this.state.resultMatchFromLoadUser = []
     this.state.resultMatchFromLoadHoleScore = []
@@ -54,7 +56,7 @@ class MatchDetail extends React.Component{
      dataType: 'json',
      data: {
        "matchid": this.props.matchDetailID,
-       "sort": 0
+       "sort": this.state.sortData
      },
      xhrFields: { withCredentials: true },
      success: function(data) {
@@ -211,9 +213,12 @@ class MatchDetail extends React.Component{
 
       }
       console.log("resultMatchFromLoadUser",this.state.resultMatchFromLoadUser);
-      this.setState((state)=>{
-        return {modalMatchResult: !state.modalMatchResult}
-      })
+      if(data){
+        this.setState((state)=>{
+          return {modalMatchResult: !state.modalMatchResult}
+        })
+        this.setState(this.state)
+      }
     },500)
     localStorage.clear()
   }
@@ -246,7 +251,11 @@ class MatchDetail extends React.Component{
   printData = (data) =>{
   }
   updateTeam =()=>{
-    this.HandlerUpdateTDbyUser(this.props.matchDetailID,this.state.teamNumber,this.state.departNumber)
+    if(this.state.departNumber>=1){
+      this.HandlerUpdateTDbyUser(this.props.matchDetailID,this.state.teamNumber,this.state.departNumber)
+    }else{
+      this.HandlerUpdateTDbyUser(this.props.matchDetailID,this.state.teamNumber,1)
+    }
     setTimeout(()=>{
       this.matchDetailRefresh=false;
       this.props.loadMatchDetail(this.props.matchDetailData)
@@ -364,7 +373,7 @@ class MatchDetail extends React.Component{
                 <div className="space"></div>
                 <div className="detail__controller__result">
                   <div className="space"></div>
-                  <a onClick={this.modalMatchResultClick}>
+                  <a onClick={()=>this.modalMatchResultClick(true)}>
                     <img className="detail__controller__icon" src={ic_result}/>
                   </a>
                   <div className="space"></div>
@@ -439,8 +448,8 @@ class MatchDetail extends React.Component{
             {this.props.detailUserhost.map((data)=>
               <div className={drawerClassUser}>
                 {this.setTeamno(data)}
-                <div className="detail__userhostname">{data.fullname} {data.userid}
-                  <button onClick={this.clickScore}>toggle</button>
+                <div className="detail__userhostname">{data.fullname} id : {data.userid}
+                  <button onClick={this.clickScore}>Toggle</button>
                     {(this.props.setDepartData)?(
                       <div>
                         <select onChange={(e)=>this.departNo(e.target.value)}>
@@ -494,7 +503,7 @@ class MatchDetail extends React.Component{
                         <div className="detail__username">
                           <div className="detail__username__name">
                             <div className="detail__username__name__text">
-                              {data.fullname} {data.userid}
+                              {data.fullname} id : {data.userid}
                                 {this.setTeamno(data)}
                                 {this.setUserMapID(data.userid)}
                                 <select onChange={(e)=>this.setUpdateTeam(e.target.value)}>

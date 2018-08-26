@@ -40,6 +40,7 @@ const sideNav = props =>{
         <Switch
           switchClick={props.langClick}
           switchLang={props.lang}/>
+        <p style={{color:'white'}}>User id : {props.dashUserID}</p>
       </div>
       <div className="sidelogo">
         <div className="space"></div>

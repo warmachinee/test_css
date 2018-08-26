@@ -188,6 +188,7 @@ class App extends Component {
       console.log('main Didmount ::: ',this.state.chksession);
       this.setState(this.state)
     },350)
+    alert('แมทช์การแข่งขัน SENIOR NATION TOUR จะเปิดดูรายละเอียดได้ภายในวันนี้ ขออภัยในความไม่สะดวก')
   }
   render() {
     //this.checksession()

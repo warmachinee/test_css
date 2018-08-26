@@ -68,6 +68,7 @@ class Dashboard extends Component {
       tempHole:[],
       dashUserID:'',
       UserHostID:'',
+      chksessionFullLast:'',
       updateMatchMatchid:'',
       matchModalData:{
         fieldid:'',
@@ -910,6 +911,19 @@ class Dashboard extends Component {
     if(this.state.matchModalData.departnum === "" || this.state.matchModalData.departnum === undefined || this.state.matchModalData.departnum === null){
       this.state.matchModalData.departnum = this.state.detailMatchFromLoad[0].departnum
     }
+    const dataU = {
+      "fieldid": this.state.matchModalData.fieldid[0],
+      "cordA": this.state.matchModalData.fieldid[1],
+      "cordB": this.state.matchModalData.fieldid[2],
+      "matchid": this.state.updateMatchMatchid,
+      "matchname": this.state.matchModalData.matchname,
+      "typescore": this.state.matchModalData.typescore,
+      "typeroom": this.state.matchModalData.typeroom,
+      "publicshow": this.state.matchModalData.publicshow,
+      "date": this.state.matchModalData.date,
+      "teamnum": this.state.matchModalData.teamnum,
+      "departnum": this.state.matchModalData.departnum,
+    }
     console.log("detailMatchFromLoad",this.state.detailMatchFromLoad);
     var geturl;
     geturl = $.ajax({
@@ -917,17 +931,7 @@ class Dashboard extends Component {
      url: "http://pds.in.th/phpadmin/updatematch.php",
      dataType: 'json',
      data: {
-       "fieldid": this.state.matchModalData.fieldid[0],
-       "cordA": this.state.matchModalData.fieldid[1],
-       "cordB": this.state.matchModalData.fieldid[2],
-       "matchid": this.state.updateMatchMatchid,
-       "matchname": this.state.matchModalData.matchname,
-       "typescore": this.state.matchModalData.typescore,
-       "typeroom": this.state.matchModalData.typeroom,
-       "publicshow": this.state.matchModalData.publicshow,
-       "date": this.state.matchModalData.date,
-       "teamnum": this.state.matchModalData.teamnum,
-       "departnum": this.state.matchModalData.departnum,
+
      },
      xhrFields: { withCredentials: true },
      success: function(data) {
@@ -1197,16 +1201,21 @@ class Dashboard extends Component {
        //console.log(data)
        localStorage['chk'] = data.status;
        localStorage['id'] = data.id;
+       localStorage['fullname'] = data.fullname
+       localStorage['lastname'] = data.lastname
       }
      });
      setTimeout(()=>{
        if(localStorage['id']){
          var chksessions = localStorage['chk'];
          var id = localStorage['id'];
+         var fullname = localStorage['fullname']
+         var lastname = localStorage['lastname']
          this.state.dashUserID = parseInt(id)
          console.log(id," : ",chksessions);
          if(chksessions === 'valid session'){
            this.state.chksession = true
+           this.state.chksessionFullLast = fullname + " " +lastname
          }else{
            this.state.chksession = false
          }
@@ -1236,12 +1245,14 @@ class Dashboard extends Component {
     return(
       <div>
         <TopNav
+          name = {this.state.chksessionFullLast}
           userID = {this.state.dashUserID}
           loadField = {this.toggleCreateModalLoad}
           drawerClickHandler = {this.drawerToggleClickHandler}
           notiClick = {this.HandlerActivityRequest}
           />
         <SideNav
+          dashUserID = {this.state.dashUserID}
           notiClick = {this.sideNaveNoti}
           logOut = {this.props.logOut}
           show={this.state.sideDrawerOpen}

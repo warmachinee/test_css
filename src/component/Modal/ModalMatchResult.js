@@ -19,14 +19,17 @@ class ModalMatchResult extends React.Component{
     this.state.teamNameTemp = data
   }
   sortResult =(data)=>{
+    console.log(data);
     if(data){
       this.props.getSort(data)
-      this.props.modalMatchResultClick()
+      this.props.modalMatchResultClick(false)
     }else{
       this.props.getSort(0)
-      this.props.modalMatchResultClick()
+      this.props.modalMatchResultClick(false)
     }
-    this.setState(this.state)
+    setTimeout(()=>{
+      this.setState(this.state)
+    },1000)
   }
   render(){
     if(this.props.modalState){
@@ -87,23 +90,6 @@ class ModalMatchResult extends React.Component{
                     ):(null)
                   )
                 )}
-
-                {/*this.props.setTeamData*/}
-                {/*teamTmp.map((d)=>
-                  <div>
-                    <p>{d.teamname}</p>
-                      <div className="detail__teambox">
-                        <div className="match__result__box__user">
-                          <div className="result__box__userid">userid</div>
-                          <div className="result__box__in">in</div>
-                          <div className="result__box__out">out</div>
-                          <div className="result__box__gross">gross</div>
-                          <div className="result__box__par">par</div>
-                        </div>
-                      </div>
-                  </div>
-                )*/}
-
               {this.props.setTeamData.map((data,i)=>
                 <div>
                   <p>{data.teamname}</p>
@@ -223,7 +209,10 @@ class ModalMatchResult extends React.Component{
                 )
               )}
               <div className="spacer"></div>
-              <button className="close__modalresult" onClick={this.props.modalClick}>Close</button>
+              <div className="close__modalresult">
+                <button className="close__modalresult__button" onClick={this.props.modalClick}>Close</button>
+              </div>
+
             </div>
             <div onClick = {this.props.modalClick} className="spacer"></div>
           </div>

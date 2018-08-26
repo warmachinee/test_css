@@ -23,7 +23,7 @@ class TopNav extends React.Component{
             <a onClick={this.props.loadField}><img src={ic_add}></img></a>
           </div>
           <div className="spacer"></div>
-          <div className="topnav__button" style={{transform: 'translateX(-3rem)'}}>User Id : {this.props.userID}</div>
+          <div className="topnav__button" style={{transform: 'translateX(-3rem)'}}>ผู้ใช้งาน : {this.props.name}</div>
           <div className="spacer"></div>
           <div className="topnav__items">
             <ul>
