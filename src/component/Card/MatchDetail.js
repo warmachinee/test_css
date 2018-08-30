@@ -21,7 +21,7 @@ class MatchDetail extends React.Component{
       teamTemp:'',
       optionTemp:[],
       teamNumber: 1,
-      departNumber:1,
+      departNumber: 1,
       tempDepart:'',
       editTeamData:{
         teamname:'',
@@ -32,6 +32,7 @@ class MatchDetail extends React.Component{
       resultMatchFromLoad:[],
       resultMatchFromLoadUser:[],
       resultMatchFromLoadHoleScore:[],
+      tempResultHole:[],
       tempHole:{
         teamno:'',
         matchid:''
@@ -41,7 +42,6 @@ class MatchDetail extends React.Component{
     }
   }
   getSort = (data) =>{
-    console.log(data);
     this.state.sortData = data
     this.setState(this.state)
   }
@@ -83,7 +83,7 @@ class MatchDetail extends React.Component{
        localStorage['departno']=data.departno
        localStorage['fullname']=data.full
        localStorage['lastname']=data.last
-       console.log(data);
+       //console.log(data);
      }
     });
     setTimeout(()=>{
@@ -210,9 +210,14 @@ class MatchDetail extends React.Component{
             holescoreTemp = []
           }
         }
-
+        for(var i =0;i < this.state.resultMatchFromLoadUser.length;i++){
+          this.state.tempResultHole.push({
+            userid: this.state.resultMatchFromLoadUser[i].userid,
+            teamno: this.state.resultMatchFromLoadUser[i].teamno,
+            holescore: this.state.resultMatchFromLoadHoleScore[i]
+          })
+        }
       }
-      console.log("resultMatchFromLoadUser",this.state.resultMatchFromLoadUser);
       if(data){
         this.setState((state)=>{
           return {modalMatchResult: !state.modalMatchResult}
@@ -246,21 +251,25 @@ class MatchDetail extends React.Component{
     this.state.departNumber = parseInt(data)
   }
   setDepartno=(data)=>{
-    this.state.tempDepart = data
+    this.state.tempDepart = parseInt(data)
   }
   printData = (data) =>{
   }
-  updateTeam =()=>{
-    if(this.state.departNumber>=1){
-      this.HandlerUpdateTDbyUser(this.props.matchDetailID,this.state.teamNumber,this.state.departNumber)
-    }else{
-      this.HandlerUpdateTDbyUser(this.props.matchDetailID,this.state.teamNumber,1)
-    }
+  updateDepart =()=>{
+    this.HandlerUpdateTDbyUser(this.props.matchDetailID,this.state.teamNumber,this.state.departNumber)
     setTimeout(()=>{
       this.matchDetailRefresh=false;
       this.props.loadMatchDetail(this.props.matchDetailData)
     },500)
     this.setState(this.state)
+  }
+  updateTeam =()=>{
+    this.HandlerUpdateTDbyUser(this.props.matchDetailID,this.state.teamNumber,this.state.departNumber)
+    setTimeout(()=>{
+      this.matchDetailRefresh=false;
+      this.props.loadMatchDetail(this.props.matchDetailData)
+    },500)
+    this.setState({teamNumber: 1})
   }
   HandlerUpdateTDbyUser=(matchid,teamno,departno)=>{
     var geturl;
@@ -301,7 +310,10 @@ class MatchDetail extends React.Component{
     });
     setTimeout(()=>{
       this.modalEditTeamClick()
+      this.matchDetailRefresh=false;
+      this.props.loadMatchDetail(this.props.matchDetailData)
     },500)
+    this.setState(this.state)
   }
   editTeamName =(data)=>{
     this.state.editTeamData.matchid = this.props.matchDetailID
@@ -329,8 +341,10 @@ class MatchDetail extends React.Component{
     console.log("setTeamData",this.props.setTeamData);*/
     const option = this.props.setTeamData
     let drawerClassUser = 'detail__griduserhost hide';
+    let toggleScoreShow = 'Show score'
     if(this.state.scoreHideState){
       drawerClassUser = 'detail__griduserhost'
+      toggleScoreShow = 'Hide score'
     }
     const te = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
     const testt = [1,2,3,4,5,6,7,8,9]
@@ -449,7 +463,7 @@ class MatchDetail extends React.Component{
               <div className={drawerClassUser}>
                 {this.setTeamno(data)}
                 <div className="detail__userhostname">{data.fullname} id : {data.userid}
-                  <button onClick={this.clickScore}>Toggle</button>
+                  <button onClick={this.clickScore}>{toggleScoreShow}</button>
                     {(this.props.setDepartData)?(
                       <div>
                         <select onChange={(e)=>this.departNo(e.target.value)}>
@@ -459,7 +473,7 @@ class MatchDetail extends React.Component{
                           </option>
                         )}
                         </select>
-                        <button onClick={this.updateTeam}>set depart</button>
+                        <button onClick={this.updateDepart}>set depart</button>
                       </div>
                     ):(null)}
                 </div>
@@ -506,14 +520,16 @@ class MatchDetail extends React.Component{
                               {data.fullname} id : {data.userid}
                                 {this.setTeamno(data)}
                                 {this.setUserMapID(data.userid)}
-                                <select onChange={(e)=>this.setUpdateTeam(e.target.value)}>
-                                  {(parseInt(this.state.userMapID) === this.props.userID)?
-                                  (
-                                    option.map((data,i)=>
-                                      <option value={data.teamno}>{data.teamno}</option>
-                                    )
-                                  ):(null)}
-                                </select>
+                                {(parseInt(this.state.userMapID) === this.props.userID)?(
+                                  <select onChange={(e)=>this.setUpdateTeam(e.target.value)}>
+                                    {(parseInt(this.state.userMapID) === this.props.userID)?
+                                    (
+                                      option.map((data,i)=>
+                                        <option value={data.teamno}>{data.teamno}</option>
+                                      )
+                                    ):(null)}
+                                  </select>
+                                ):(null)}
                                 {(parseInt(this.state.userMapID) === this.props.userID)?
                                 (
                                   <button onClick={this.updateTeam} className="detail__choose">Choose team</button>
@@ -563,30 +579,65 @@ class MatchDetail extends React.Component{
                 return item.teamno === 0;
               }
             ).map((data,i)=>
-              <div className="detail__username">
-                <div className="detail__username__name">{data.fullname} {data.userid}
-                  {this.setUserMapID(data.userid)}
-                  <select onChange={(e)=>this.setUpdateTeam(e.target.value)}>
-                    {(parseInt(this.state.userMapID) === this.props.userID)?
-                    (
-                      option.map((data,i)=>
-                        <option value={data.teamno}>{data.teamno}</option>
-                      )
-                    ):(null)}
-                  </select>
-                  {(parseInt(this.state.userMapID) === this.props.userID)?
-                  (
-                    <button onClick={this.updateTeam} className="detail__choose">Choose team</button>
-                  ):(null)}
+            <div className="detail__userdetailbox">
+              <div className="detail__userdetailbox__label">
+                <div className="detail__username">
+                  <div className="detail__username__name">
+                    <div className="detail__username__name__text">
+                      {data.fullname} id : {data.userid}
+                        {this.setTeamno(data)}
+                        {this.setUserMapID(data.userid)}
+                        {(parseInt(this.state.userMapID) === this.props.userID)?(
+                          <select onChange={(e)=>this.setUpdateTeam(e.target.value)}>
+                            {(parseInt(this.state.userMapID) === this.props.userID)?
+                            (
+                              option.map((data,i)=>
+                                <option value={data.teamno}>{data.teamno}</option>
+                              )
+                            ):(null)}
+                          </select>
+                        ):(null)}
+                        {(parseInt(this.state.userMapID) === this.props.userID)?
+                        (
+                          <button onClick={this.updateTeam} className="detail__choose">Choose team</button>
+                        ):(null)}
+                    </div>
+                    <div className="detail__username__name__depart">
+                      {this.setDepartno(data.departno)}
+                      {this.props.setDepartData.filter(
+                        (item)=>{
+                          return (parseInt(item.departno) === this.state.tempDepart)
+                        }
+                      ).map((d)=>
+                      <div>
+                        depart :
+                        {d.departname}
+                      </div>
+                    )}
+                    </div>
+                  </div>
+                  <div className="detail__usernamein">{data.in}</div>
+                  <div className="detail__usernameout">{data.out}</div>
+                  <div className="detail__usernamegross">{data.gross}</div>
                 </div>
-                <div className="detail__usernamein">{data.in}</div>
-                <div className="detail__usernameout">{data.out}</div>
-                <div className="detail__usernamegross">{data.gross}</div>
               </div>
+              {this.props.tempHole.filter(
+                (item)=>{
+                  return (parseInt(this.state.tempHole.teamno) === parseInt(item.teamno)) && (parseInt(this.state.tempHole.userid) === parseInt(item.userid))
+                }
+                ).map((data)=>
+                <div className="detail__userdetailbox__score">
+                  {data.holescore.map((d)=>
+                    <p className="griduserhost__score">
+                      <div className="space"></div>
+                      {d}
+                      <div className="space"></div>
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
             )}
-
-
-
           </div>
         </div>
         <div className="space"></div>
@@ -596,8 +647,10 @@ class MatchDetail extends React.Component{
           modalClick = {this.modalEditTeamClick}
           modalState = {this.state.modalEditTeam}/>
         <ModalMatchResult
+          setDepartData = {this.props.setDepartData}
           setTeamData = {this.props.setTeamData}
           typeScore = {this.state.typeScore}
+          tempResultHole = {this.state.tempResultHole}
           matchDetailID = {this.props.matchDetailID}
           resultMatchFromLoad = {this.state.resultMatchFromLoad}
           resultMatchFromLoadUser = {this.state.resultMatchFromLoadUser}

@@ -248,7 +248,7 @@ class ModalCreateMatch extends React.Component{
                 </div>
                 <div className="team__depart">
                   <div className="creatematch__team">
-                    <div className="team__depart__label">{"จำนวนทีม"}</div>
+                    <div className="team__depart__label">{"จำนวนประเภทการแข่งขัน"}</div>
                     <EditTextImg type="number" formType="team" placeholder="0"
                       editTextValue={this.createSetTeamNumber}/>
                   </div>

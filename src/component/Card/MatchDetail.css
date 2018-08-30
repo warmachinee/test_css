@@ -469,10 +469,12 @@
   height: 100%;
   width: 10%;
 }
+.detail__card .detail__userdetailbox,
 .detail__teambox .detail__userdetailbox{
   height: 6rem;
   width: 100%;
 }
+.detail__userdetailbox .detail__userdetailbox__label,
 .detail__teambox .detail__userdetailbox__label{
   border: 1px black solid;
   height: 75%;
@@ -482,6 +484,7 @@
   height: 100%;
   width: 100%;
 }
+.detail__userdetailbox .detail__userdetailbox__score,
 .detail__teambox .detail__userdetailbox__score{
   border: 1px black solid;
   height: 25%;

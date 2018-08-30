@@ -191,7 +191,6 @@ class Dashboard extends Component {
     this.toggleCreateModal("create")
   }
   updateMatchToggle = (matchid) =>{
-    console.log(matchid);
     this.state.updateMatchMatchid = matchid
     this.HandlerLoadField()
     this.toggleCreateModal("update")
@@ -585,6 +584,8 @@ class Dashboard extends Component {
                 userid: userid[i],
                 fullname: fullname[i],
                 lastname: lastname[i],
+                teamno: teamno[i],
+                departno: departno[i]
               })
             this.state.detailMatchFromLoadUserHostScore.push(this.state.detailMatchFromLoadHoleScore[i])
             userhostIndex = i;
@@ -627,12 +628,12 @@ class Dashboard extends Component {
           this.state.detailMatchFromLoadField.push(obj)
         }
         console.log("detailMatchFromLoad ",this.state.detailMatchFromLoad)
-        //console.log("detailMatchFromLoadUser :::",this.state.detailMatchFromLoadUser)
+        console.log("detailMatchFromLoadUser :::",this.state.detailMatchFromLoadUser)
         //console.log("detailMatchFromLoadHoleScore :::",this.state.detailMatchFromLoadHoleScore)
-        console.log("tempHole ",this.state.tempHole);
-        //console.log("detailMatchFromLoadField :::",this.state.detailMatchFromLoadField)
-        console.log("detailMatchFromLoadUserHost :::",this.state.detailMatchFromLoadUserHost)
-        console.log("detailMatchFromLoadUserHostScore :::",this.state.detailMatchFromLoadUserHostScore)
+        //console.log("tempHole ",this.state.tempHole);
+        console.log("detailMatchFromLoadField :::",this.state.detailMatchFromLoadField)
+        //console.log("detailMatchFromLoadUserHost :::",this.state.detailMatchFromLoadUserHost)
+        //console.log("detailMatchFromLoadUserHostScore :::",this.state.detailMatchFromLoadUserHostScore)
         this.setState(this.state)
       }
     },300)
@@ -1485,6 +1486,7 @@ class Dashboard extends Component {
               )
             )
           )}
+
         </div>
         <ModalRoomPassword
           getCardTargetIDPass = {this.getCardTargetIDPass}
