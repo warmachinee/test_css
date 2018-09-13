@@ -31,6 +31,7 @@
 
   -ms-overflow-y: auto;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 
   -webkit-box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
   -moz-box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
@@ -52,6 +53,15 @@
 .creatematch__matchname{
   width: 80%;
   margin: 1rem 10%;
+}
+.modal-creatematch__card .creatematch__switchtour{
+  width: 50%;
+  margin: 3rem 2rem 2rem 10%;
+}
+.creatematch__switchtour .creatematch__switchtour__label{
+  color: #2a4d69;
+  font-weight: bolder;
+  margin: .5rem 0;
 }
 .modal-creatematch__card .creatematch__matchname__text{
   margin: 8% 5% 5% 10%;

@@ -15,6 +15,8 @@ import ModalRoomPassword from '../component/Modal/ModalRoomPassword'
 import HistoryCard from '../component/Card/HistoryCard'
 import DropDown from '../component/DropDown/DropDown'
 import MatchDetail from '../component/Card/MatchDetail'
+import UserMatch from '../component/Card/UserMatch'
+import SwitchToggle from '../component/Switch/SwitchToggle'
 
 const pageClickState = props =>{
   return (props.pageDashboardClick);
@@ -33,14 +35,15 @@ class Dashboard extends Component {
       notiToggle: false,
       languageState: false,
       matchDetailState: false,
-      matchRunningState: !false,
+      userDashboardState: !false,
       historyPage: false,
       publicPageState:false,
       updateMatchState: false,
       currentCardData:{},
       data:[],
-      dataLength:0,
+      userProfileData:[],
       fieldFromLoad:[],
+      loadUserMatchData:[],
       customFieldFromLoad:[],
       customFieldFromLoadHoleScore:[],
       cardTargetData:[{
@@ -48,6 +51,8 @@ class Dashboard extends Component {
         userTarget:'',
         action:''
       }],
+      addScoreFieldScoreFirst:[],
+      addScoreFieldScoreLast:[],
       historyFromLoad:[],
       detailMatchFromLoad:[],
       detailMatchFromLoadUser:[],
@@ -75,6 +80,7 @@ class Dashboard extends Component {
         matchname:'',
         typeroom:'',
         publicshow:'',
+        tourMode:'',
         date:'',
         teamnum:'',
         departnum:'',
@@ -84,27 +90,37 @@ class Dashboard extends Component {
       inviteMatchID:'',
       inviteAction:'',
       calScoreMatchID:'',
-      chksession: ''
+      calScoreFieldID:'',
+      chksession: '',
+      tourDetail: 0
     }
   };
+  TournamentToggle = (value) =>{
+    if(value){
+      this.state.tourDetail = 1
+    }else{
+      this.state.tourDetail = 0
+    }
+    this.HandleLoadUserMatch()
+  }
   historyPageToggle = () =>{
     //this.drawerToggleClickHandler()
     this.setState((prevState)=>{
       return {
         historyPage: true,
         matchDetailState: false,
-        matchRunningState: false,
+        userDashboardState: false,
         publicPageState: false,
         sideDrawerOpen: false
       };
     });
   };
-  runningPageToggle = () =>{
+  userDashboardPageToggle = () =>{
     this.setState((prevState)=>{
       return {
         historyPage: false,
         matchDetailState: false,
-        matchRunningState: true,
+        userDashboardState: true,
         publicPageState: false,
         sideDrawerOpen: false
       };
@@ -115,7 +131,7 @@ class Dashboard extends Component {
       return {
         historyPage: false,
         matchDetailState: false,
-        matchRunningState: false,
+        userDashboardState: false,
         publicPageState: true,
         sideDrawerOpen: false
       };
@@ -126,7 +142,7 @@ class Dashboard extends Component {
       return {
         historyPage: false,
         matchDetailState: false,
-        matchRunningState: false,
+        userDashboardState: false,
         publicPageState: false,
         sideDrawerOpen: false
       };
@@ -137,7 +153,7 @@ class Dashboard extends Component {
       return {
         historyPage: false,
         matchDetailState: true,
-        matchRunningState: false,
+        userDashboardState: false,
         publicPageState: false,
         sideDrawerOpen: false
       };
@@ -205,7 +221,7 @@ class Dashboard extends Component {
     if(
       this.state.matchDetailState === false &&
       this.state.historyPage === false &&
-      this.state.matchRunningState === false &&
+      this.state.userDashboardState === false &&
       this.state.publicPageState === false){
         console.log("defalut");
         this.props.loadMatch();
@@ -213,15 +229,16 @@ class Dashboard extends Component {
       else if(
         this.state.matchDetailState === false &&
         this.state.historyPage === false &&
-        this.state.matchRunningState === true &&
+        this.state.userDashboardState === true &&
         this.state.publicPageState === false
       ){
-        console.log("run");
-        this.HandlerLoadRunning()
+        console.log("userDashboard");
+        this.HandleLoadUserMatch()
+        //this.HandlerLoadRunning()
       }else if(
         this.state.matchDetailState === false &&
         this.state.historyPage === false &&
-        this.state.matchRunningState === false &&
+        this.state.userDashboardState === false &&
         this.state.publicPageState === true
       ){
         console.log("pub");
@@ -237,9 +254,13 @@ class Dashboard extends Component {
       return {addpeopleModalIsOpen: !state.addpeopleModalIsOpen}
     });
   }
+  getFieldDataFromCard=(first,last)=>{
+    this.state.addScoreFieldScoreFirst = []
+    this.state.addScoreFieldScoreLast = []
 
-  getCalScoreMatchID=(MatchID)=>{
-    this.state.calScoreMatchID = MatchID
+    this.state.addScoreFieldScoreFirst = first
+    this.state.addScoreFieldScoreLast = last
+    this.setState(this.state)
   }
 
   calculateScore = (score)=>{
@@ -278,6 +299,9 @@ class Dashboard extends Component {
   }
   createSetPublicShow = (publicshow)=>{
     this.state.matchModalData.publicshow = publicshow
+  }
+  createSetTourMode = (tourmode)=>{
+    this.state.matchModalData.tourMode = tourmode
   }
   createSetDate=(date)=>{
     this.state.matchModalData.date = date
@@ -318,7 +342,7 @@ class Dashboard extends Component {
      success: function(data) {
        //localStorage.setItem("response",JSON.stringify(data));
        localStorage['response']=data.status;
-       console.log(data);
+       //console.log(data);
      }
     });
     if(localStorage['response']){
@@ -341,7 +365,7 @@ class Dashboard extends Component {
      data: {},
      xhrFields: { withCredentials: true },
      success: function(data) {
-       console.log(data);
+       //console.log(data);
        localStorage['matchid'] = data.matchid
        localStorage['userid'] = data.userid
        localStorage['action'] = data.action
@@ -627,11 +651,11 @@ class Dashboard extends Component {
           }
           this.state.detailMatchFromLoadField.push(obj)
         }
-        console.log("detailMatchFromLoad ",this.state.detailMatchFromLoad)
-        console.log("detailMatchFromLoadUser :::",this.state.detailMatchFromLoadUser)
+        //console.log("detailMatchFromLoad ",this.state.detailMatchFromLoad)
+        //console.log("detailMatchFromLoadUser :::",this.state.detailMatchFromLoadUser)
         //console.log("detailMatchFromLoadHoleScore :::",this.state.detailMatchFromLoadHoleScore)
         //console.log("tempHole ",this.state.tempHole);
-        console.log("detailMatchFromLoadField :::",this.state.detailMatchFromLoadField)
+        //console.log("detailMatchFromLoadField :::",this.state.detailMatchFromLoadField)
         //console.log("detailMatchFromLoadUserHost :::",this.state.detailMatchFromLoadUserHost)
         //console.log("detailMatchFromLoadUserHostScore :::",this.state.detailMatchFromLoadUserHostScore)
         this.setState(this.state)
@@ -654,12 +678,11 @@ class Dashboard extends Component {
      success: function(data) {
        //localStorage.setItem("response",JSON.stringify(data));
        localStorage['response']=data.status;
-       console.log(data);
+       //console.log(data);
      }
     });
     setTimeout(()=>{
       if(localStorage['response']==='success'){
-        console.log(localStorage['response']);
         this.setState({addscoreModalIsOpen: false})
         this.state.calScoreMatchID = ''
       }else{
@@ -670,9 +693,9 @@ class Dashboard extends Component {
   }
 
   HanderlSendRequest = event =>{
-    console.log("this.state.inviteMatchID ",this.state.inviteMatchID);
-    console.log("this.state.invitePlayer ",this.state.invitePlayer);
-    console.log("this.state.inviteAction ",this.state.inviteAction);
+    //console.log("this.state.inviteMatchID ",this.state.inviteMatchID);
+    //console.log("this.state.invitePlayer ",this.state.invitePlayer);
+    //console.log("this.state.inviteAction ",this.state.inviteAction);
     var geturl;
     geturl = $.ajax({
       type: "POST",
@@ -687,12 +710,12 @@ class Dashboard extends Component {
      success: function(data) {
        //localStorage.setItem("response",JSON.stringify(data));
        localStorage['response']=data.status;
-       console.log(data);
+       //console.log(data);
      }
     });
     setTimeout(()=>{
       if(localStorage['response']){
-        console.log(localStorage['response']);
+        //console.log(localStorage['response']);
         if(this.state.inviteAction===0){
           this.toggleAddpeopleModal()
         }
@@ -733,7 +756,7 @@ class Dashboard extends Component {
        localStorage['cus__fieldid']=data.fieldid;
        localStorage['cus__fieldname']=data.fieldname;
        localStorage['holescore']=data.holescore;
-       console.log(data);
+       //console.log(data);
      }
     });
     setTimeout(()=>{
@@ -804,7 +827,7 @@ class Dashboard extends Component {
      data: {},
      xhrFields: { withCredentials: true },
      success: function(data) {
-       console.log(data);
+       //console.log(data);
      }
     });
     setTimeout(()=>{
@@ -831,8 +854,6 @@ class Dashboard extends Component {
           }
           this.state.historyFromLoad.push(obj);
         }
-        //console.log("this.state.historyFromLoad.push(obj) :::",this.state.historyFromLoad)
-        //this.setState({dataLength: this.state.fieldFromLoad.length})//-------
       }
       this.historyPageToggle()
       this.dashboardRefresh = false
@@ -840,57 +861,134 @@ class Dashboard extends Component {
     },500)
     localStorage.clear()
   }
-
-  HandlerLoadRunning = (event) => {
+  HandleUserDetail = () =>{
+    this.state.userProfileData = []
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://pds.in.th/phpadmin/loadmatchrunning.php",
+     url: "http://pds.in.th/phpadmin/userdetail.php",
      dataType: 'json',
      data: {},
      xhrFields: { withCredentials: true },
      success: function(data) {
-       console.log(data);
-       localStorage['matchid'] = data.matchid;
-       localStorage['matchname'] = data.matchname;
-       localStorage['userhost'] = data.userhost;
-       localStorage['fieldname'] = data.fieldname;
-       localStorage['date'] = data.date;
-       localStorage['type'] = data.type;
+       //console.log(data);
+       localStorage['status'] = data.status
+       localStorage['userid'] = data.userid
+       localStorage['username'] = data.username
+       localStorage['fullname'] = data.fullname
+       localStorage['lastname'] = data.lastname
+       localStorage['nickname'] = data.nickname
+       localStorage['sex'] = data.sex
+       localStorage['depart'] = data.depart
+       localStorage['tel'] = data.tel
+       localStorage['favtypegolf'] = data.favtypegolf
      }
     });
     setTimeout(()=>{
-      this.state.runningFromLoad=[]
-      if(localStorage['matchid']){
-        var matchid = localStorage['matchid'];
-        var matchname = localStorage['matchname'];
-        var userhost = localStorage['userhost'];
-        var fieldname = localStorage['fieldname'];
-        var date = localStorage['date'];
-        var type = localStorage['type']
+      if(localStorage['status'] === 'success'){
+        var userid = localStorage['userid']
+        var username = localStorage['username']
+        var fullname = localStorage['fullname']
+        var lastname = localStorage['lastname']
+        var nickname = localStorage['nickname']
+        var sex = localStorage['sex']
+        var depart = localStorage['depart']
+        var tel = localStorage['tel']
+        var favtypegolf = localStorage['favtypegolf']
 
-        matchid = JSON.parse("["+matchid+"]")
-        matchname = matchname.split(",",matchname.length)
-        userhost= JSON.parse("["+userhost+"]")
-        fieldname= fieldname.split(",",fieldname.length)
+        this.state.userProfileData.push({
+          userid: parseInt(userid),
+          username: username,
+          fullname: fullname,
+          lastname: lastname,
+          nickname: nickname,
+          sex: sex,
+          depart: depart,
+          tel: tel,
+          favtypegolf: favtypegolf
+        })
+      }
+    },500)
+    localStorage.clear()
+  }
+  HandleLoadUserMatch = () =>{
+    this.state.loadUserMatchData = []
+    var geturl;
+    geturl = $.ajax({
+      type: "POST",
+     url: "http://pds.in.th/phpadmin/loadusermatch.php",
+     dataType: 'json',
+     data: {
+       "tourtype": this.state.tourDetail
+     },
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+       //console.log(data);
+       localStorage['matchname'] = data.matchname
+       localStorage['matchid'] = data.matchid
+       localStorage['date'] = data.date
+       localStorage['in'] = data.in
+       localStorage['out'] = data.out
+       localStorage['gross'] = data.gross
+       localStorage['hc'] = data.hc
+       localStorage['net'] = data.net
+       localStorage['net36sys'] = data.net36sys
+       localStorage['par'] = data.par
+       localStorage['sf'] = data.sf
+       localStorage['sf36sys'] = data.sf36sys
+     }
+    });
+    setTimeout(()=>{
+      if(localStorage['matchname']){
+        var matchname = localStorage['matchname']
+        var matchid = localStorage['matchid']
+        var date = localStorage['date']
+        var inn = localStorage['in']
+        var outt = localStorage['out']
+        var gross = localStorage['gross']
+        var hc = localStorage['hc']
+        var net = localStorage['net']
+        var net36sys = localStorage['net36sys']
+        var par = localStorage['par']
+        var sf = localStorage['sf']
+        var sf36sys = localStorage['sf36sys']
+
+        matchname= matchname.split(",",matchname.length)
+        matchid= matchid.split(",",matchid.length)
         date= date.split(",",date.length)
-        type= type.split(",",type.length)
+        inn= inn.split(",",inn.length)
+        outt= outt.split(",",outt.length)
+        gross= gross.split(",",gross.length)
+        hc= hc.split(",",hc.length)
+        net= net.split(",",net.length)
+        net36sys= net36sys.split(",",net36sys.length)
+        par= par.split(",",par.length)
+        sf= sf.split(",",sf.length)
+        sf36sys= sf36sys.split(",",sf36sys.length)
 
-        for(var i = 0;i < matchid.length;i++){
+        for(var i = 0;i < matchname.length;i++){
           var obj = {
-            matchid: matchid[i],
             matchname: matchname[i],
-            userhost: userhost[i],
-            fieldname: fieldname[i],
+            matchid: parseInt(matchid[i]),
             date: date[i],
-            type: type[i]
+            in: parseInt(inn[i]),
+            out: parseInt(outt[i]),
+            gross: parseInt(gross[i]),
+            hc: parseInt(hc[i]),
+            net: parseInt(net[i]),
+            net36sys: parseInt(net36sys[i]),
+            par: parseInt(par[i]),
+            sf: parseInt(sf[i]),
+            sf36sys: parseInt(sf36sys[i]),
           }
-          this.state.runningFromLoad.push(obj);
+          this.state.loadUserMatchData.push(obj)
         }
+        //console.log("loadMatchData",this.state.loadUserMatchData);
+        //console.log("userProfileData",this.state.userProfileData);
       }
       this.dashboardRefresh = false
-      this.showRunningFromLoad()
-    },500)
+      this.showUserLoadmatchFromLoad()
+    },800)
     localStorage.clear()
   }
   HandlerUpdateMatch = (data) =>{
@@ -925,7 +1023,7 @@ class Dashboard extends Component {
       "teamnum": this.state.matchModalData.teamnum,
       "departnum": this.state.matchModalData.departnum,
     }
-    console.log("detailMatchFromLoad",this.state.detailMatchFromLoad);
+    //console.log("detailMatchFromLoad",this.state.detailMatchFromLoad);
     var geturl;
     geturl = $.ajax({
       type: "POST",
@@ -958,7 +1056,7 @@ class Dashboard extends Component {
     if(
       this.state.matchDetailState === true &&
       this.state.historyPage === false &&
-      this.state.matchRunningState === false &&
+      this.state.userDashboardState === false &&
       this.state.publicPageState === false
     ){
       this.refreshMatchDetail.current.refresh()
@@ -984,6 +1082,7 @@ class Dashboard extends Component {
        "matchname": this.state.matchModalData.matchname,
        "typeroom": this.state.matchModalData.typeroom,
        "publicshow": this.state.matchModalData.publicshow,
+       "tourtype"  : this.state.matchModalData.tourMode,
        "date": this.state.matchModalData.date,
        "teamnum": this.state.matchModalData.teamnum,
        "departnum": this.state.matchModalData.departnum,
@@ -993,7 +1092,7 @@ class Dashboard extends Component {
      success: function(data) {
        //localStorage.setItem("response",JSON.stringify(data));
        localStorage['response']=data.status;
-       console.log(data);
+       //console.log(data);
      }
     });
     if(localStorage['response']){
@@ -1012,7 +1111,7 @@ class Dashboard extends Component {
      data: {},
      xhrFields: { withCredentials: true },
      success: function(data) {
-       console.log(data);
+       //console.log(data);
        localStorage['matchid'] = data.matchid;
        localStorage['matchname'] = data.matchname;
        localStorage['userhost'] = data.userhost;
@@ -1049,7 +1148,7 @@ class Dashboard extends Component {
           }
           this.state.publicFromLoad.push(obj);
         }
-        console.log("this.state.publicFromLoad :::",this.state.publicFromLoad)
+        //console.log("this.state.publicFromLoad :::",this.state.publicFromLoad)
       }
       this.dashboardRefresh = false
       this.showPublicFromLoad()
@@ -1064,12 +1163,12 @@ class Dashboard extends Component {
   CreateMatchAction=()=>{
     if(this.getResultCreateMatch()){
       alert(this.getResultCreateMatch())
-      console.log("this.getResultCreateMatch() true ::",this.getResultCreateMatch());
-      console.log(this.getResultCreateMatch());
+      //console.log("this.getResultCreateMatch() true ::",this.getResultCreateMatch());
+      //console.log(this.getResultCreateMatch());
     }else{
       alert(this.getResultCreateMatch())
-      console.log("this.getResultCreateMatch() false ::",this.getResultCreateMatch());
-      console.log(this.getResultCreateMatch());
+      //console.log("this.getResultCreateMatch() false ::",this.getResultCreateMatch());
+      //console.log(this.getResultCreateMatch());
     }
     localStorage['response']=null;
     localStorage.clear()
@@ -1083,14 +1182,6 @@ class Dashboard extends Component {
   addPeople = (PlayerName) =>{
     this.state.invitePlayer = PlayerName
   }
-  getCardTargetData=(Data)=>{
-
-    console.log("getCardTargetData ::",Data);
-    console.log("this.state.cardTargetData before:::",this.state.cardTargetData);
-    console.log("Data.invitePlayer :::",this.state.invitePlayer)
-
-    console.log("invitePlayer ::",this.state.cardTargetData)
-  }
   sentRequestPlayer=(Data)=>{
     this.state.cardTargetData =[]
     this.state.inviteMatchID = Data.matchid
@@ -1098,9 +1189,10 @@ class Dashboard extends Component {
   sentRequestPlayerNotOwn=(Data)=>{
     this.state.invitePlayer = Data.userhost
     this.state.inviteMatchID = Data.matchid
+    /*
     console.log("this.state.inviteMatchID ",this.state.inviteMatchID);
     console.log("this.state.invitePlayer ",this.state.invitePlayer);
-    console.log("this.state.inviteAction ",this.state.inviteAction);
+    console.log("this.state.inviteAction ",this.state.inviteAction);*/
     this.HanderlSendRequest()
   }
   setInviteAction =(action)=>{
@@ -1117,7 +1209,6 @@ class Dashboard extends Component {
   }
   getCardTargetIDEdit = (value)=>{
     this.state.currentCardData = value
-    //console.log("currentCardData",this.state.currentCardData);
     this.HandlerLoadMatchUserDetail(value)
     this.dashboardRefresh=false;
     this.updateMatchToggle(value.matchid)
@@ -1125,9 +1216,8 @@ class Dashboard extends Component {
   }
   getCardTargetID =(value)=>{
     this.state.currentCardData = value
-    //console.log("currentCardData",this.state.currentCardData);
     this.HandlerLoadMatchUserDetail(value)
-    this.dashboardRefresh=false;
+    this.dashboardRefresh = false;
     this.matchDetailStateToggle()
   }
   getCardTargetIDPass = (value) =>{
@@ -1141,7 +1231,7 @@ class Dashboard extends Component {
   }
 
   getActivityRequest = (data) =>{
-    console.log('getActivityRequest data',data)
+    //console.log('getActivityRequest data',data)
     this.HandlerResultRequest(data)
   }
   showDataFromLoad = () => {
@@ -1157,10 +1247,9 @@ class Dashboard extends Component {
       this.setState(this.state);
     }
   }
-  showRunningFromLoad = () => {
-    this.runningPageToggle()
+  showUserLoadmatchFromLoad = () => {
     if(!this.dashboardRefresh ){
-      this.dashboardRefresh=true;
+      this.dashboardRefresh = true;
       this.setState(this.state);
     }
   }
@@ -1178,7 +1267,7 @@ class Dashboard extends Component {
     setTimeout(()=>{
       //console.log("refresh");
       this.state.dashboardRefresh = false
-      this.showDataFromLoad()
+      this.showUserLoadmatchFromLoad()
     },500);
   }
   dashboardPageClick = ()=>{
@@ -1213,7 +1302,7 @@ class Dashboard extends Component {
          var fullname = localStorage['fullname']
          var lastname = localStorage['lastname']
          this.state.dashUserID = parseInt(id)
-         console.log(id," : ",chksessions);
+         //console.log(id," : ",chksessions);
          if(chksessions === 'valid session'){
            this.state.chksession = true
            this.state.chksessionFullLast = fullname + " " +lastname
@@ -1226,16 +1315,9 @@ class Dashboard extends Component {
    }
    componentWillMount(){
      this.checksession()
-     this.props.dashPage()/*
-     setTimeout(()=>{
-       if((window.location.pathname === '/home') && this.state.chksession){
-         console.log("session true /home");
-       }else{
-         console.log("Please login")
-         this.props.appPage()
-       }
-     },400)*/
-     this.HandlerLoadRunning()
+     this.props.dashPage()
+     this.HandleUserDetail()
+     this.HandleLoadUserMatch()
    }
   render() {
     let backDrop;
@@ -1258,7 +1340,7 @@ class Dashboard extends Component {
           logOut = {this.props.logOut}
           show={this.state.sideDrawerOpen}
           click={pageClickState}
-          runningPageClick={this.HandlerLoadRunning}
+          userDashboardPageClick={this.userDashboardPageToggle}
           dashboardPageClick={this.dashboardPageClick}
           historyPageClick={this.HandlerLoadHistory}
           publicPageClick={this.HandlerLoadPublicMatch}
@@ -1274,7 +1356,7 @@ class Dashboard extends Component {
           {(
             this.state.matchDetailState === false &&
             this.state.historyPage === false &&
-            this.state.matchRunningState === false &&
+            this.state.userDashboardState === false &&
             this.state.publicPageState === false
           )?(
             (this.props.loadMatchData.length)?
@@ -1285,7 +1367,6 @@ class Dashboard extends Component {
                 setInviteAction = {this.setInviteAction}
                 sentRequestPlayerNotOwn = {this.sentRequestPlayerNotOwn}
                 sentRequestPlayer={this.sentRequestPlayer}
-                getCardTargetData={this.getCardTargetData}
                 targetClickID={this.getCardTargetID}
                 loadDetail = {this.loadDetail}
                 updateMatchToggle = {this.updateMatchToggle}
@@ -1293,38 +1374,20 @@ class Dashboard extends Component {
                 matchDetailID = {number.matchid}
                 loadMatchDetail = {this.HandlerLoadMatchUserDetail}
                 getRoomDetailToAccess = {this.getRoomDetailToAccess}
-                getCalScoreMatchID={this.getCalScoreMatchID}
+                getFieldDataFromCard={this.getFieldDataFromCard}
                 matchDetailClick = {this.matchDetailStateToggle}
                 roomPasswordClick = {this.toggleRoomPasswordModal}
                 addPeopleClick = {this.toggleAddpeopleModal}
                 addScoreClick = {this.toggleAddScoreModal}
                 />
             )):(
-              <div className="no__match">
-                <div className="spacer"></div>
-                <div className="no__match__grid">
-                  <div className="spacer"></div>
-                  <div className="no__match__card">
-                    <div className="spacer"></div>
-                    <div className="no__match__card__grid">
-                      <div className="spacer"></div>
-                      <div className="no__match__card__content">
-                        No match available
-                      </div>
-                      <div className="spacer"></div>
-                    </div>
-                    <div className="spacer"></div>
-                  </div>
-                  <div className="spacer"></div>
-                </div>
-                <div className="spacer"></div>
-              </div>
+              no__match__card
             )
           ):(
             (
               this.state.matchDetailState === false &&
                 this.state.historyPage === true &&
-                this.state.matchRunningState === false &&
+                this.state.userDashboardState === false &&
                 this.state.publicPageState === false
             )?(
               (this.state.historyFromLoad.length)?
@@ -1337,31 +1400,13 @@ class Dashboard extends Component {
                   date = {data.date}
                   />
               )):(
-                <div className="no__match">
-                  <div className="spacer"></div>
-                  <div className="no__match__grid">
-                    <div className="spacer"></div>
-                    <div className="no__match__card">
-                      <div className="spacer"></div>
-                      <div className="no__match__card__grid">
-                        <div className="spacer"></div>
-                        <div className="no__match__card__content">
-                          No match available
-                        </div>
-                        <div className="spacer"></div>
-                      </div>
-                      <div className="spacer"></div>
-                    </div>
-                    <div className="spacer"></div>
-                  </div>
-                  <div className="spacer"></div>
-                </div>
+                no__match__card
               )
             ):(
               (
                 this.state.matchDetailState === true &&
                 this.state.historyPage === false &&
-                this.state.matchRunningState === false &&
+                this.state.userDashboardState === false &&
                 this.state.publicPageState === false
               )?(
                 <MatchDetail
@@ -1385,57 +1430,19 @@ class Dashboard extends Component {
                 (
                   this.state.matchDetailState === false &&
                   this.state.historyPage === false &&
-                  this.state.matchRunningState === true &&
+                  this.state.userDashboardState === true &&
                   this.state.publicPageState === false
                 )?(
-                  (this.state.runningFromLoad.length)?
-                  (this.state.runningFromLoad.map((number,i) =>
-                      <Card
-                        data={number}
-                        userID={this.state.dashUserID}
-                        setInviteAction = {this.setInviteAction}
-                        sentRequestPlayerNotOwn = {this.sentRequestPlayerNotOwn}
-                        sentRequestPlayer={this.sentRequestPlayer}
-                        getCardTargetData={this.getCardTargetData}
-                        targetClickID={this.getCardTargetID}
-                        loadDetail = {this.loadDetail}
-                        loadMatchDetail = {this.HandlerLoadMatchUserDetail}
-                        getCardTargetIDEdit = {this.getCardTargetIDEdit}
-                        updateMatchToggle = {this.updateMatchToggle}
-                        matchDetailID = {this.state.matchDetailID}
-                        getRoomDetailToAccess = {this.getRoomDetailToAccess}
-                        getCalScoreMatchID={this.getCalScoreMatchID}
-                        matchDetailClick = {this.matchDetailStateToggle}
-                        roomPasswordClick = {this.toggleRoomPasswordModal}
-                        addPeopleClick = {this.toggleAddpeopleModal}
-                        addScoreClick = {this.toggleAddScoreModal}
-                        />
-                    )):(
-                      <div className="no__match">
-                        <div className="spacer"></div>
-                        <div className="no__match__grid">
-                          <div className="spacer"></div>
-                          <div className="no__match__card">
-                            <div className="spacer"></div>
-                            <div className="no__match__card__grid">
-                              <div className="spacer"></div>
-                              <div className="no__match__card__content">
-                                No match available
-                              </div>
-                              <div className="spacer"></div>
-                            </div>
-                            <div className="spacer"></div>
-                          </div>
-                          <div className="spacer"></div>
-                        </div>
-                        <div className="spacer"></div>
-                      </div>
-                    )
+                  <UserMatch
+                    userProfileData = {this.state.userProfileData}
+                    getCardTargetID = {this.getCardTargetID}
+                    TournamentToggle = {this.TournamentToggle}
+                    loadUserMatchData = {this.state.loadUserMatchData}/>
                 ):(
                   (
                     this.state.matchDetailState === false &&
                     this.state.historyPage === false &&
-                    this.state.matchRunningState === false &&
+                    this.state.userDashboardState === false &&
                     this.state.publicPageState === true
                   )?(
                     (this.state.publicFromLoad.length)?
@@ -1446,7 +1453,6 @@ class Dashboard extends Component {
                           setInviteAction = {this.setInviteAction}
                           sentRequestPlayerNotOwn = {this.sentRequestPlayerNotOwn}
                           sentRequestPlayer={this.sentRequestPlayer}
-                          getCardTargetData={this.getCardTargetData}
                           targetClickID={this.getCardTargetID}
                           loadDetail = {this.loadDetail}
                           loadMatchDetail = {this.HandlerLoadMatchUserDetail}
@@ -1454,39 +1460,20 @@ class Dashboard extends Component {
                           updateMatchToggle = {this.updateMatchToggle}
                           matchDetailID = {this.state.matchDetailID}
                           getRoomDetailToAccess = {this.getRoomDetailToAccess}
-                          getCalScoreMatchID={this.getCalScoreMatchID}
+                          getFieldDataFromCard={this.getFieldDataFromCard}
                           matchDetailClick = {this.matchDetailStateToggle}
                           roomPasswordClick = {this.toggleRoomPasswordModal}
                           addPeopleClick = {this.toggleAddpeopleModal}
                           addScoreClick = {this.toggleAddScoreModal}
                           />
                       )):(
-                        <div className="no__match">
-                          <div className="spacer"></div>
-                          <div className="no__match__grid">
-                            <div className="spacer"></div>
-                            <div className="no__match__card">
-                              <div className="spacer"></div>
-                              <div className="no__match__card__grid">
-                                <div className="spacer"></div>
-                                <div className="no__match__card__content">
-                                  No match available
-                                </div>
-                                <div className="spacer"></div>
-                              </div>
-                              <div className="spacer"></div>
-                            </div>
-                            <div className="spacer"></div>
-                          </div>
-                          <div className="spacer"></div>
-                        </div>
+                        no__match__card
                       )
                   ):(null)
                 )
               )
             )
           )}
-
         </div>
         <ModalRoomPassword
           getCardTargetIDPass = {this.getCardTargetIDPass}
@@ -1494,7 +1481,9 @@ class Dashboard extends Component {
           modalClick = {this.toggleRoomPasswordModal}
           modalState = {this.state.roomPasswordModal} />
         <ModalAddScore
-          closeAddScoreModal = {this.toggleAddScoreModal}
+          firstFieldScore = {this.state.addScoreFieldScoreFirst}
+          lastFieldScore = {this.state.addScoreFieldScoreLast}
+          modalClick = {this.toggleAddScoreModal}
           calculateScore = {this.calculateScore}
           modalState = {this.state.addscoreModalIsOpen} />
         <ModalAddPeople
@@ -1521,6 +1510,7 @@ class Dashboard extends Component {
           createSetTypeScore = {this.createSetTypeScore}
 
           publicShow = {this.createSetPublicShow}
+          tourMode = {this.createSetTourMode}
           fieldDetail = {this.state.fieldFromLoad}
           customFieldDetail = {this.state.customFieldFromLoad}
           customFieldDetailScore = {this.state.customFieldFromLoadHoleScore}
@@ -1532,4 +1522,25 @@ class Dashboard extends Component {
   }
 }
 
+const no__match__card = (
+  <div className="no__match">
+    <div className="spacer"></div>
+    <div className="no__match__grid">
+      <div className="spacer"></div>
+      <div className="no__match__card">
+        <div className="spacer"></div>
+        <div className="no__match__card__grid">
+          <div className="spacer"></div>
+          <div className="no__match__card__content">
+            No match available
+          </div>
+          <div className="spacer"></div>
+        </div>
+        <div className="spacer"></div>
+      </div>
+      <div className="spacer"></div>
+    </div>
+    <div className="spacer"></div>
+  </div>
+)
 export default Dashboard;

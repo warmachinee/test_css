@@ -43,6 +43,7 @@
 
   -ms-overflow-y: auto;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 
   -webkit-box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
   -moz-box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
@@ -65,6 +66,35 @@
   letter-spacing: .1rem;
   color: #2a4d69;
   font-weight: bolder;
+}
+.modal-matchresult__card .match__result__label{
+  -webkit-flex-wrap: wrap;
+  -moz-flex-wrap: wrap;
+  flex-wrap: wrap;
+
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+  min-height: 4rem;
+  width: 100%;
+}
+.match__result__label .match__result__label__teamname{
+  width: 30%;
+  height: 4rem;
+  background: #f1f9ff;
+  border: 1px black solid;
+}
+.match__result__label .match__result__label__in,
+.match__result__label .match__result__label__out,
+.match__result__label .match__result__label__gross,
+.match__result__label .match__result__label__net,
+.match__result__label .match__result__label__sf,
+.match__result__label .match__result__label__par{
+  width: 14%;
+  height: 4rem;
+  background: #f1f9ff;
+  border: 1px black solid;
 }
 .modal-matchresult__card .match__result__box{
   -webkit-flex-direction: column;
@@ -324,11 +354,11 @@
 }
 @media (min-width: 768px) and (max-width: 1200px) {
   .modal-matchresult{
-    -webkit-transform: translate(-7.5rem,-4rem);
-    -ms-transform: translate(-7.5rem,-4rem);
-    -moz-transform: translate(-7.5rem,-4rem);
-    -o-transform: translate(-7.5rem,-4rem);
-    transform: translate(-7.5rem,-4rem);
+    -webkit-transform: translate(-15rem,-4rem);
+    -ms-transform: translate(-15rem,-4rem);
+    -moz-transform: translate(-15rem,-4rem);
+    -o-transform: translate(-15rem,-4rem);
+    transform: translate(-15rem,-4rem);
 
     position: fixed;
     height: 100%;
@@ -342,19 +372,19 @@
 }
 @media (min-width: 1200px) and (max-width: 1600px) {
   .modal-matchresult{
-    -webkit-transform: translate(-7.5rem,-4rem);
-    -ms-transform: translate(-7.5rem,-4rem);
-    -moz-transform: translate(-7.5rem,-4rem);
-    -o-transform: translate(-7.5rem,-4rem);
-    transform: translate(-7.5rem,-4rem);
+    -webkit-transform: translate(-15rem,-4rem);
+    -ms-transform: translate(-15rem,-4rem);
+    -moz-transform: translate(-15rem,-4rem);
+    -o-transform: translate(-15rem,-4rem);
+    transform: translate(-15rem,-4rem);
   }
 }
 @media (min-width: 1600px) {
   .modal-matchresult{
-    -webkit-transform: translate(-7.5rem,-4rem);
-    -ms-transform: translate(-7.5rem,-4rem);
-    -moz-transform: translate(-7.5rem,-4rem);
-    -o-transform: translate(-7.5rem,-4rem);
-    transform: translate(-7.5rem,-4rem);
+    -webkit-transform: translate(-15rem,-4rem);
+    -ms-transform: translate(-15rem,-4rem);
+    -moz-transform: translate(-15rem,-4rem);
+    -o-transform: translate(-15rem,-4rem);
+    transform: translate(-15rem,-4rem);
   }
 }

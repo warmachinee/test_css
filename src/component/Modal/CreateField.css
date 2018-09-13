@@ -27,6 +27,7 @@
   max-width: 35rem;
   -ms-overflow-y: auto;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   -webkit-box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
   -moz-box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);
   box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);

@@ -17,10 +17,14 @@ body{
   min-height:0;
   min-width: 0;
   top: 4rem;
+
   -ms-overflow-y: auto;
   overflow-y: auto;
+
+  -ms-overflow-x: hidden;
+  overflow-x: hidden;
+
   -webkit-overflow-scrolling: touch;
-  overflow: auto;
 }
 .maincontent .no__match{
   display: -webkit-flex;
@@ -99,15 +103,39 @@ body{
 @media (min-width: 768px) and (max-width: 1200px) {
   .maincontent{
     left: 15rem;
+    z-index: 120;
+  }
+  .maincontent .no__match{
+    -webkit-transform: translateX(-7.5rem);
+    -ms-transform: translateX(-7.5rem);
+    -moz-transform: translateX(-7.5rem);
+    -o-transform: translateX(-7.5rem);
+    transform: translateX(-7.5rem);
   }
 }
 @media (min-width: 1200px) and (max-width: 1600px) {
   .maincontent{
     left: 15rem;
+    z-index: 120;
+  }
+  .maincontent .no__match{
+    -webkit-transform: translateX(-7.5rem);
+    -ms-transform: translateX(-7.5rem);
+    -moz-transform: translateX(-7.5rem);
+    -o-transform: translateX(-7.5rem);
+    transform: translateX(-7.5rem);
   }
 }
 @media (min-width: 1600px) {
   .maincontent{
     left: 15rem;
+    z-index: 120;
+  }
+  .maincontent .no__match{
+    -webkit-transform: translateX(-7.5rem);
+    -ms-transform: translateX(-7.5rem);
+    -moz-transform: translateX(-7.5rem);
+    -o-transform: translateX(-7.5rem);
+    transform: translateX(-7.5rem);
   }
 }

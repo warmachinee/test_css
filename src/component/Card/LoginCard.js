@@ -19,7 +19,7 @@ class LoginCard extends React.Component{
     return(
       <div className="form__card">
           <div className="form__card__switch">
-            <Switch />
+            {/*<Switch />*/}
           </div>
           <div className="form__card__profilelogo">
             <div className="spacer"></div>

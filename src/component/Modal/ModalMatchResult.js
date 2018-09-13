@@ -72,40 +72,41 @@ class ModalMatchResult extends React.Component{
                       </select>
                     ):
                     (
-                      <select>
-                        <option>Death match</option>
+                      <select onChange={(e)=>this.sortResult(e.target.value)}>
+                        <option value={0}>Death match</option>
+                        <option value={2}>By depart</option>
                       </select>
                     )}
               </div>
 
                 {(this.props.typeScore === '0')?(
-                  <div className="match__result__box">
-                    <div className="match__result__box__teamname">Name</div>
-                    <div className="match__result__box__in">IN</div>
-                    <div className="match__result__box__out">OUT</div>
-                    <div className="match__result__box__gross">GROSS</div>
-                    <div className="match__result__box__net">NET</div>
-                    <div className="match__result__box__sf">SF</div>
+                  <div className="match__result__label">
+                    <div className="match__result__label__teamname">Name</div>
+                    <div className="match__result__label__in">IN</div>
+                    <div className="match__result__label__out">OUT</div>
+                    <div className="match__result__label__gross">GROSS</div>
+                    <div className="match__result__label__net">NET</div>
+                    <div className="match__result__label__sf">SF</div>
                   </div>
                 ):(
                   (this.props.typeScore === '1')?
                   (
-                    <div className="match__result__box">
-                      <div className="match__result__box__teamname">Name</div>
-                      <div className="match__result__box__in">IN</div>
-                      <div className="match__result__box__out">OUT</div>
-                      <div className="match__result__box__gross">GROSS</div>
-                      <div className="match__result__box__net">NET</div>
-                      <div className="match__result__box__sf">SF</div>
+                    <div className="match__result__label">
+                      <div className="match__result__label__teamname">Name</div>
+                      <div className="match__result__label__in">IN</div>
+                      <div className="match__result__label__out">OUT</div>
+                      <div className="match__result__label__gross">GROSS</div>
+                      <div className="match__result__label__net">NET</div>
+                      <div className="match__result__label__sf">SF</div>
                     </div>
                   ):(
                     (this.props.typeScore === '2')?(
-                      <div className="match__result__box">
-                        <div className="match__result__box__teamname">Name</div>
-                        <div className="match__result__box__in">IN</div>
-                        <div className="match__result__box__out">OUT</div>
-                        <div className="match__result__box__gross">GROSS</div>
-                        <div className="match__result__box__par">PAR</div>
+                      <div className="match__result__label">
+                        <div className="match__result__label__teamname">Name</div>
+                        <div className="match__result__label__in">IN</div>
+                        <div className="match__result__label__out">OUT</div>
+                        <div className="match__result__label__gross">GROSS</div>
+                        <div className="match__result__label__par">PAR</div>
                       </div>
                     ):(null)
                   )
@@ -352,7 +353,7 @@ class ModalMatchResult extends React.Component{
                         <div className="match__result__box__in">{data.in}</div>
                         <div className="match__result__box__out">{data.out}</div>
                         <div className="match__result__box__gross">{data.gross}</div>
-                        <div className="match__result__box__net">{data.net}</div>
+                        <div className="match__result__box__par">{data.par}</div>
                       </div>
                       {this.checkScoreFromUserID(data.userid)}
                       <div className="match__result__box__score">

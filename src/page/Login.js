@@ -84,7 +84,7 @@ class Login extends Component{
        //localStorage.setItem("response",JSON.stringify(data));
        localStorage['response']=data.status;
        localStorage['id']=data.id;
-       console.log(data);
+       //console.log(data);
      }
     });
     setTimeout(()=>{
@@ -116,7 +116,7 @@ class Login extends Component{
      xhrFields: { withCredentials: true },
      success: function(data) {
        localStorage['response']=data.status;
-       console.log(data);
+       //console.log(data);
      }
     });
     if(localStorage['response']){
@@ -127,12 +127,12 @@ class Login extends Component{
   }
   LoginAction = () =>{
     if(this.getResultLogin()==='Success'){
-      console.log(this.state.userID," ::",this.getResultLogin());
+      //console.log(this.state.userID," ::",this.getResultLogin());
       this.sendUserID();
       this.props.loadMatch();
       setTimeout(this.props.pageLoginClick,350)
     }else{
-      console.log(this.getResultLogin());
+      //console.log(this.getResultLogin());
       alert('Login Fail')
     }
     localStorage['response']=null;
@@ -141,10 +141,10 @@ class Login extends Component{
   RegisAction=()=>{
     if(this.getResultRegis()==='Success'){
       alert(this.getResultRegis())
-      console.log(this.getResultRegis());
+      //console.log(this.getResultRegis());
     }else{
       alert(this.getResultRegis())
-      console.log(this.getResultRegis());
+      //console.log(this.getResultRegis());
     }
     localStorage['response']=null;
     localStorage.clear()
@@ -179,7 +179,7 @@ class Login extends Component{
        if(localStorage['id']){
            var chksessions = localStorage['chk'];
            var id = localStorage['id'];
-           console.log(id," : ",chksessions);
+           //console.log(id," : ",chksessions);
            if(chksessions === 'valid session'){
              this.state.chksession = true
            }else{
@@ -198,13 +198,13 @@ class Login extends Component{
    componentWillMount(){
      this.checksession()
      setTimeout(()=>{
-       console.log('home ::: ',this.state.chksession);
+       //console.log('home ::: ',this.state.chksession);
      },350)
    }
 
    componentDidMount(){
      setTimeout(()=>{
-       console.log('home Didmount ::: ',this.state.chksession);
+       //console.log('home Didmount ::: ',this.state.chksession);
      },350)
    }
   render(){

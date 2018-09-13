@@ -168,7 +168,7 @@ class App extends Component {
   componentWillMount(){
     this.checksession()
     setTimeout(()=>{
-      console.log('main ::: ',this.state.chksession);
+      //console.log('main ::: ',this.state.chksession);
     },350)
     /*
     {(this.state.pageDashboard && this.state.chksession)?
@@ -185,7 +185,7 @@ class App extends Component {
 
   componentDidMount(){
     setTimeout(()=>{
-      console.log('main Didmount ::: ',this.state.chksession);
+      //console.log('main Didmount ::: ',this.state.chksession);
       this.setState(this.state)
     },350)
     //alert('แมทช์การแข่งขัน SENIOR NATION TOUR จะเปิดดูรายละเอียดได้ภายในวันนี้ ขออภัยในความไม่สะดวก')

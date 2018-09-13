@@ -15,7 +15,7 @@ class RegisCard extends React.Component{
       <div>
         <div className="form__card dis">
           <div className="form__card__switch">
-            <Switch />
+            {/*<Switch />*/}
           </div>
           <div className="form__card__profilelogo">
             <div className="spacer"></div>
@@ -49,7 +49,7 @@ class RegisCard extends React.Component{
 
         <div className="form__card regisinlogin">
           <div className="form__card__switch">
-            <Switch />
+            {/*<Switch />*/}
           </div>
           <div className="form__card__profilelogo">
             <div className="spacer"></div>

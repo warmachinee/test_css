@@ -1,6 +1,6 @@
 import React from 'react'
-import './Card.css'
 import $ from 'jquery'
+import './Card.css'
 import ic_person_add from '../img/baseline-person_add-24px.svg'
 import ic_location from '../img/baseline-place-24px.svg'
 import ic_edit from '../img/baseline-edit-24px-white.svg'
@@ -13,11 +13,14 @@ class Card extends React.Component{
     super(props)
     this.state={
       userID:'',
+      addScoreData:{
+        fieldid:'',
+        matchid:''
+      },
+      fieldHoleScoreFirst:[],
+      fieldHoleScoreLast:[]
     }
     this.stateID=''
-  }
-  sentCardTargetData = (Data) =>{
-    this.props.getCardTargetData(Data)
   }
   getCardMatchID = (value)=>{
     //this.props.targetClickID(value)
@@ -37,10 +40,64 @@ class Card extends React.Component{
     }
     /**/
   }
+  HandlerGetDataToAddScore = () =>{
+    this.state.fieldHoleScoreFirst = []
+    this.state.fieldHoleScoreLast = []
+    var geturl;
+    geturl = $.ajax({
+      type: "POST",
+     url: "http://pds.in.th/phpadmin/loadmatchfielddetail.php",
+     dataType: 'json',
+     data: {
+       "matchid": this.state.addScoreData.matchid,
+       "fieldid": this.state.addScoreData.fieldid,
+     },
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+       localStorage['fieldscore']=data.fieldscore
+     }
+    });
+    setTimeout(()=>{
+      if(localStorage['fieldscore']){
+        var fieldscore = localStorage['fieldscore'];
+        fieldscore = fieldscore.split(",",fieldscore.length)
+        for(var i = 0;i < 9;i++){
+          this.state.fieldHoleScoreFirst.push(fieldscore[i])
+        }
+        for(var i = 0;i < 9;i++){
+          this.state.fieldHoleScoreLast.push(fieldscore[i+9])
+        }
+        this.props.getFieldDataFromCard(this.state.fieldHoleScoreFirst,this.state.fieldHoleScoreLast)
+      }
+    },300)
+    localStorage.clear()
+  }
   calculateScore = (value)=>{
-    //console.log(value);
-    this.props.getCalScoreMatchID(value)
-    this.props.addScoreClick()
+    this.state.addScoreData.matchid = value.matchid
+    var geturl;
+    geturl = $.ajax({
+      type: "POST",
+     url: "http://pds.in.th/phpadmin/loadmatchuserdetail.php",
+     dataType: 'json',
+     data: {
+       "matchid": value.matchid,
+     },
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+       localStorage['fieldid'] = data.fieldid
+     }
+    });
+    setTimeout(()=>{
+      if(localStorage['fieldid']){
+        var fieldid = localStorage['fieldid']
+        fieldid = parseInt(fieldid)
+        this.state.addScoreData.fieldid = fieldid
+        console.log("data.fieldid",this.state.addScoreData.fieldid);
+        this.HandlerGetDataToAddScore()
+        this.props.addScoreClick()
+      }
+    },300)
+    localStorage.clear()
   }
   detailRoom = (Data)=>{
     //console.log(Data);

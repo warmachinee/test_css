@@ -49,6 +49,7 @@ class MatchDetail extends React.Component{
     this.state.resultMatchFromLoad = []
     this.state.resultMatchFromLoadUser = []
     this.state.resultMatchFromLoadHoleScore = []
+    this.state.tempResultHole = []
     var geturl;
     geturl = $.ajax({
       type: "POST",
@@ -337,9 +338,7 @@ class MatchDetail extends React.Component{
     //console.log("detailUser.userid",this.props.userID);
     //console.log("userHostID",this.props.userHostID);this.props.matchDetailID
     /*console.log("userID",this.props.userID);
-    console.log("detailUser",this.props.detailUser);
-    console.log("setTeamData",this.props.setTeamData);*/
-    const option = this.props.setTeamData
+    console.log("detailUser",this.props.detailUser);*/
     let drawerClassUser = 'detail__griduserhost hide';
     let toggleScoreShow = 'Show score'
     if(this.state.scoreHideState){
@@ -464,7 +463,7 @@ class MatchDetail extends React.Component{
                 {this.setTeamno(data)}
                 <div className="detail__userhostname">{data.fullname} id : {data.userid}
                   <button onClick={this.clickScore}>{toggleScoreShow}</button>
-                    {(this.props.setDepartData)?(
+                    {(this.props.setDepartData.length)?(
                       <div>
                         <select onChange={(e)=>this.departNo(e.target.value)}>
                         {this.props.setDepartData.map((d)=>
@@ -520,17 +519,17 @@ class MatchDetail extends React.Component{
                               {data.fullname} id : {data.userid}
                                 {this.setTeamno(data)}
                                 {this.setUserMapID(data.userid)}
-                                {(parseInt(this.state.userMapID) === this.props.userID)?(
+                                {(this.props.setTeamData.length && parseInt(this.state.userMapID) === this.props.userID)?(
                                   <select onChange={(e)=>this.setUpdateTeam(e.target.value)}>
                                     {(parseInt(this.state.userMapID) === this.props.userID)?
                                     (
-                                      option.map((data,i)=>
+                                      this.props.setTeamData.map((data,i)=>
                                         <option value={data.teamno}>{data.teamno}</option>
                                       )
                                     ):(null)}
                                   </select>
                                 ):(null)}
-                                {(parseInt(this.state.userMapID) === this.props.userID)?
+                                {(this.props.setTeamData.length && parseInt(this.state.userMapID) === this.props.userID)?
                                 (
                                   <button onClick={this.updateTeam} className="detail__choose">Choose team</button>
                                 ):(null)}
@@ -587,17 +586,17 @@ class MatchDetail extends React.Component{
                       {data.fullname} id : {data.userid}
                         {this.setTeamno(data)}
                         {this.setUserMapID(data.userid)}
-                        {(parseInt(this.state.userMapID) === this.props.userID)?(
+                        {(this.props.setTeamData.length && parseInt(this.state.userMapID) === this.props.userID)?(
                           <select onChange={(e)=>this.setUpdateTeam(e.target.value)}>
                             {(parseInt(this.state.userMapID) === this.props.userID)?
                             (
-                              option.map((data,i)=>
+                              this.props.setTeamData.map((data,i)=>
                                 <option value={data.teamno}>{data.teamno}</option>
                               )
                             ):(null)}
                           </select>
                         ):(null)}
-                        {(parseInt(this.state.userMapID) === this.props.userID)?
+                        {(this.props.setTeamData.length && parseInt(this.state.userMapID) === this.props.userID)?
                         (
                           <button onClick={this.updateTeam} className="detail__choose">Choose team</button>
                         ):(null)}

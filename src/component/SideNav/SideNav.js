@@ -17,9 +17,9 @@ import Switch from '../Switch/Switch'
 const menu ={
   Notifications: ['Notifications','การแจ้งเตือน'],
   Profile: ['Profile','โปรไฟล์'],
-  Dashboard: ['My Match','แมทช์'],
+  MyMatch: ['My Match','แมทช์'],
+  Dashboard: ['Dashboard','แดชบอร์ด'],
   Public: ['PUBLIC ','แมทช์สาธารณะ'],
-  Running: ['Running Match','แมทช์ที่กำลังเล่น'],
   History: ['History','ประวัติ'],
   Logout: ['Log out','ออกจากระบบ'],
   LogOutBtnClass: ['sidenav-btn','sidenav-btn thailang']
@@ -69,19 +69,19 @@ const sideNav = props =>{
         <div className="sidenav__item">
           <img className="icon" src={ic_dashboard} />
           <div className="text">
-            <button onClick={props.dashboardPageClick}>{menu.Dashboard[i]}</button>
+            <button onClick={props.userDashboardPageClick}>{menu.Dashboard[i]}</button>
+          </div>
+        </div>
+        <div className="sidenav__item">
+          <img className="icon" src={ic_dashboard} />
+          <div className="text">
+            <button onClick={props.dashboardPageClick}>{menu.MyMatch[i]}</button>
           </div>
         </div>
         <div className="sidenav__item">
           <img className="icon" src={ic_public} />
           <div className="text">
             <button onClick={props.publicPageClick}>{menu.Public[i]}</button>
-          </div>
-        </div>
-        <div className="sidenav__item">
-          <img className="icon" src={ic_process} />
-          <div className="text">
-            <button onClick={props.runningPageClick}>{menu.Running[i]}</button>
           </div>
         </div>
         <div className="sidenav__item">

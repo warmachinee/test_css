@@ -22,6 +22,7 @@ class ModalCreateMatch extends React.Component{
       customField:[],
       dataLength:0,
       publicShow: 0,
+      tournamentMode: 0,
       clickedFieldDetail:[],
       clickedFieldCourt:[],
       FieldCourt:[],
@@ -37,6 +38,9 @@ class ModalCreateMatch extends React.Component{
   }
   createSetPublicShow=()=>{
     this.props.publicShow(this.state.publicShow)
+  }
+  createSetTourMode=()=>{
+    this.props.tourMode(this.state.tournamentMode)
   }
   createSetMatchName=(matchname)=>{
     this.props.createSetMatchName(matchname);
@@ -113,9 +117,9 @@ class ModalCreateMatch extends React.Component{
     this.state.typescore = type
   }
   MatchHandle=()=>{
-    //console.log("matchModalData",this.props.matchModalData)
     this.createSetFieldId()
     this.createSetPublicShow()
+    this.createSetTourMode()
     this.createSetTypeScore()
     this.state.clickedFieldDetail = []
     if(this.props.updateMatchState){
@@ -155,13 +159,21 @@ class ModalCreateMatch extends React.Component{
   exportFieldName = (data) =>{
     this.setState({getExportFieldName: data})
   }
-  switchToggleState=(value)=>{
+  switchToggleStatePublic=(value)=>{
     if(value){
       this.setState({publicShow: 1})
     }else{
       this.setState({publicShow: 0})
     }
-    console.log(this.state.publicShow);
+    //console.log(this.state.publicShow);
+  }
+  switchToggleStateTournamentMode=(value)=>{
+    if(value){
+      this.setState({tournamentMode: 1})
+    }else{
+      this.setState({tournamentMode: 0})
+    }
+    //console.log(this.state.tournamentMode);
   }
   selectFieldToggle = ()=>{
     this.props.loadField()
@@ -211,6 +223,10 @@ class ModalCreateMatch extends React.Component{
               <div onClick = {this.modalToggle} className="spacer"></div>
               <div className="modal-creatematch__card">
                 <div className="creatematch__matchname__text">Match name</div>
+                <div className="creatematch__switchtour">
+                  <div className="creatematch__switchtour__label">Tournament</div>
+                  <SwitchToggle switchToggleState={this.switchToggleStateTournamentMode}/>
+                </div>
                 <div className="creatematch__matchname">
                   <EditTextImg type="text" placeholder="Match name" formType="matchname"
                     editTextValue={this.createSetMatchName}/>
@@ -220,7 +236,7 @@ class ModalCreateMatch extends React.Component{
                     {(this.state.publicShow)?(
                       <div className="creatematch__switchpub__label">Public</div>
                     ):(<div className="creatematch__switchpub__label">Private</div>)}
-                    <SwitchToggle switchToggleState={this.switchToggleState}/>
+                    <SwitchToggle switchToggleState={this.switchToggleStatePublic}/>
                   </div>
                   <div className="creatematch__typeroom">
                     <div className="creatematch__typeroom__label">Score type</div>
