@@ -82,7 +82,7 @@ class ModalUserMatch extends React.Component{
         this.props.detailUserFromLoad[i].in + "\t" + "  " +
         textHoleScoreLast + " IN : " +
         this.props.detailUserFromLoad[i].out + "\t" + " GROSS : " +
-        this.props.detailUserFromLoad[i].gross + "\t" + " PAR : " +
+        this.props.detailUserFromLoad[i].gross + "\t" + " TOTAL : " +
         this.props.detailUserFromLoad[i].par
       )
       player.push(

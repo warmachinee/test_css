@@ -204,7 +204,7 @@ class SelectField extends React.Component{
             <div onClick = {this.toggleSelect} className="spacer"></div>
             <div className="selectfield__card">
               <div className="selectfield__card__label__grid">
-                <div className="selectfield__card__label">SelectField</div>
+                <div className="selectfield__card__label">เลือกสนาม</div>
                 <div className="selectfield__switch">
                   <div className="selectfield__switch__switch">
                     <SwitchToggle switchToggleState={this.switchToggleState}/>
@@ -213,7 +213,7 @@ class SelectField extends React.Component{
                 </div>
               </div>
               <div className="selectfield___search">
-                <EditTextImg type='text' placeholder="Search field name" editTextValue={this.setInputValue} formType='search'/>
+                <EditTextImg type='text' placeholder="Search course name" editTextValue={this.setInputValue} formType='search'/>
               </div>
               <div className="selectfield__fieldlist">
 

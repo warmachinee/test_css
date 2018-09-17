@@ -1272,7 +1272,7 @@ class Dashboard extends Component {
   }
   dashboardPageClick = ()=>{
     //console.log("dashboardPageClick");
-    this.props.loadMatch();
+    this.HandleLoadUserMatch()
     setTimeout(()=>{
       this.dashboardStateToggle()
       this.dashboardRefresh = false

@@ -255,10 +255,10 @@ class ModalCreateMatch extends React.Component{
                   </div>
                   <div className="locationselect__button">
                     <div className="creatematch__selectfield">
-                      <button onClick = {this.selectFieldToggle}>Select Field</button>
+                      <button onClick = {this.selectFieldToggle}>เลือกสนาม</button>
                     </div>
                     <div className="creatematch__selectfield">
-                      <button onClick = {this.createFieldToggle}>Create Field</button>
+                      <button onClick = {this.createFieldToggle}>สร้างสนาม</button>
                     </div>
                   </div>
                 </div>

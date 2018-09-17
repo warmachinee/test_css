@@ -33,7 +33,8 @@ class UserMatch extends React.Component{
       holeScoreFromLoad:[],
       holeScoreFromLoadTemp:[],
       clientHistoryData:[],
-      matchidUserLoadMatch:''
+      matchidUserLoadMatch:'',
+      selectedFile:null
     }
     //<SwitchToggle switchToggleState={this.props.TournamentToggle}/>
   }
@@ -55,9 +56,9 @@ class UserMatch extends React.Component{
       this.state.avgStat.gross += parseInt(this.props.loadUserMatchData[i].gross)
       this.state.avgStat.par += parseInt(this.props.loadUserMatchData[i].par)
     }
-    this.state.avgStat.in = this.state.avgStat.in / this.props.loadUserMatchData.length
-    this.state.avgStat.out = this.state.avgStat.out / this.props.loadUserMatchData.length
-    this.state.avgStat.gross = this.state.avgStat.gross / this.props.loadUserMatchData.length
+    this.state.avgStat.in = Math.round(((this.state.avgStat.in / this.props.loadUserMatchData.length)*1000)/1000)
+    this.state.avgStat.out = Math.round(((this.state.avgStat.out / this.props.loadUserMatchData.length)*1000)/1000)
+    this.state.avgStat.gross = Math.round(((this.state.avgStat.gross / this.props.loadUserMatchData.length)*1000)/1000)
     if(this.props.loadUserMatchData.length === 0){
       this.state.avgStat = {
         in: 0,
@@ -494,12 +495,36 @@ class UserMatch extends React.Component{
     localStorage.clear()
   }
 
+  fileSelectedHandler = event =>{
+   console.log(event.target.files[0]);
+   console.log(event.target.files[0].name);
+   this.setState({
+     selectedFile: event.target.files[0]
+   })
+ }
+
+ fileUploadHandler = event =>{
+   console.log(this.state.selectedFile);
+   console.log(this.state.selectedFile.name);
+   const data = new FormData();
+ }
+
   render(){
     this.calculateAvgStat()
     return(
       <div className="usermatch">
         <div className="usermatch__userdetail">
-          <img src={ic_person}/>
+          <div className="userdetail__pic">
+            <img src={ic_person}/>
+            {(this.state.selectedFile)?
+              (<div>{this.state.selectedFile.name}</div>):
+              (<div>Picture</div>)}
+            <input style={{display:'none'}} type = "file" onChange={this.fileSelectedHandler} ref={fileInput => this.fileInput = fileInput}/>
+            <button onClick={() => this.fileInput.click()}>Select Image</button>
+            {(this.state.selectedFile)?
+              (<button onClick={this.fileUploadHandler}>Upload Image</button>):
+              (<button onClick={this.fileUploadHandler} disabled>Upload Image</button>)}
+          </div>
             {(this.props.userProfileData.length)?
               (
                 this.props.userProfileData.map((d)=>

@@ -21,18 +21,36 @@
   display: -ms-flex;
   display: -moz-flex;
   display: flex;
+
   -webkit-flex-direction: column;
   -moz-flex-direction: column;
   flex-direction: column;
 }
-.usermatch__userdetail img{
+
+.usermatch__userdetail .userdetail__pic{
+  width: 30%;
+
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  flex-direction: column;
+}
+.userdetail__pic img{
   border: 1px black solid;
   padding: 1rem 1rem 0 1rem;
   width: 100%;
-  height: 50%;
+  height: 100%;
+}
+.userdetail__pic button{
+  height: 20%;
+  width: 100%;
 }
 .usermatch__userdetail .userdetail__label{
-  width: 100%;
+  width: 20%;
 }
 .userdetail__label .userdetail__name{
   display: -webkit-flex;
@@ -299,7 +317,7 @@
   }
   .usermatch__userdetail img{
     padding: 1rem;
-    width: 30%;
+    width: 100%;
     height: 100%;
   }
   .usermatch__userdetail .userdetail__label{
@@ -383,7 +401,7 @@
   }
   .usermatch__userdetail img{
     padding: 1rem;
-    width: 30%;
+    width: 100%;
     height: 100%;
   }
   .usermatch__userdetail .userdetail__label{
@@ -460,7 +478,7 @@
   }
   .usermatch__userdetail img{
     padding: 1rem;
-    width: 30%;
+    width: 100%;
     height: 100%;
   }
   .usermatch__userdetail .userdetail__label{
@@ -545,7 +563,7 @@
   }
   .usermatch__userdetail img{
     padding: 1rem;
-    width: 30%;
+    width: 100%;
     height: 100%;
   }
   .usermatch__userdetail .userdetail__label{
