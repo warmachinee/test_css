@@ -124,8 +124,12 @@ class ModalUserMatch extends React.Component{
                         <img onClick = {this.props.modalClick} src={ic_close}></img>
                       </div>
                     </div>
-                    <div className="modal__usermatch__name">Fullname Lastname (Nickname)</div>
-                    <div className="modal__usermatch__depart">Department</div>
+                    {this.props.userProfileData.map((d)=>
+                      <div className="modal__usermatch__name">{d.fullname} {d.lastname}({d.nickname})</div>
+                    )}
+                    {this.props.userProfileData.map((d)=>
+                      <div className="modal__usermatch__depart">Department : {d.depart}</div>
+                    )}
                     <div className="modal__usermatch__score__grid">
                       <div className="modal__usermatch__score__label">
                         <div className="usermatch__score__label__score hole">
@@ -270,12 +274,12 @@ class ModalUserMatch extends React.Component{
                     <div className="usermatch__stat__result">
                       <div className="usermatch__stat__result__label">
                         <div className="spacer"></div>
-                        <div>{"In"}</div>
+                        <div>{"OUT"}</div>
                         <div className="spacer"></div>
                       </div>
                       <div className="usermatch__stat__result__label">
                         <div className="spacer"></div>
-                        <div>{"Out"}</div>
+                        <div>{"IN"}</div>
                         <div className="spacer"></div>
                       </div>
                       <div className="usermatch__stat__result__label">
@@ -927,6 +931,35 @@ class ModalUserMatch extends React.Component{
                   </div>
                 )}
                 <div onClick = {this.props.modalClick} className="spacer"></div>
+              </div>
+              <div onClick = {this.props.modalClick} className="spacer"></div>
+            </div>
+            <div className="spacer"></div>
+          </div>
+        );
+      }else if(this.props.modalType === 'showTempAccount'){
+        console.log("showTempAccount",this.props.tempAccountData);
+        return (
+          <div className="modal__usermatch__alluser">
+            <ModalBackDrop click = {this.props.modalClick}/>
+            <div className="spacer"></div>
+            <div className="modal__usermatch__grid__alluser">
+              <div onClick = {this.props.modalClick} className="spacer"></div>
+              <div className="modal__usermatch__card__alluser">
+                <div className="modal__usermatch__label__alluser">
+                  <div className="modal__usermatch__label__text__alluser">Temporary account</div>
+                  <div className="spacer"></div>
+                  <div className="modal__usermatch__label__close__alluser">
+                    <img onClick = {this.props.modalClick} src={ic_close}></img>
+                  </div>
+                </div>
+                {this.props.tempAccountData.map((d)=>
+                  <div>
+                    <div>Username : {d.username}</div>
+                    <div>Password : {d.password}</div>
+                    <div>Team : {d.teamno}</div>
+                  </div>
+                )}
               </div>
               <div onClick = {this.props.modalClick} className="spacer"></div>
             </div>

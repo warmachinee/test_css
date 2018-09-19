@@ -28,7 +28,7 @@
 }
 
 .usermatch__userdetail .userdetail__pic{
-  width: 30%;
+  width: 100%;
 
   display: -webkit-flex;
   display: -ms-flex;
@@ -50,7 +50,7 @@
   width: 100%;
 }
 .usermatch__userdetail .userdetail__label{
-  width: 20%;
+  width: 100%;
 }
 .userdetail__label .userdetail__name{
   display: -webkit-flex;

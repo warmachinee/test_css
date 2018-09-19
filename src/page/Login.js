@@ -84,6 +84,7 @@ class Login extends Component{
        //localStorage.setItem("response",JSON.stringify(data));
        localStorage['response']=data.status;
        localStorage['id']=data.id;
+       localStorage['tempid']=data.tempid;
        //console.log(data);
      }
     });
@@ -128,9 +129,13 @@ class Login extends Component{
   LoginAction = () =>{
     if(this.getResultLogin()==='Success'){
       //console.log(this.state.userID," ::",this.getResultLogin());
-      this.sendUserID();
-      this.props.loadMatch();
-      setTimeout(this.props.pageLoginClick,350)
+      if(parseInt(localStorage['tempid'])){
+        this.props.pageFillScoreClick()
+      }else{
+        this.sendUserID();
+        this.props.loadMatch();
+        setTimeout(this.props.pageLoginClick,350)
+      }
     }else{
       //console.log(this.getResultLogin());
       alert('Login Fail')

@@ -4,6 +4,7 @@ import './UserMatch.css'
 
 import SwitchToggle from '../Switch/SwitchToggle'
 import ModalUserMatch from '../Modal/ModalUserMatch'
+import ModalFillScore from '../Modal/ModalFillScore'
 
 import ic_person from '../img/baseline-account_circle-24px-login.svg'
 import ic_male from '../img/gender-male.svg'
@@ -12,8 +13,9 @@ import ic_female from '../img/gender-female.svg'
 class UserMatch extends React.Component{
   constructor(props){
     super(props)
-    this.state ={
+    this.state = {
       modalUserMatchState: false,
+      modalFillScoreState: false,
       modalUserMatchType: 'allUser',
       testData:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],
       avgStat:{
@@ -34,13 +36,20 @@ class UserMatch extends React.Component{
       holeScoreFromLoadTemp:[],
       clientHistoryData:[],
       matchidUserLoadMatch:'',
-      selectedFile:null
+      selectedFile:null,
+      tempMatchid: '',
+      tempAccountData: []
     }
     //<SwitchToggle switchToggleState={this.props.TournamentToggle}/>
   }
   modalUserMatchToggle = () =>{
     this.setState((prev)=>{
       return {modalUserMatchState: !prev.modalUserMatchState}
+    })
+  }
+  modalFillScoreToggle = () =>{
+    this.setState((prev)=>{
+      return {modalFillScoreState: !prev.modalFillScoreState}
     })
   }
   calculateAvgStat = () =>{
@@ -449,6 +458,53 @@ class UserMatch extends React.Component{
     this.modalUserMatchToggle()
   }
 
+  testShow = (d) =>{
+    this.state.tempAccountData = []
+    this.state.modalUserMatchType = 'showTempAccount'
+    var geturl;
+    geturl = $.ajax({
+      type: "POST",
+     url: "http://pds.in.th/phpadmin/showtempacc.php",
+     dataType: 'json',
+     data: {
+       "matchid": d.matchid,
+     },
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+       console.log(data);
+       localStorage['status']=data.status
+       localStorage['username']=data.username
+       localStorage['password']=data.password
+       localStorage['teamno']=data.teamno
+     }
+    });
+    setTimeout(()=>{
+      if(localStorage['status'] != 'error to load'){
+        if(localStorage['username']){
+          var username = localStorage['username'];
+          var password = localStorage['password'];
+          var teamno = localStorage['teamno'];
+
+          username = username.split(",",username.length)
+          password = password.split(",",password.length)
+          teamno = teamno.split(",",teamno.length)
+
+          for(var i = 0;i < username.length;i++){
+            this.state.tempAccountData.push({
+              username: username[i],
+              password: password[i],
+              teamno: parseInt(teamno[i]),
+            })
+          }
+          this.modalUserMatchToggle()
+        }
+      }else{
+        alert('กรูณาเลือกแมทช์ที่เป็นทัวร์นาเมนท์')
+      }
+    },500)
+    localStorage.clear()
+  }
+
   clientHistory = () =>{
     console.log("clientHistory :",this.props.loadUserMatchData[0].matchid);
     this.state.clientHistoryData = []
@@ -594,6 +650,8 @@ class UserMatch extends React.Component{
                     {/*<button onClick={()=>this.loadAdminTour(parseInt(d.matchid))}>LoadAdmin</button>*/}
                     <button onClick={()=>this.loadMatchUserDetail(parseInt(d.matchid),'1User')}>{"1User"}</button>
                     <button onClick={()=>this.loadMatchUserDetail(parseInt(d.matchid),'allUser')}>All</button>
+                    <button onClick={()=>this.modalFillScoreToggle()}>FillScore</button>
+                    <button onClick={()=>this.testShow(d)}>Show</button>
                   </div>
                   <div className="userscore__in">{d.in}</div>
                   <div className="userscore__out">{d.out}</div>
@@ -607,6 +665,8 @@ class UserMatch extends React.Component{
                 <div className="userscore__matchname">
                   <button onClick={()=>this.loadMatchUserDetail(parseInt(1),'1User')}>{"1User"}</button>
                   <button onClick={()=>this.loadMatchUserDetail(parseInt(1),'allUser')}>All</button>
+                  <button onClick={()=>this.modalFillScoreToggle()}>FillScore</button>
+                  <button>Show</button>
                 </div>
                 <div className="userscore__in"></div>
                 <div className="userscore__out"></div>
@@ -615,6 +675,9 @@ class UserMatch extends React.Component{
               </div>
             )}
         </div>
+        <ModalFillScore
+          modalState = {this.state.modalFillScoreState}
+          modalClick = {this.modalFillScoreToggle}/>
         <ModalUserMatch
           modalType = {this.state.modalUserMatchType}
           matchidUserLoadMatch = {this.state.matchidUserLoadMatch}
@@ -629,6 +692,7 @@ class UserMatch extends React.Component{
           detailFieldFromLoad = {this.state.detailFieldFromLoad}
           FieldFromLoadDetail = {this.state.FieldFromLoadDetail}
           clientHistory = {this.state.clientHistoryData}
+          tempAccountData = {this.state.tempAccountData}
           modalState = {this.state.modalUserMatchState}
           modalClick = {this.modalUserMatchToggle}/>
       </div>

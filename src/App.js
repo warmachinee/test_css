@@ -7,6 +7,7 @@ import $ from 'jquery';
 
 import Dashboard from './page/Dashboard';
 import Login from './page/Login';
+import FillScore from './component/Card/FillScore'
 
 class App extends Component {
   constructor(props){
@@ -14,6 +15,7 @@ class App extends Component {
     this.state = {
       pageLogin: true,
       pageDashboard: false,
+      pageFillScore: false,
       appLoadMatch:[],
       dataLength:0,
       detailData:[
@@ -52,6 +54,26 @@ class App extends Component {
       };
     });
   };
+  goToLoginPage = () =>{
+    this.setState( ()=>{
+      return {
+        chksession: false,
+        pageLogin: true,
+        pageFillScore: false,
+        pageDashboard: false,
+        logoutClickState: false
+      };
+    });
+  };
+  pageFillScoreToggle = () =>{
+    this.setState( ()=>{
+      return {
+        pageFillScore: true,
+        pageLogin: false,
+        pageDashboard: false
+      };
+    });
+  }
   dashPage = () =>{
     this.state.pageLogin = false
     this.state.pageDashboard = true
@@ -68,7 +90,6 @@ class App extends Component {
   handelLogout = event =>{
     this.state.userID = ''
     this.state.appLoadMatch = []
-    event.preventDefault()
     $.ajax({
       type: "POST",
      url: "http://pds.in.th/phpadmin/logout.php",
@@ -82,6 +103,24 @@ class App extends Component {
      setTimeout(()=>{
        this.state.chksession = false
        this.goToAnotherPage()
+     },500)
+  }
+  handelLogoutFillscore = () =>{
+    this.state.userID = ''
+    this.state.appLoadMatch = []
+    $.ajax({
+      type: "POST",
+     url: "http://pds.in.th/phpadmin/logout.php",
+     dataType: 'json',
+     data: {},
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+      }
+     });
+     this.setState({logoutClickState: true})
+     setTimeout(()=>{
+       this.state.chksession = false
+       this.goToLoginPage()
      },500)
   }
   handleLoadMatch = event => {
@@ -163,24 +202,10 @@ class App extends Component {
       },300);
       localStorage.clear()
    }
-
+   
 
   componentWillMount(){
     this.checksession()
-    setTimeout(()=>{
-      //console.log('main ::: ',this.state.chksession);
-    },350)
-    /*
-    {(this.state.pageDashboard && this.state.chksession)?
-    (<Redirect to="/home" />):(
-      (this.state.pageLogin && this.state.chksession)?
-      (<Redirect to="/" />):(null)
-    )}
-    {(this.state.chksession && (window.location.pathname === '/home') && this.state.pageLogin)?
-    (<Redirect to="/home" />):(null)}
-    {(this.state.logoutClickState)?
-      (<Redirect to="/" />):(null)}
-    */
   }
 
   componentDidMount(){
@@ -191,8 +216,6 @@ class App extends Component {
     //alert('แมทช์การแข่งขัน SENIOR NATION TOUR จะเปิดดูรายละเอียดได้ภายในวันนี้ ขออภัยในความไม่สะดวก')
   }
   render() {
-    //this.checksession()
-
     return (
       <Delay wait={1000}>
       <Router>
@@ -202,11 +225,17 @@ class App extends Component {
             :(
               (this.state.logoutClickState)?
               (<Redirect to="/" />):(
-                (this.state.pageDashboard)?
-                (<Redirect to="/home" />):(
-                  ((this.state.chksession===true) && (window.location.pathname === '/home'))?
-                  (<Redirect to="/home" />):
-                  (<Redirect to="/" />)
+                (this.state.pageFillScore)?
+                (<Redirect to="/fillscore" />):
+                (
+                  ((this.state.chksession===true) && (window.location.pathname === '/fillscore'))?
+                  (<Redirect to="/fillscore" />):
+                  ((this.state.pageDashboard)?
+                  (<Redirect to="/home" />):(
+                    ((this.state.chksession===true) && (window.location.pathname === '/home'))?
+                    (<Redirect to="/home" />):
+                    (<Redirect to="/" />)
+                  ))
                 )
               )
             )}
@@ -217,7 +246,8 @@ class App extends Component {
                 session = {this.state.chksession}
                 userID = {this.getUserID}
                 loadMatch = {this.handleLoadMatch}
-                pageLoginClick = {this.goToAnotherPage}/>
+                pageLoginClick = {this.goToAnotherPage}
+                pageFillScoreClick = {this.pageFillScoreToggle}/>
             }/>
             <Route
               path="/home"
@@ -242,9 +272,15 @@ class App extends Component {
                     session = {this.state.chksession}
                     userID = {this.getUserID}
                     loadMatch = {this.handleLoadMatch}
-                    pageLoginClick = {this.goToAnotherPage}/>
+                    pageLoginClick = {this.goToAnotherPage}
+                    pageFillScoreClick = {this.pageFillScoreToggle}/>
                 }/>
-
+              <Route
+                path="/fillscore"
+                render={()=>
+                  <FillScore
+                    logout = {this.handelLogoutFillscore}/>
+                }/>
         </div>
       </Router>
     </Delay>
