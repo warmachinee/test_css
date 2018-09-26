@@ -7,6 +7,7 @@ import './ModalUserMatch.css'
 import ModalBackDrop from './ModalBackDrop'
 
 import ic_close from '../img/baseline-clear-24px.svg'
+import ic_print from '../img/baseline-print-24px.svg'
 import ic_person from '../img/baseline-account_circle-24px-login.svg'
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -14,9 +15,9 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 pdfMake.fonts = {
   THSarabunNew: {
     normal: 'THSarabunNew.ttf',
-    bold: 'THSarabunNew-Bold.ttf',
-    italics: 'THSarabunNew-Italic.ttf',
-    bolditalics: 'THSarabunNew-BoldItalic.ttf'
+    bold: 'THSarabunNew Bold.ttf',
+    italics: 'THSarabunNew Italic.ttf',
+    bolditalics: 'THSarabunNew BoldItalic.ttf'
   },
   Roboto: {
     normal: 'Roboto-Regular.ttf',
@@ -41,7 +42,8 @@ class ModalUserMatch extends React.Component{
       lastScore:[],
       matchRoundState: 0,
       checkDepartno: '',
-      checkUserid: ''
+      checkUserid: '',
+      departnoBySort: 1
     }
   }
   checkUserid = (userid) =>{
@@ -66,42 +68,109 @@ class ModalUserMatch extends React.Component{
     console.log(this.props.detailUserFromLoad[0].fullname);
     console.log(this.props.detailUserFromLoad[1].fullname);*/
     let player = []
-    for(var i = 0;i < this.props.detailUserFromLoad.length;i++){
-      let textHoleScoreFirst = ''
-      let textHoleScoreLast = ''
-      for(var j = 0;j < 9;j++){
-        textHoleScoreFirst += this.props.detailUserFromLoad[i].holescore[j] + " "
+    let rankTemp = 0
+    let rowPlayerScoreTemp = []
+    let departmentTemp = ''
+
+    for(var setDepartIndex = 0;setDepartIndex < this.props.setDepartData.length;setDepartIndex++){
+      if(this.state.departnoBySort === this.props.setDepartData[setDepartIndex].departno){
+        departmentTemp = this.props.setDepartData[setDepartIndex].departname
       }
-      for(var j = 9;j < 18;j++){
-        textHoleScoreLast += this.props.detailUserFromLoad[i].holescore[j] + " "
-      }
-      let text = (
-        this.props.detailUserFromLoad[i].fullname + " " +
-        this.props.detailUserFromLoad[i].lastname + "\t\t" + " HoleScore : " +
-        textHoleScoreFirst + " OUT : " +
-        this.props.detailUserFromLoad[i].in + "\t" + "  " +
-        textHoleScoreLast + " IN : " +
-        this.props.detailUserFromLoad[i].out + "\t" + " GROSS : " +
-        this.props.detailUserFromLoad[i].gross + "\t" + " TOTAL : " +
-        this.props.detailUserFromLoad[i].par
-      )
-      player.push(
-        {
-          text: text,
-          fontSize: 20
-        });
     }
+    rowPlayerScoreTemp.push([
+      {alignment : 'right' ,text: '#'},
+      {alignment : 'left' ,text: 'Name'},
+      {alignment : 'center' ,text: '1'},{alignment : 'center' ,text: '2'},{alignment : 'center' ,text: '3'},
+      {alignment : 'center' ,text: '4'},{alignment : 'center' ,text: '5'},{alignment : 'center' ,text: '6'},
+      {alignment : 'center' ,text: '7'},{alignment : 'center' ,text: '8'},{alignment : 'center' ,text: '9'},
+      {alignment : 'center', fillColor: '#d6d6d6',text: 'OUT'},
+      {alignment : 'center' ,text: '10'},{alignment : 'center' ,text: '11'},{alignment : 'center' ,text: '12'},
+      {alignment : 'center' ,text: '13'},{alignment : 'center' ,text: '14'},{alignment : 'center' ,text: '15'},
+      {alignment : 'center' ,text: '16'},{alignment : 'center' ,text: '17'},{alignment : 'center' ,text: '18'},
+      {alignment : 'center', fillColor: '#d6d6d6',text: 'IN'},
+      {alignment : 'center', fillColor: '#bebebe',text: 'TOTAL'},
+      {alignment : 'center', fillColor: '#8e8e8e',text: 'PAR'}])
+    for(var i = 0;i < this.props.detailUserFromLoad.length;i++){
+      let rowPlayerScore = []
+      if(this.props.detailUserFromLoad[i].departno === this.state.departnoBySort){
+        rankTemp += 1
+        rowPlayerScore.push({alignment : 'right' ,text: rankTemp})
+        rowPlayerScore.push(
+          this.props.detailUserFromLoad[i].fullname + '\t' +
+          this.props.detailUserFromLoad[i].lastname
+        )
+        for(var j = 0;j < 9;j++){
+          let f = this.props.detailFieldFromLoad[j].fieldscore
+          let s = this.props.detailUserFromLoad[i].holescore[j]
+          if(f > s){
+            rowPlayerScore.push({alignment : 'center', color: 'red', bold: true, text: s})
+          }else{
+            rowPlayerScore.push({alignment : 'center', text: s})
+          }
+        }
+        rowPlayerScore.push({alignment : 'center', fillColor: '#d6d6d6',text: this.props.detailUserFromLoad[i].in})
+        for(var j = 9;j < 18;j++){
+          let f = this.props.detailFieldFromLoad[j].fieldscore
+          let s = this.props.detailUserFromLoad[i].holescore[j]
+          if(f > s){
+            rowPlayerScore.push({alignment : 'center', color: 'red', bold: true, text: s})
+          }else{
+            rowPlayerScore.push({alignment : 'center', text: s})
+          }
+        }
+        rowPlayerScore.push(
+          {alignment : 'center', fillColor: '#d6d6d6',text: this.props.detailUserFromLoad[i].out},
+          {alignment : 'center', fillColor: '#bebebe',text: this.props.detailUserFromLoad[i].gross},
+          {alignment : 'center', fillColor: '#8e8e8e',text: this.props.detailUserFromLoad[i].par}
+        )
+        rowPlayerScoreTemp.push(rowPlayerScore)
+      }
+    }
+    player.push(
+      {
+        text: [
+          this.props.detailMatchFromLoad[0].matchname,
+          {text: ' ณ สนาม ', fontSize: 25, bold: true},
+          this.props.detailMatchFromLoad[0].fieldname,
+          ' วันที่ ' + this.props.detailMatchFromLoad[0].datematch
+        ],
+        fontSize: 20, bold: true,
+      },
+      {
+        text: [
+          {text: 'ประเภท ', fontSize: 25, bold: true},
+          departmentTemp
+        ],
+        fontSize: 18, bold: true,
+      },
+      {
+  			style: 'tableScore',
+  			table: {
+  				widths: [
+            25,150,15,15,15,15,15,15,15,15,15,25,
+            15,15,15,15,15,15,15,15,15,25,'*','*'],
+  				body: rowPlayerScoreTemp
+  			},
+        fontSize: 14
+  		}
+    )
     var doc = {
       pageSize: 'A4',
       pageOrientation: 'landscape',
       content: [
         player
       ],
+      styles: {
+    		tableScore: {
+    			margin: [0, 5, 0, 15]
+    		}
+    	},
       defaultStyle:{
         font: 'THSarabunNew'
       }
     };
     pdfMake.createPdf(doc).open()
+    //pdfMake.createPdf(doc).download(this.props.detailMatchFromLoad[0].matchname + '_ScoreBoard.pdf');
   }
   render(){
     let tempTable = []
@@ -109,6 +178,7 @@ class ModalUserMatch extends React.Component{
       tempTable.push(i)
     }
     if(this.props.modalState){
+      this.showData()
       if(this.props.modalType === '1User'){
         return(
           <div className="modal__usermatch">
@@ -179,10 +249,13 @@ class ModalUserMatch extends React.Component{
                         {this.props.oneUserTempHole.filter(
                           (item) => {
                             return item.i < 9
-                          }).map((d)=>
-                          <div className="usermatch__score__score">
+                          }).map((d,i)=>
+                          <div
+                            className="usermatch__score__score">
                             <div className="spacer"></div>
-                            <div>{d.holescore}</div>
+                            <div
+                              style = {this.props.detailFieldFromLoad[i].fieldscore > d.holescore ? {color: 'red'} : {}}>
+                              {d.holescore}</div>
                             <div className="spacer"></div>
                           </div>
                         )}
@@ -250,10 +323,13 @@ class ModalUserMatch extends React.Component{
                         {this.props.oneUserTempHole.filter(
                           (item) => {
                             return item.i >= 9
-                          }).map((d)=>
-                          <div className="usermatch__score__score">
+                          }).map((d,i)=>
+                          <div
+                            className="usermatch__score__score">
                             <div className="spacer"></div>
-                            <div>{d.holescore}</div>
+                            <div
+                              style = {this.props.detailFieldFromLoad[i].fieldscore > d.holescore ? {color: 'red'} : {}}>
+                              {d.holescore}</div>
                             <div className="spacer"></div>
                           </div>
                         )}
@@ -332,7 +408,6 @@ class ModalUserMatch extends React.Component{
           </div>
         );
       }else if(this.props.modalType === 'allUser'){
-        this.showData()
         if(this.state.matchRoundState){
           return(
             <div className="modal__usermatch__alluser">
@@ -458,13 +533,30 @@ class ModalUserMatch extends React.Component{
                   <div className="modal__usermatch__label__alluser">
                     <div className="modal__usermatch__label__text__alluser">
                       Match detail All User
-                      <button onClick={this.printDocument}>Print</button>
+                    </div>
+                    <select onChange={(e)=>this.setState({departnoBySort: parseInt(e.target.value)})}>
+                      {this.props.setDepartData.map((d)=>
+                        <option value={parseInt(d.departno)}>{d.departname}</option>
+                      )}
+                    </select>
+                    <div className="modal__usermatch__label__printDocument">
+                      <img onClick={this.printDocument} src={ic_print}></img>
+                      <p onClick={this.printDocument}>PDF</p>
                     </div>
                     <div className="spacer"></div>
                     <div className="modal__usermatch__label__close__alluser">
                       <img onClick = {this.props.modalClick} src={ic_close}></img>
                     </div>
                   </div>
+                  {this.props.detailMatchFromLoad.map((d)=>
+                    <div className="modal__usermatch__alluser__fielddetail">
+                      <p>{d.datematch}</p>
+                      <div className="modal__usermatch__alluser__fielddetail__matchname">
+                        {d.matchname}
+                      </div>
+                      <p>@  {d.fieldname}</p>
+                    </div>
+                  )}
                   <div className="usermatch__leaderboard__label">
                     <div className="leaderboard__label__rank">
                       <div className="spacer"></div>
@@ -488,206 +580,9 @@ class ModalUserMatch extends React.Component{
                     </div>
                   </div>
                   <div className="usermatch__leaderboard">
-                    {/*tempTable.map((d,i)=>
-                      <div className="usermatch__leaderboard__item__grid">
-                        <a className="usermatch__leaderboard__item"
-                          onClick={()=>{
-                            this.state.expandClassIndex = i
-                            this.state.expandClassState[i] = !this.state.expandClassState[i]
-                            if(this.state.expandClassState[i]){
-                              this.state.expandClassDrawer[i] = 'usermatch__leaderboard__item__detail expand'
-                            }else{
-                              this.state.expandClassDrawer[i] = 'usermatch__leaderboard__item__detail'
-                            }
-                            this.setState(this.state)
-                          }}>
-                          <div className="leaderboard__item__rank">
-                            <div className="spacer"></div>
-                            {i+1}
-                            <div className="spacer"></div>
-                          </div>
-                          <div className="leaderboard__item__player">
-                            <div className="spacer"></div>
-                            Player {d+1}
-                            <div className="spacer"></div>
-                          </div>
-                          <div className="leaderboard__item__overall">
-                            <div className="spacer"></div>
-                            {d}
-                            <div className="spacer"></div>
-                          </div>
-                          <div className="leaderboard__item__stroke">
-                            <div className="spacer"></div>
-                            {d}
-                            <div className="spacer"></div>
-                          </div>
-                        </a>
-                        <div className={this.state.expandClassDrawer[i]}>
-                          <div className="leaderboard__item__detail">
-                            <div className="leaderboard__item__detail__pic">
-                              <img src={ic_person}></img>
-                            </div>
-                            <div className="leaderboard__item__detail__detail__left">
-                              <div className="leaderboard__item__detail__detail__name">{d.fullname} {d.lastname}</div>
-                              {this.checkDepart(d.departno)}
-                              {this.props.setDepartData.filter((item)=>{
-                                return item.departno === this.state.checkDepartno
-                              }).map((d)=>
-                                <div className="leaderboard__item__detail__detail__depart">
-                                  {d}
-                                </div>
-                              )}
-                              <div className="leaderboard__item__detail__detail__racket">Racket</div>
-                            </div>
-                            <div className="leaderboard__item__detail__detail__right">
-
-                            </div>
-                          </div>
-                          <div className="leaderboard__item__score">
-
-                            <div className="leaderboard__item__score__hole">
-                              <div className="leaderboard__item__score__hole__label">
-                                <div className="spacer"></div>
-                                HOLE
-                                <div className="spacer"></div>
-                              </div>
-                              {this.state.tempHoleLabel.filter(
-                                (item)=>{ return item < 9 }
-                              ).map((d)=>
-                                <div className="leaderboard__item__score__hole__value">
-                                  <div className="spacer"></div>
-                                  {d+1}
-                                  <div className="spacer"></div>
-                                </div>
-                              )}
-                              <div className="leaderboard__item__score__hole__value__label">
-                                <div className="spacer"></div>
-                                OUT
-                                <div className="spacer"></div>
-                              </div>
-                              {this.state.tempHoleLabel.filter(
-                                (item)=>{ return item >= 9 }
-                              ).map((d)=>
-                                <div className="leaderboard__item__score__hole__value">
-                                  <div className="spacer"></div>
-                                  {d+1}
-                                  <div className="spacer"></div>
-                                </div>
-                              )}
-                              <div className="leaderboard__item__score__hole__value__label">
-                                <div className="spacer"></div>
-                                IN
-                                <div className="spacer"></div>
-                              </div>
-                              <div className="leaderboard__item__score__hole__value__label__tot">
-                                <div className="spacer"></div>
-                                TOT
-                                <div className="spacer"></div>
-                              </div>
-                            </div>
-
-                            <div className="leaderboard__item__score__par">
-                              <div className="leaderboard__item__score__par__label">
-                                <div className="spacer"></div>
-                                PAR
-                                <div className="spacer"></div>
-                              </div>
-                              {this.props.detailFieldFromLoad.filter(
-                                (item)=>{ return item.i < 9 }
-                              ).map((d)=>
-                                <div className="leaderboard__item__score__par__value">
-                                  <div className="spacer"></div>
-                                  {d.fieldscore}
-                                  <div className="spacer"></div>
-                                </div>
-                              )}
-                              {this.props.FieldFromLoadDetail.map((d)=>
-                                <div className="leaderboard__item__score__par__value__label">
-                                  <div className="spacer"></div>
-                                  {d.in}
-                                  <div className="spacer"></div>
-                                </div>
-                              )}
-                              {this.props.detailFieldFromLoad.filter(
-                                (item)=>{ return item.i >= 9 }
-                              ).map((d)=>
-                                <div className="leaderboard__item__score__par__value">
-                                  <div className="spacer"></div>
-                                  {d.fieldscore}
-                                  <div className="spacer"></div>
-                                </div>
-                              )}
-                              {this.props.FieldFromLoadDetail.map((d)=>
-                                <div className="leaderboard__item__score__par__value__label">
-                                  <div className="spacer"></div>
-                                  {d.out}
-                                  <div className="spacer"></div>
-                                </div>
-                              )}
-                              {this.props.FieldFromLoadDetail.map((d)=>
-                                <div className="leaderboard__item__score__par__value__label__tot">
-                                  <div className="spacer"></div>
-                                  {d.gross}
-                                  <div className="spacer"></div>
-                                </div>
-                              )}
-                            </div>
-
-                            <div className="leaderboard__item__score__score">
-                              <div className="leaderboard__item__score__score__label">
-                                <div className="spacer"></div>
-                                SCORE
-                                <div className="spacer"></div>
-                              </div>
-                              {this.checkUserid(d.userid)}
-                              {this.props.tempHole.filter(
-                                (item)=>{ return (this.state.checkUserid === item.userid) }
-                              ).map((d)=>
-                                d.holescore.filter((item)=>{
-                                  return item.i < 9
-                                }).map((d)=>
-                                  <div className="leaderboard__item__score__score__value">
-                                    <div className="spacer"></div>
-                                    {d.holescore}
-                                    <div className="spacer"></div>
-                                  </div>
-                                )
-                              )}
-                              <div className="leaderboard__item__score__score__value__label">
-                                <div className="spacer"></div>
-                                {d.in}
-                                <div className="spacer"></div>
-                              </div>
-                              {this.props.tempHole.filter(
-                                (item)=>{ return (this.state.checkUserid === item.userid) }
-                              ).map((d)=>
-                                d.holescore.filter((item)=>{
-                                  return item.i >= 9
-                                }).map((d)=>
-                                  <div className="leaderboard__item__score__score__value">
-                                    <div className="spacer"></div>
-                                    {d.holescore}
-                                    <div className="spacer"></div>
-                                  </div>
-                                )
-                              )}
-                              <div className="leaderboard__item__score__score__value__label">
-                                <div className="spacer"></div>
-                                {d.out}
-                                <div className="spacer"></div>
-                              </div>
-                              <div className="leaderboard__item__score__score__value__label__tot">
-                                <div className="spacer"></div>
-                                {d.gross}
-                                <div className="spacer"></div>
-                              </div>
-                            </div>
-
-                          </div>
-                        </div>
-                      </div>
-                    )*/}
-                    {this.props.detailUserFromLoad.map((d,i)=>
+                    {this.props.detailUserFromLoad.filter(
+                      (item)=>{return item.departno === this.state.departnoBySort}
+                    ).map((d,i)=>
                       <div className="usermatch__leaderboard__item__grid">
                         <a className="usermatch__leaderboard__item"
                           onClick={()=>{
@@ -712,7 +607,7 @@ class ModalUserMatch extends React.Component{
                           </div>
                           <div className="leaderboard__item__overall">
                             <div className="spacer"></div>
-                            {d.par}
+                            {(d.par === 0)?('E'):(d.par)}
                             <div className="spacer"></div>
                           </div>
                           <div className="leaderboard__item__stroke">
@@ -844,8 +739,10 @@ class ModalUserMatch extends React.Component{
                               ).map((d)=>
                                 d.holescore.filter((item)=>{
                                   return item.i < 9
-                                }).map((d)=>
-                                  <div className="leaderboard__item__score__score__value">
+                                }).map((d,i)=>
+                                  <div
+                                    style = {this.props.detailFieldFromLoad[i].fieldscore > d.holescore ? {color: 'red'} : {}}
+                                    className="leaderboard__item__score__score__value">
                                     <div className="spacer"></div>
                                     {d.holescore}
                                     <div className="spacer"></div>
@@ -862,8 +759,10 @@ class ModalUserMatch extends React.Component{
                               ).map((d)=>
                                 d.holescore.filter((item)=>{
                                   return item.i >= 9
-                                }).map((d)=>
-                                  <div className="leaderboard__item__score__score__value">
+                                }).map((d,i)=>
+                                  <div
+                                    style = {this.props.detailFieldFromLoad[i].fieldscore > d.holescore ? {color: 'red'} : {}}
+                                    className="leaderboard__item__score__score__value">
                                     <div className="spacer"></div>
                                     {d.holescore}
                                     <div className="spacer"></div>

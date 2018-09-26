@@ -1270,6 +1270,15 @@ class Dashboard extends Component {
       this.showUserLoadmatchFromLoad()
     },500);
   }
+  userDashboardPageClick = () =>{
+    this.HandleLoadUserMatch()
+    setTimeout(()=>{
+      this.userDashboardPageToggle()
+      this.dashboardRefresh = false
+      this.showDataFromLoad()
+    },500);
+    this.setState(()=>{{sideDrawerOpen: false};});
+  }
   dashboardPageClick = ()=>{
     //console.log("dashboardPageClick");
     this.HandleLoadUserMatch()
@@ -1340,7 +1349,7 @@ class Dashboard extends Component {
           logOut = {this.props.logOut}
           show={this.state.sideDrawerOpen}
           click={pageClickState}
-          userDashboardPageClick={this.userDashboardPageToggle}
+          userDashboardPageClick = {this.userDashboardPageClick}
           dashboardPageClick={this.dashboardPageClick}
           historyPageClick={this.HandlerLoadHistory}
           publicPageClick={this.HandlerLoadPublicMatch}

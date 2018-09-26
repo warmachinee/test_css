@@ -172,14 +172,16 @@ class UserMatch extends React.Component{
        dataType: 'json',
        data: {
          "matchid": matchid,
-         "sort": 0
+         "sort": 2
        },
        xhrFields: { withCredentials: true },
        success: function(data) {
          localStorage['in']=data.in
          localStorage['out']=data.out
          localStorage['gross']=data.gross
-         localStorage['par']=data.par
+         if(data.par){
+           localStorage['par']=data.par
+         }
          localStorage['holescore']=data.holescore
          localStorage['userid']=data.userid
          localStorage['fullname']=data.full
@@ -260,7 +262,7 @@ class UserMatch extends React.Component{
         var inn = localStorage['in'];
         var outt = localStorage['out'];
         var gross = localStorage['gross'];
-        if(check === 'allUser'){
+        if(localStorage['par']){
           var par = localStorage['par'];
         }
         var holescore = localStorage['holescore'];
@@ -281,10 +283,9 @@ class UserMatch extends React.Component{
         inn = JSON.parse("["+inn+"]")
         outt = JSON.parse("["+outt+"]")
         gross = JSON.parse("["+gross+"]")
-        if(check === 'allUser'){
+        if(localStorage['par']){
           par = JSON.parse("["+par+"]")
         }
-
         holescore = holescore.split(",",holescore.length)
         userid = userid.split(",",userid.length)
         fullname = fullname.split(",",fullname.length)
@@ -363,21 +364,39 @@ class UserMatch extends React.Component{
             this.state.detailUserFromLoad.push(obj);
           }
         }else{
-          for(var i = 0;i < userid.length;i++){
-            var obj = {
-              i: i,
-              in: parseInt(inn[i]),
-              out: parseInt(outt[i]),
-              gross: parseInt(gross[i]),
-              par: parseInt(par[i]),
-              userid: parseInt(userid[i]),
-              fullname: fullname[i],
-              lastname: lastname[i],
-              teamno: parseInt(teamno[i]),
-              departno: parseInt(departno[i]),
-              holescore: this.state.holeScoreFromLoadTemp[i]
+          if(localStorage['par']){
+            for(var i = 0;i < userid.length;i++){
+              var obj = {
+                i: i,
+                in: parseInt(inn[i]),
+                out: parseInt(outt[i]),
+                gross: parseInt(gross[i]),
+                par: parseInt(par[i]),
+                userid: parseInt(userid[i]),
+                fullname: fullname[i],
+                lastname: lastname[i],
+                teamno: parseInt(teamno[i]),
+                departno: parseInt(departno[i]),
+                holescore: this.state.holeScoreFromLoadTemp[i]
+              }
+              this.state.detailUserFromLoad.push(obj);
             }
-            this.state.detailUserFromLoad.push(obj);
+          }else{
+            for(var i = 0;i < userid.length;i++){
+              var obj = {
+                i: i,
+                in: parseInt(inn[i]),
+                out: parseInt(outt[i]),
+                gross: parseInt(gross[i]),
+                userid: parseInt(userid[i]),
+                fullname: fullname[i],
+                lastname: lastname[i],
+                teamno: parseInt(teamno[i]),
+                departno: parseInt(departno[i]),
+                holescore: this.state.holeScoreFromLoadTemp[i]
+              }
+              this.state.detailUserFromLoad.push(obj);
+            }
           }
         }
 
@@ -452,10 +471,10 @@ class UserMatch extends React.Component{
         console.log("userProfileData",this.props.userProfileData);
         console.log("loadUserMatchData",this.props.loadUserMatchData);
         this.setState(this.state)
+        this.modalUserMatchToggle()
       }
     },300)
     localStorage.clear()
-    this.modalUserMatchToggle()
   }
 
   testShow = (d) =>{
@@ -625,53 +644,84 @@ class UserMatch extends React.Component{
             onClick = {()=>this.clientHistory()}
             style={{margin:'1rem 0 2rem 2rem'}}>Client History</button>
         </div>
-        <div className="userscore__stat">
-          <div className="userscore__stat__result">{"RESULT"}</div>
-          <div className="userscore__stat__in">{this.state.avgStat.in}</div>
-          <div className="userscore__stat__out">{this.state.avgStat.out}</div>
-          <div className="userscore__stat__gross">{this.state.avgStat.gross}</div>
-          <div className="userscore__stat__par">{this.state.avgStat.par}</div>
-        </div>
         <div className="userscore__stat__label">
-          <div className="userscore__stat__label__date">{"Date"}</div>
-          <div className="userscore__stat__label__matchname">{"Match"}</div>
-          <div className="userscore__stat__label__in">{"IN"}</div>
-          <div className="userscore__stat__label__out">{"OUT"}</div>
-          <div className="userscore__stat__label__gross">{"Gross"}</div>
-          <div className="userscore__stat__label__par">{"PAR"}</div>
+          <div className="userscore__stat__label__date">
+            <div className="spacer"></div>{"Date"}<div className="spacer"></div>
+            </div>
+          <div className="userscore__stat__label__matchname">
+            <div className="spacer"></div>{"Match"}<div className="spacer"></div>
+          </div>
+          <div className="userscore__stat__label__in">
+            <div className="spacer"></div>{"IN"}<div className="spacer"></div>
+          </div>
+          <div className="userscore__stat__label__out">
+            <div className="spacer"></div>{"OUT"}<div className="spacer"></div>
+          </div>
+          <div className="userscore__stat__label__gross">
+            <div className="spacer"></div>{"Gross"}<div className="spacer"></div>
+          </div>
+          <div className="userscore__stat__label__par">
+            <div className="spacer"></div>{"PAR"}<div className="spacer"></div>
+          </div>
+        </div>
+        <div className="userscore__stat">
+          <div className="userscore__stat__result">
+            <div className="spacer"></div>{"RESULT"}<div className="spacer"></div>
+          </div>
+          <div className="userscore__stat__in">
+            <div className="spacer"></div>{this.state.avgStat.in}<div className="spacer"></div>
+          </div>
+          <div className="userscore__stat__out">
+            <div className="spacer"></div>{this.state.avgStat.out}<div className="spacer"></div>
+          </div>
+          <div className="userscore__stat__gross">
+            <div className="spacer"></div>{this.state.avgStat.gross}<div className="spacer"></div>
+          </div>
+          <div className="userscore__stat__par">
+            <div className="spacer"></div>{this.state.avgStat.par}<div className="spacer"></div>
+          </div>
         </div>
         <div className="usermatch__userscore">
           {(this.props.loadUserMatchData.length)?
             (
               this.props.loadUserMatchData.map((d)=>
                 <div className="userscore__grid">
-                  <div className="userscore__date">{d.date}</div>
-                  <div className="userscore__matchname">{d.matchname}
-                    {/*<button onClick={()=>this.loadAdminTour(parseInt(d.matchid))}>LoadAdmin</button>*/}
-                    <button onClick={()=>this.loadMatchUserDetail(parseInt(d.matchid),'1User')}>{"1User"}</button>
-                    <button onClick={()=>this.loadMatchUserDetail(parseInt(d.matchid),'allUser')}>All</button>
-                    <button onClick={()=>this.modalFillScoreToggle()}>FillScore</button>
-                    <button onClick={()=>this.testShow(d)}>Show</button>
+                  <div className="userscore__date"><div className="spacer"></div>{d.date}<div className="spacer"></div></div>
+                  <div className="userscore__matchname">
+                    <div className="spacer"></div>
+                    <div className="userscore__matchname__grid">
+                      {d.matchname}
+                      <button onClick={()=>this.loadMatchUserDetail(parseInt(d.matchid),'1User')}>{"1User"}</button>
+                      <button onClick={()=>this.loadMatchUserDetail(parseInt(d.matchid),'allUser')}>All</button>
+                      <button onClick={()=>this.modalFillScoreToggle()}>FillScore</button>
+                      <button onClick={()=>this.testShow(d)}>Show</button>
+                    </div>
+                    <div className="spacer"></div>
                   </div>
-                  <div className="userscore__in">{d.in}</div>
-                  <div className="userscore__out">{d.out}</div>
-                  <div className="userscore__gross">{d.gross}</div>
-                  <div className="userscore__par">{d.par}</div>
+                  <div className="userscore__in"><div className="spacer"></div>{d.in}<div className="spacer"></div></div>
+                  <div className="userscore__out"><div className="spacer"></div>{d.out}<div className="spacer"></div></div>
+                  <div className="userscore__gross"><div className="spacer"></div>{d.gross}<div className="spacer"></div></div>
+                  <div className="userscore__par"><div className="spacer"></div>{d.par}<div className="spacer"></div></div>
                 </div>
               )
             ):(
               <div className="userscore__grid">
-                <div className="userscore__date"></div>
+                <div className="userscore__date"><div className="spacer"></div>Date<div className="spacer"></div></div>
                 <div className="userscore__matchname">
-                  <button onClick={()=>this.loadMatchUserDetail(parseInt(1),'1User')}>{"1User"}</button>
-                  <button onClick={()=>this.loadMatchUserDetail(parseInt(1),'allUser')}>All</button>
-                  <button onClick={()=>this.modalFillScoreToggle()}>FillScore</button>
-                  <button>Show</button>
+                  <div className="spacer"></div>
+                  <div className="userscore__matchname__grid">
+                    <p>No match</p>
+                    <button onClick={()=>this.loadMatchUserDetail(parseInt(1),'1User')}>{"1User"}</button>
+                    <button onClick={()=>this.loadMatchUserDetail(parseInt(1),'allUser')}>All</button>
+                    <button onClick={()=>this.modalFillScoreToggle()}>FillScore</button>
+                    <button>Show</button>
+                  </div>
+                  <div className="spacer"></div>
                 </div>
-                <div className="userscore__in"></div>
-                <div className="userscore__out"></div>
-                <div className="userscore__gross"></div>
-                <div className="userscore__par"></div>
+                <div className="userscore__in"><div className="spacer"></div>1<div className="spacer"></div></div>
+                <div className="userscore__out"><div className="spacer"></div>1<div className="spacer"></div></div>
+                <div className="userscore__gross"><div className="spacer"></div>1<div className="spacer"></div></div>
+                <div className="userscore__par"><div className="spacer"></div>1<div className="spacer"></div></div>
               </div>
             )}
         </div>

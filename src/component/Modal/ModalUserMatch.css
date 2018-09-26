@@ -89,16 +89,52 @@
   display: flex;
 }
 .modal__usermatch__label__alluser .modal__usermatch__label__text__alluser{
-  margin: 4% 5% 5% 10%;
+  margin: 8% 5% 5% 10%;
   font-size: 1.5rem;
   letter-spacing: .1rem;
   color: #2a4d69;
   font-weight: bolder;
 }
-.modal__usermatch__label__alluser .modal__usermatch__label__close__alluser{
-  margin: 4% 5% 5% 0;
+.modal__usermatch__label__alluser select{
+  margin: 8% 5% 5% 0;
+  height: 2rem;
+  width: 10rem;
+}
+.modal__usermatch__label__alluser .modal__usermatch__label__printDocument{
+  margin: 5% 5% 5% 0;
   height: 2.5rem;
   width: 2.5rem;
+}
+.modal__usermatch__label__printDocument img{width: 100%;cursor: pointer;}
+.modal__usermatch__label__printDocument p{
+  color: #036ec8;
+  font-weight: bolder;
+  text-align: center;
+  cursor: pointer;
+}
+.modal__usermatch__label__alluser .modal__usermatch__label__close__alluser{
+  margin: 5% 5% 5% 0;
+  height: 2.5rem;
+  width: 2.5rem;
+}
+.modal__usermatch__card__alluser .modal__usermatch__alluser__fielddetail{
+  margin: 0% 5% 5% 10%;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+}
+.modal__usermatch__alluser__fielddetail .modal__usermatch__alluser__fielddetail__matchname{
+  margin: 0 1rem;
+  font-size: 1.35rem;
+  color: #036ec8;
+  font-weight: bolder;
+}
+.modal__usermatch__alluser__fielddetail p{
+  margin-top: .1rem;
+  font-size: 1.15rem;
+  color: #036ec8;
+  font-weight: 600;
 }
 .modal__usermatch__card__alluser .usermatch__leaderboard__label{
   -webkit-box-shadow: 0 0.3rem 0.5rem 0 rgba(0,0,0,0.3);

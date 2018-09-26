@@ -96,10 +96,9 @@ class Login extends Component{
           loginStatus: response,
           userID: id
         });
-        //console.log("this.state.userID :::",this.state.userID);
       }
       this.LoginAction()
-    },350)
+    },1500)
   }
   handleSubmitRegis =()=> {
     var geturl;
@@ -140,7 +139,6 @@ class Login extends Component{
       //console.log(this.getResultLogin());
       alert('Login Fail')
     }
-    localStorage['response']=null;
     localStorage.clear()
   }
   RegisAction=()=>{
@@ -151,7 +149,6 @@ class Login extends Component{
       alert(this.getResultRegis())
       //console.log(this.getResultRegis());
     }
-    localStorage['response']=null;
     localStorage.clear()
   }
   getResultLogin=()=>{

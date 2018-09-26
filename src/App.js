@@ -29,9 +29,12 @@ class App extends Component {
         }
       ],
       userID:'',
-      chksession : false,
-      sessionstatus : '',
-      logoutClickState: false
+      chksession: false,
+      chktempid: 0,
+      chktype: 0,
+      chkName:{},
+      sessionstatus: '',
+      logoutClickState: false,
     }
     this.cardStateClick = ''
   }
@@ -87,6 +90,10 @@ class App extends Component {
       };
     });
   }
+  pageFillScoreClick = () =>{
+    this.checksession()
+    setTimeout(this.pageFillScoreToggle,350)
+  }
   handelLogout = event =>{
     this.state.userID = ''
     this.state.appLoadMatch = []
@@ -103,7 +110,7 @@ class App extends Component {
      setTimeout(()=>{
        this.state.chksession = false
        this.goToAnotherPage()
-     },500)
+     },1000)
   }
   handelLogoutFillscore = () =>{
     this.state.userID = ''
@@ -121,7 +128,7 @@ class App extends Component {
      setTimeout(()=>{
        this.state.chksession = false
        this.goToLoginPage()
-     },500)
+     },1000)
   }
   handleLoadMatch = event => {
     $.ajax({
@@ -172,9 +179,9 @@ class App extends Component {
      },250);
      localStorage.clear()
    }
-   checksession = () =>{
-     $.ajax({
-       type: "POST",
+  checksession = () =>{
+    $.ajax({
+      type: "POST",
       //url: "http://127.0.0.1/php/login.php",
       url: "http://pds.in.th/phpadmin/loadsession.php",
       dataType: 'json',
@@ -184,25 +191,42 @@ class App extends Component {
         //console.log(data)
         localStorage['chk'] = data.status;
         localStorage['id'] = data.id;
+        localStorage['fullname'] = data.fullname;
+        localStorage['lastname'] = data.lastname;
+        localStorage['tempid'] = data.tempid;
+        localStorage['type'] = data.type;
        }
       });
       setTimeout(()=>{
         if(localStorage['id']){
           var chksessions = localStorage['chk'];
           var id = localStorage['id'];
+          var tempid = localStorage['tempid'];
+          var fullname = localStorage['fullname'];
+          var lastname = localStorage['lastname'];
+          var type = localStorage['type'];
+
           this.state.sessionstatus = chksessions;
           this.state.userID = parseInt(id)
+          this.state.chktempid = parseInt(tempid)
+          this.state.chktype = parseInt(type)
+          this.state.chkName = fullname + " " + lastname
+
           //console.log(id," : ",chksessions);
           if(this.state.sessionstatus === 'valid session'){
              this.state.chksession = true
           }else{
              this.state.chksession = false
            }
+           if(this.state.chktempid === 1){
+             this.state.chktempid = true
+           }else{
+             this.state.chktempid = false
+           }
           }
       },300);
       localStorage.clear()
    }
-   
 
   componentWillMount(){
     this.checksession()
@@ -229,11 +253,16 @@ class App extends Component {
                 (<Redirect to="/fillscore" />):
                 (
                   ((this.state.chksession===true) && (window.location.pathname === '/fillscore'))?
-                  (<Redirect to="/fillscore" />):
+                  (
+                    (this.state.chktempid)?
+                    (<Redirect to="/fillscore" />):(<Redirect to="/home" />)
+                  ):
                   ((this.state.pageDashboard)?
                   (<Redirect to="/home" />):(
                     ((this.state.chksession===true) && (window.location.pathname === '/home'))?
-                    (<Redirect to="/home" />):
+                    (
+                      (this.state.chktempid)?(<Redirect to="/fillscore" />):(<Redirect to="/home" />)
+                    ):
                     (<Redirect to="/" />)
                   ))
                 )
@@ -247,7 +276,7 @@ class App extends Component {
                 userID = {this.getUserID}
                 loadMatch = {this.handleLoadMatch}
                 pageLoginClick = {this.goToAnotherPage}
-                pageFillScoreClick = {this.pageFillScoreToggle}/>
+                pageFillScoreClick = {this.pageFillScoreClick}/>
             }/>
             <Route
               path="/home"
@@ -273,12 +302,14 @@ class App extends Component {
                     userID = {this.getUserID}
                     loadMatch = {this.handleLoadMatch}
                     pageLoginClick = {this.goToAnotherPage}
-                    pageFillScoreClick = {this.pageFillScoreToggle}/>
+                    pageFillScoreClick = {this.pageFillScoreClick}/>
                 }/>
               <Route
                 path="/fillscore"
                 render={()=>
                   <FillScore
+                    chkName = {this.state.chkName}
+                    chktype = {this.state.chktype}
                     logout = {this.handelLogoutFillscore}/>
                 }/>
         </div>
