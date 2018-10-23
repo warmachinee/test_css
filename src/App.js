@@ -99,7 +99,7 @@ class App extends Component {
     this.state.appLoadMatch = []
     $.ajax({
       type: "POST",
-     url: "http://pds.in.th/phpadmin/logout.php",
+     url: "http://www.thai-pga.com/phpadmin/logout.php",
      dataType: 'json',
      data: {},
      xhrFields: { withCredentials: true },
@@ -117,7 +117,7 @@ class App extends Component {
     this.state.appLoadMatch = []
     $.ajax({
       type: "POST",
-     url: "http://pds.in.th/phpadmin/logout.php",
+     url: "http://www.thai-pga.com/phpadmin/logout.php",
      dataType: 'json',
      data: {},
      xhrFields: { withCredentials: true },
@@ -134,7 +134,7 @@ class App extends Component {
     $.ajax({
       type: "POST",
      //url: "http://127.0.0.1/php/login.php",
-     url: "http://pds.in.th/phpadmin/loadmatchprivate.php",
+     url: "http://www.thai-pga.com/phpadmin/loadmatchprivate.php",
      dataType: 'json',
      data: {},
      xhrFields: { withCredentials: true },
@@ -183,7 +183,7 @@ class App extends Component {
     $.ajax({
       type: "POST",
       //url: "http://127.0.0.1/php/login.php",
-      url: "http://pds.in.th/phpadmin/loadsession.php",
+      url: "http://www.thai-pga.com/phpadmin/loadsession.php",
       dataType: 'json',
       data: {},
       xhrFields: { withCredentials: true },

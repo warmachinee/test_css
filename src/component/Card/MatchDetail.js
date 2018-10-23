@@ -53,7 +53,7 @@ class MatchDetail extends React.Component{
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://pds.in.th/phpadmin/matchresultscore.php",
+     url: "http://www.thai-pga.com/phpadmin/matchresultscore.php",
      dataType: 'json',
      data: {
        "matchid": this.props.matchDetailID,
@@ -276,7 +276,7 @@ class MatchDetail extends React.Component{
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://pds.in.th/phpadmin/updateTDbyuser.php",
+     url: "http://www.thai-pga.com/phpadmin/updateTDbyuser.php",
      dataType: 'json',
      data: {
        "matchid": matchid,
@@ -296,7 +296,7 @@ class MatchDetail extends React.Component{
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://pds.in.th/phpadmin/sudoupdateTNDN.php",
+     url: "http://www.thai-pga.com/phpadmin/sudoupdateTNDN.php",
      dataType: 'json',
      data: {
        "matchid": this.state.editTeamData.matchid,

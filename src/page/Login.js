@@ -73,7 +73,7 @@ class Login extends Component{
     geturl = $.ajax({
       type: "POST",
      //url: "http://127.0.0.1/php/login.php",
-     url: "http://pds.in.th/phpadmin/login.php",
+     url: "http://www.thai-pga.com/phpadmin/login.php",
      dataType: 'json',
      data: {
        "username": this.state.userData.username,
@@ -104,7 +104,7 @@ class Login extends Component{
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://pds.in.th/phpadmin/register.php",
+     url: "http://www.thai-pga.com/phpadmin/register.php",
      dataType: 'json',
      data: {
        "username": this.state.regisData.username,
@@ -167,7 +167,7 @@ class Login extends Component{
   checksession = () =>{
     $.ajax({
       type: "POST",
-     url: "http://pds.in.th/phpadmin/loadsession.php",
+     url: "http://www.thai-pga.com/phpadmin/loadsession.php",
      dataType: 'json',
      data: {},
      xhrFields: { withCredentials: true },

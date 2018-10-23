@@ -36,6 +36,7 @@ class UserMatch extends React.Component{
       holeScoreFromLoadTemp:[],
       clientHistoryData:[],
       matchidUserLoadMatch:'',
+      fieldidUserLoadMatch: '',
       selectedFile:null,
       tempMatchid: '',
       tempAccountData: []
@@ -81,7 +82,7 @@ class UserMatch extends React.Component{
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://pds.in.th/phpadmin/loadadmintour.php",
+     url: "http://www.thai-pga.com/phpadmin/loadadmintour.php",
      dataType: 'json',
      data: {
        "matchid": matchid
@@ -93,7 +94,407 @@ class UserMatch extends React.Component{
     });
   }
 
-  loadMatchUserDetail = (matchid,check) =>{
+  loadMatchUserDetail = (matchid,check,checkFirstTime) =>{
+    if(matchid){
+      this.state.setTeamData = []
+      this.state.setDepartData = []
+      this.state.detailMatchFromLoad = []
+      this.state.detailUserFromLoad = []
+      this.state.holeScoreFromLoad = []
+      this.state.holeScoreFromLoadTemp = []
+      this.state.tempHole = []
+      this.state.holescoreTemp = []
+      this.state.matchidUserLoadMatch = matchid
+      this.state.modalUserMatchType = ''
+      if(check === '1User'){
+        this.state.modalUserMatchType = check
+        var geturl;
+        geturl = $.ajax({
+          type: "POST",
+         url: "http://www.thai-pga.com/phpadmin/loadmatchuserdetailonlyone.php",
+         dataType: 'json',
+         data: {
+           "matchid": matchid,
+         },
+         xhrFields: { withCredentials: true },
+         success: function(data) {
+           localStorage['fieldid']=data.fieldid
+           localStorage['matchname']=data.matchname
+           localStorage['fieldname']=data.fieldname
+           localStorage['datecreate']=data.datecreate
+           localStorage['datemodify']=data.datemodify
+           localStorage['datematch']=data.datematch
+           localStorage['cordA']=data.cordA
+           localStorage['cordB']=data.cordB
+           localStorage['in']=data.in
+           localStorage['out']=data.out
+           localStorage['gross']=data.gross
+           localStorage['holescore']=data.holescore
+           localStorage['userid']=data.userid
+           localStorage['fullname']=data.fullname
+           localStorage['lastname']=data.lastname
+           localStorage['typescore']=data.typescore
+           localStorage['teamnum']=data.teamnum
+           localStorage['teamno']=data.teamno
+           localStorage['departnum']=data.departnum
+           localStorage['departno']=data.departno
+           //console.log(data);
+         }
+        });
+      }else{
+        this.state.modalUserMatchType = check
+        var geturl;
+        geturl = $.ajax({
+          type: "POST",
+         url: "http://www.thai-pga.com/phpadmin/loadmatchuserdetail.php",
+         dataType: 'json',
+         data: {
+           "matchid": matchid,
+         },
+         xhrFields: { withCredentials: true },
+         success: function(data) {
+           localStorage['fieldid']=data.fieldid
+           localStorage['matchname']=data.matchname
+           localStorage['fieldname']=data.fieldname
+           localStorage['datecreate']=data.datecreate
+           localStorage['datemodify']=data.datemodify
+           localStorage['datematch']=data.datematch
+           localStorage['cordA']=data.cordA
+           localStorage['cordB']=data.cordB
+           localStorage['teamnum']=data.teamnum
+           localStorage['departnum']=data.departnum
+           localStorage['typescore']=data.typescore
+           //console.log("loadmatchuserdetail",data);
+         }
+        });
+        var geturl2;
+        geturl2 = $.ajax({
+          type: "POST",
+         url: "http://www.thai-pga.com/phpadmin/matchresultscore.php",
+         dataType: 'json',
+         data: {
+           "matchid": matchid,
+           "sort": 2
+         },
+         xhrFields: { withCredentials: true },
+         success: function(data) {
+           localStorage['in']=data.in
+           localStorage['out']=data.out
+           localStorage['gross']=data.gross
+           if(data.par){
+             localStorage['par']=data.par
+           }
+           localStorage['holescore']=data.holescore
+           localStorage['userid']=data.userid
+           localStorage['fullname']=data.full
+           localStorage['lastname']=data.last
+           localStorage['teamno']=data.teamno
+           localStorage['departno']=data.departno
+           localStorage['rank']=data.rank
+         }
+        });
+      }
+      var geturl3;
+      geturl3 = $.ajax({
+        type: "POST",
+       url: "http://www.thai-pga.com/phpadmin/setteammatch.php",
+       dataType: 'json',
+       data: {
+         "matchid": matchid,
+       },
+       xhrFields: { withCredentials: true },
+       success: function(data) {
+         //console.log(data);
+         localStorage['teamname2']=data.teamname
+         localStorage['teamno2']=data.teamno
+       }
+      });
+      var geturl4;
+      geturl4 = $.ajax({
+        type: "POST",
+       url: "http://www.thai-pga.com/phpadmin/setdepartmatch.php",
+       dataType: 'json',
+       data: {
+         "matchid": matchid,
+       },
+       xhrFields: { withCredentials: true },
+       success: function(data) {
+         //console.log(data);
+         localStorage['departname2']=data.departname
+         localStorage['departno2']=data.departno
+       }
+     });
+      setTimeout(()=>{
+        if(localStorage['teamname2']){
+          var teamname2 = localStorage['teamname2']
+          var teamno2 = localStorage['teamno2']
+
+          teamname2 = teamname2.split(",",teamname2.length)
+          teamno2 = teamno2.split(",",teamno2.length)
+          for(var i = 0;i < teamname2.length;i++){
+            var obj2 = {
+              teamname: teamname2[i],
+              teamno: parseInt(teamno2[i]),
+            }
+            this.state.setTeamData.push(obj2)
+          }
+        }
+        if(localStorage['departname2']){
+          var departname2 = localStorage['departname2']
+          var departno2 = localStorage['departno2']
+          departname2 = departname2.split(",",departname2.length)
+          departno2 = departno2.split(",",departno2.length)
+          for(var i =0;i < departname2.length;i++){
+            var obj3 = {
+              departname: departname2[i],
+              departno: parseInt(departno2[i]),
+            }
+            this.state.setDepartData.push(obj3)
+          }
+        }
+        if(localStorage['matchname']){
+          var fieldid = localStorage['fieldid'];
+          var matchname = localStorage['matchname'];
+          var fieldname = localStorage['fieldname'];
+          var datecreate = localStorage['datecreate'];
+          var datemodify = localStorage['datemodify'];
+          var datematch = localStorage['datematch'];
+          var cordA = localStorage['cordA'];
+          var cordB = localStorage['cordB'];
+          var inn = localStorage['in'];
+          var outt = localStorage['out'];
+          var gross = localStorage['gross'];
+          if(localStorage['par']){
+            var par = localStorage['par'];
+          }
+          var holescore = localStorage['holescore'];
+          var userid = localStorage['userid'];
+          var fullname = localStorage['fullname'];
+          var lastname = localStorage['lastname'];
+
+          var teamnum = localStorage['teamnum'];
+          var teamno = localStorage['teamno'];
+          var departnum = localStorage['departnum'];
+          var departno = localStorage['departno'];
+          var typescore = localStorage['typescore'];
+          var rank = localStorage['rank'];
+
+
+          fieldid = parseInt(fieldid)
+          this.state.fieldidUserLoadMatch = fieldid
+          cordA = parseInt(cordA)
+          cordB = parseInt(cordB)
+          inn = JSON.parse("["+inn+"]")
+          outt = JSON.parse("["+outt+"]")
+          gross = JSON.parse("["+gross+"]")
+          if(localStorage['par']){
+            par = JSON.parse("["+par+"]")
+          }
+          holescore = holescore.split(",",holescore.length)
+          userid = userid.split(",",userid.length)
+          fullname = fullname.split(",",fullname.length)
+          lastname = lastname.split(",",lastname.length)
+          teamnum = parseInt(teamnum)
+          teamno = JSON.parse("["+teamno+"]")
+          departnum = parseInt(departnum)
+          departno = JSON.parse("["+departno+"]")
+          typescore = parseInt(typescore)
+          rank = rank.split(",",rank.length)
+          var obj = {
+            fieldid:"",
+            matchname:"",
+            fieldname:"",
+            datecreate:"",
+            datemodify:"",
+            datematch:"",
+            cordA:"",
+            cordB:"",
+            teamnum:"",
+            departnum:"",
+            typescore:"",
+          }
+          obj.fieldid = fieldid
+          obj.matchname = matchname
+          obj.fieldname = fieldname
+          obj.datecreate = datecreate
+          obj.datemodify = datemodify
+          obj.datematch = datematch
+          obj.cordA = cordA
+          obj.cordB = cordB
+          obj.teamnum = teamnum
+          obj.departnum = departnum
+          obj.typescore = typescore
+          this.state.detailMatchFromLoad.push(obj);
+          if(check === '1User'){
+            for(var i = 0;i < holescore.length;i++){
+              this.state.holescoreTemp.push({
+                i: i,
+                holescore: parseInt(holescore[i])
+              })
+            }
+          }else{
+            let holescoreTemp = [];
+            let holescoreTemp2 = [];
+            let index = 0;
+            for(var i = 0;i < holescore.length;i++){
+              holescoreTemp.push({
+                i: index,
+                holescore: parseInt(holescore[i])
+              })
+              holescoreTemp2.push(parseInt(holescore[i]))
+              index += 1
+              if((i+1)%18===0){
+                this.state.holeScoreFromLoad.push(holescoreTemp);
+                this.state.holeScoreFromLoadTemp.push(holescoreTemp2);
+                holescoreTemp = []
+                holescoreTemp2 = [];
+                index = 0
+              }
+            }
+          }
+
+          if(check === '1User'){
+            for(var i = 0;i < userid.length;i++){
+              var obj = {
+                in: parseInt(inn[i]),
+                out: parseInt(outt[i]),
+                gross: parseInt(gross[i]),
+                userid: parseInt(userid[i]),
+                fullname: fullname[i],
+                lastname: lastname[i],
+                teamno: parseInt(teamno[i]),
+                departno: parseInt(departno[i]),
+                rank: rank[i],
+                holescore: this.state.holeScoreFromLoadTemp[i]
+              }
+              this.state.detailUserFromLoad.push(obj);
+            }
+          }else{
+            if(localStorage['par']){
+              for(var i = 0;i < userid.length;i++){
+                var obj = {
+                  i: i,
+                  in: parseInt(inn[i]),
+                  out: parseInt(outt[i]),
+                  gross: parseInt(gross[i]),
+                  par: parseInt(par[i]),
+                  userid: parseInt(userid[i]),
+                  fullname: fullname[i],
+                  lastname: lastname[i],
+                  teamno: parseInt(teamno[i]),
+                  departno: parseInt(departno[i]),
+                  rank: rank[i],
+                  holescore: this.state.holeScoreFromLoadTemp[i]
+                }
+                this.state.detailUserFromLoad.push(obj);
+              }
+            }else{
+              for(var i = 0;i < userid.length;i++){
+                var obj = {
+                  i: i,
+                  in: parseInt(inn[i]),
+                  out: parseInt(outt[i]),
+                  gross: parseInt(gross[i]),
+                  userid: parseInt(userid[i]),
+                  fullname: fullname[i],
+                  lastname: lastname[i],
+                  teamno: parseInt(teamno[i]),
+                  departno: parseInt(departno[i]),
+                  rank: rank[i],
+                  holescore: this.state.holeScoreFromLoadTemp[i]
+                }
+                this.state.detailUserFromLoad.push(obj);
+              }
+            }
+          }
+
+          for(var i=0;i < this.state.detailUserFromLoad.length;i++){
+            this.state.tempHole.push({
+              userid: this.state.detailUserFromLoad[i].userid,
+              teamno: this.state.detailUserFromLoad[i].teamno,
+              departno: this.state.detailUserFromLoad[i].departno,
+              holescore: this.state.holeScoreFromLoad[i]
+            })
+          }
+        }
+        localStorage.clear()
+        this.loadMatchFieldDetail(matchid,fieldid,checkFirstTime)
+      },500)
+    }
+  }
+
+  loadMatchFieldDetail = (matchid,fieldid,checkFirstTime) =>{
+    console.log("fieldid : ",fieldid," , ","matchid : ",matchid);
+    if(fieldid){
+      this.state.detailFieldFromLoad = []
+      this.state.FieldFromLoadDetail = []
+      var geturl;
+      geturl = $.ajax({
+        type: "POST",
+       url: "http://www.thai-pga.com/phpadmin/loadmatchfielddetail.php",
+       dataType: 'json',
+       data: {
+         "matchid": matchid,
+         "fieldid": fieldid,
+       },
+       xhrFields: { withCredentials: true },
+       success: function(data) {
+         //console.log(data);
+         localStorage['fieldscore']=data.fieldscore
+         localStorage['fieldHscore']=data.fieldHscore
+       }
+      });
+
+      setTimeout(()=>{
+        if(localStorage['fieldscore']){
+          var fieldscore = localStorage['fieldscore'];
+          var fieldHscore = localStorage['fieldHscore'];
+          fieldscore = fieldscore.split(",",fieldscore.length)
+          fieldHscore = fieldHscore.split(",",fieldHscore.length)
+          let fieldIn = 0
+          let fieldOut = 0
+          for(var i = 0;i < 9;i++){
+            fieldIn += parseInt(fieldscore[i])
+          }
+          for(var i = 9;i < 18;i++){
+            fieldOut += parseInt(fieldscore[i])
+          }
+          for(var i = 0;i < fieldscore.length;i++){
+            var obj = {
+              i: i,
+              fieldscore: parseInt(fieldscore[i]),
+              fieldHscore: parseInt(fieldHscore[i])
+            }
+            this.state.detailFieldFromLoad.push(obj)
+          }
+          this.state.FieldFromLoadDetail.push({
+            in: fieldIn,
+            out: fieldOut,
+            gross: fieldIn+fieldOut
+          })
+          /*
+          console.log("setTeamData",this.state.setTeamData);
+          console.log("setDepartData",this.state.setDepartData);
+          console.log("detailMatchFromLoad",this.state.detailMatchFromLoad);
+          console.log("detailUserFromLoad",this.state.detailUserFromLoad);
+          console.log("tempHole",this.state.tempHole);
+          console.log("holeScoreFromLoadTemp",this.state.holeScoreFromLoadTemp);
+          console.log("detailFieldFromLoad ",this.state.detailFieldFromLoad)
+          console.log("userProfileData",this.props.userProfileData);
+          console.log("loadUserMatchData",this.props.loadUserMatchData);*/
+          this.setState(this.state)
+          if(checkFirstTime){
+            this.modalUserMatchToggle()
+          }
+        }
+
+      },300)
+      localStorage.clear()
+    }
+
+  }
+
+  autoRefreshData = (i) =>{
     this.state.setTeamData = []
     this.state.setDepartData = []
     this.state.detailMatchFromLoad = []
@@ -102,103 +503,63 @@ class UserMatch extends React.Component{
     this.state.holeScoreFromLoadTemp = []
     this.state.tempHole = []
     this.state.holescoreTemp = []
-    this.state.matchidUserLoadMatch = matchid
-    this.state.modalUserMatchType = ''
-    if(check === '1User'){
-      this.state.modalUserMatchType = check
-      var geturl;
-      geturl = $.ajax({
-        type: "POST",
-       url: "http://pds.in.th/phpadmin/loadmatchuserdetailonlyone.php",
-       dataType: 'json',
-       data: {
-         "matchid": matchid,
-       },
-       xhrFields: { withCredentials: true },
-       success: function(data) {
-         localStorage['fieldid']=data.fieldid
-         localStorage['matchname']=data.matchname
-         localStorage['fieldname']=data.fieldname
-         localStorage['datecreate']=data.datecreate
-         localStorage['datemodify']=data.datemodify
-         localStorage['datematch']=data.datematch
-         localStorage['cordA']=data.cordA
-         localStorage['cordB']=data.cordB
-         localStorage['in']=data.in
-         localStorage['out']=data.out
-         localStorage['gross']=data.gross
-         localStorage['holescore']=data.holescore
-         localStorage['userid']=data.userid
-         localStorage['fullname']=data.fullname
-         localStorage['lastname']=data.lastname
-         localStorage['typescore']=data.typescore
-         localStorage['teamnum']=data.teamnum
-         localStorage['teamno']=data.teamno
-         localStorage['departnum']=data.departnum
-         localStorage['departno']=data.departno
-         //console.log(data);
+    var geturl;
+    geturl = $.ajax({
+      type: "POST",
+     url: "http://www.thai-pga.com/phpadmin/loadmatchuserdetail.php",
+     dataType: 'json',
+     data: {
+       "matchid": this.state.matchidUserLoadMatch,
+     },
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+       localStorage['fieldid']=data.fieldid
+       localStorage['matchname']=data.matchname
+       localStorage['fieldname']=data.fieldname
+       localStorage['datecreate']=data.datecreate
+       localStorage['datemodify']=data.datemodify
+       localStorage['datematch']=data.datematch
+       localStorage['cordA']=data.cordA
+       localStorage['cordB']=data.cordB
+       localStorage['teamnum']=data.teamnum
+       localStorage['departnum']=data.departnum
+       localStorage['typescore']=data.typescore
+       //console.log("loadmatchuserdetail",data);
+     }
+    });
+    var geturl2;
+    geturl2 = $.ajax({
+      type: "POST",
+     url: "http://www.thai-pga.com/phpadmin/matchresultscore.php",
+     dataType: 'json',
+     data: {
+       "matchid": this.state.matchidUserLoadMatch,
+       "sort": 2
+     },
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+       localStorage['in']=data.in
+       localStorage['out']=data.out
+       localStorage['gross']=data.gross
+       if(data.par){
+         localStorage['par']=data.par
        }
-      });
-    }else{
-      this.state.modalUserMatchType = check
-      var geturl;
-      geturl = $.ajax({
-        type: "POST",
-       url: "http://pds.in.th/phpadmin/loadmatchuserdetail.php",
-       dataType: 'json',
-       data: {
-         "matchid": matchid,
-       },
-       xhrFields: { withCredentials: true },
-       success: function(data) {
-         localStorage['fieldid']=data.fieldid
-         localStorage['matchname']=data.matchname
-         localStorage['fieldname']=data.fieldname
-         localStorage['datecreate']=data.datecreate
-         localStorage['datemodify']=data.datemodify
-         localStorage['datematch']=data.datematch
-         localStorage['cordA']=data.cordA
-         localStorage['cordB']=data.cordB
-         localStorage['teamnum']=data.teamnum
-         localStorage['departnum']=data.departnum
-         localStorage['typescore']=data.typescore
-         //console.log("loadmatchuserdetail",data);
-       }
-      });
-      var geturl2;
-      geturl2 = $.ajax({
-        type: "POST",
-       url: "http://pds.in.th/phpadmin/matchresultscore.php",
-       dataType: 'json',
-       data: {
-         "matchid": matchid,
-         "sort": 2
-       },
-       xhrFields: { withCredentials: true },
-       success: function(data) {
-         localStorage['in']=data.in
-         localStorage['out']=data.out
-         localStorage['gross']=data.gross
-         if(data.par){
-           localStorage['par']=data.par
-         }
-         localStorage['holescore']=data.holescore
-         localStorage['userid']=data.userid
-         localStorage['fullname']=data.full
-         localStorage['lastname']=data.last
-         localStorage['teamno']=data.teamno
-         localStorage['departno']=data.departno
-         //console.log("matchresultscore",data);
-       }
-      });
-    }
+       localStorage['holescore']=data.holescore
+       localStorage['userid']=data.userid
+       localStorage['fullname']=data.full
+       localStorage['lastname']=data.last
+       localStorage['teamno']=data.teamno
+       localStorage['departno']=data.departno
+       localStorage['rank']=data.rank
+     }
+    });
     var geturl3;
     geturl3 = $.ajax({
       type: "POST",
-     url: "http://pds.in.th/phpadmin/setteammatch.php",
+     url: "http://www.thai-pga.com/phpadmin/setteammatch.php",
      dataType: 'json',
      data: {
-       "matchid": matchid,
+       "matchid": this.state.matchidUserLoadMatch,
      },
      xhrFields: { withCredentials: true },
      success: function(data) {
@@ -210,10 +571,10 @@ class UserMatch extends React.Component{
     var geturl4;
     geturl4 = $.ajax({
       type: "POST",
-     url: "http://pds.in.th/phpadmin/setdepartmatch.php",
+     url: "http://www.thai-pga.com/phpadmin/setdepartmatch.php",
      dataType: 'json',
      data: {
-       "matchid": matchid,
+       "matchid": this.state.matchidUserLoadMatch,
      },
      xhrFields: { withCredentials: true },
      success: function(data) {
@@ -221,7 +582,7 @@ class UserMatch extends React.Component{
        localStorage['departname2']=data.departname
        localStorage['departno2']=data.departno
      }
-   });
+    });
     setTimeout(()=>{
       if(localStorage['teamname2']){
         var teamname2 = localStorage['teamname2']
@@ -275,9 +636,11 @@ class UserMatch extends React.Component{
         var departnum = localStorage['departnum'];
         var departno = localStorage['departno'];
         var typescore = localStorage['typescore'];
+        var rank = localStorage['rank'];
 
 
         fieldid = parseInt(fieldid)
+        this.state.fieldidUserLoadMatch = fieldid
         cordA = parseInt(cordA)
         cordB = parseInt(cordB)
         inn = JSON.parse("["+inn+"]")
@@ -295,6 +658,7 @@ class UserMatch extends React.Component{
         departnum = parseInt(departnum)
         departno = JSON.parse("["+departno+"]")
         typescore = parseInt(typescore)
+        rank = rank.split(",",rank.length)
         var obj = {
           fieldid:"",
           matchname:"",
@@ -320,37 +684,46 @@ class UserMatch extends React.Component{
         obj.departnum = departnum
         obj.typescore = typescore
         this.state.detailMatchFromLoad.push(obj);
-        if(check === '1User'){
-          for(var i = 0;i < holescore.length;i++){
-            this.state.holescoreTemp.push({
-              i: i,
-              holescore: parseInt(holescore[i])
-            })
-          }
-        }else{
-          let holescoreTemp = [];
-          let holescoreTemp2 = [];
-          let index = 0;
-          for(var i = 0;i < holescore.length;i++){
-            holescoreTemp.push({
-              i: index,
-              holescore: parseInt(holescore[i])
-            })
-            holescoreTemp2.push(parseInt(holescore[i]))
-            index += 1
-            if((i+1)%18===0){
-              this.state.holeScoreFromLoad.push(holescoreTemp);
-              this.state.holeScoreFromLoadTemp.push(holescoreTemp2);
-              holescoreTemp = []
-              holescoreTemp2 = [];
-              index = 0
-            }
+        let holescoreTemp = [];
+        let holescoreTemp2 = [];
+        let index = 0;
+        for(var i = 0;i < holescore.length;i++){
+          holescoreTemp.push({
+            i: index,
+            holescore: parseInt(holescore[i])
+          })
+          holescoreTemp2.push(parseInt(holescore[i]))
+          index += 1
+          if((i+1)%18===0){
+            this.state.holeScoreFromLoad.push(holescoreTemp);
+            this.state.holeScoreFromLoadTemp.push(holescoreTemp2);
+            holescoreTemp = []
+            holescoreTemp2 = [];
+            index = 0
           }
         }
-
-        if(check === '1User'){
+        if(localStorage['par']){
           for(var i = 0;i < userid.length;i++){
             var obj = {
+              i: i,
+              in: parseInt(inn[i]),
+              out: parseInt(outt[i]),
+              gross: parseInt(gross[i]),
+              par: parseInt(par[i]),
+              userid: parseInt(userid[i]),
+              fullname: fullname[i],
+              lastname: lastname[i],
+              teamno: parseInt(teamno[i]),
+              departno: parseInt(departno[i]),
+              rank: rank[i],
+              holescore: this.state.holeScoreFromLoadTemp[i]
+            }
+            this.state.detailUserFromLoad.push(obj);
+          }
+        }else{
+          for(var i = 0;i < userid.length;i++){
+            var obj = {
+              i: i,
               in: parseInt(inn[i]),
               out: parseInt(outt[i]),
               gross: parseInt(gross[i]),
@@ -359,47 +732,12 @@ class UserMatch extends React.Component{
               lastname: lastname[i],
               teamno: parseInt(teamno[i]),
               departno: parseInt(departno[i]),
+              rank: rank[i],
               holescore: this.state.holeScoreFromLoadTemp[i]
             }
             this.state.detailUserFromLoad.push(obj);
           }
-        }else{
-          if(localStorage['par']){
-            for(var i = 0;i < userid.length;i++){
-              var obj = {
-                i: i,
-                in: parseInt(inn[i]),
-                out: parseInt(outt[i]),
-                gross: parseInt(gross[i]),
-                par: parseInt(par[i]),
-                userid: parseInt(userid[i]),
-                fullname: fullname[i],
-                lastname: lastname[i],
-                teamno: parseInt(teamno[i]),
-                departno: parseInt(departno[i]),
-                holescore: this.state.holeScoreFromLoadTemp[i]
-              }
-              this.state.detailUserFromLoad.push(obj);
-            }
-          }else{
-            for(var i = 0;i < userid.length;i++){
-              var obj = {
-                i: i,
-                in: parseInt(inn[i]),
-                out: parseInt(outt[i]),
-                gross: parseInt(gross[i]),
-                userid: parseInt(userid[i]),
-                fullname: fullname[i],
-                lastname: lastname[i],
-                teamno: parseInt(teamno[i]),
-                departno: parseInt(departno[i]),
-                holescore: this.state.holeScoreFromLoadTemp[i]
-              }
-              this.state.detailUserFromLoad.push(obj);
-            }
-          }
         }
-
         for(var i=0;i < this.state.detailUserFromLoad.length;i++){
           this.state.tempHole.push({
             userid: this.state.detailUserFromLoad[i].userid,
@@ -409,72 +747,10 @@ class UserMatch extends React.Component{
           })
         }
       }
-      this.loadMatchFieldDetail(matchid,fieldid)
+      this.setState(this.state)
     },500)
     localStorage.clear()
-  }
-
-  loadMatchFieldDetail = (matchid,fieldid) =>{
-    this.state.detailFieldFromLoad = []
-    this.state.FieldFromLoadDetail = []
-    var geturl;
-    geturl = $.ajax({
-      type: "POST",
-     url: "http://pds.in.th/phpadmin/loadmatchfielddetail.php",
-     dataType: 'json',
-     data: {
-       "matchid": matchid,
-       "fieldid": fieldid,
-     },
-     xhrFields: { withCredentials: true },
-     success: function(data) {
-       //console.log(data);
-       localStorage['fieldscore']=data.fieldscore
-       localStorage['fieldHscore']=data.fieldHscore
-     }
-    });
-    setTimeout(()=>{
-      if(localStorage['fieldscore']){
-        var fieldscore = localStorage['fieldscore'];
-        var fieldHscore = localStorage['fieldHscore'];
-        fieldscore = fieldscore.split(",",fieldscore.length)
-        fieldHscore = fieldHscore.split(",",fieldHscore.length)
-        let fieldIn = 0
-        let fieldOut = 0
-        for(var i = 0;i < 9;i++){
-          fieldIn += parseInt(fieldscore[i])
-        }
-        for(var i = 9;i < 18;i++){
-          fieldOut += parseInt(fieldscore[i])
-        }
-        for(var i = 0;i < fieldscore.length;i++){
-          var obj = {
-            i: i,
-            fieldscore: parseInt(fieldscore[i]),
-            fieldHscore: parseInt(fieldHscore[i])
-          }
-          this.state.detailFieldFromLoad.push(obj)
-        }
-        this.state.FieldFromLoadDetail.push({
-          in: fieldIn,
-          out: fieldOut,
-          gross: fieldIn+fieldOut
-        })
-
-        console.log("setTeamData",this.state.setTeamData);
-        console.log("setDepartData",this.state.setDepartData);
-        console.log("detailMatchFromLoad",this.state.detailMatchFromLoad);
-        console.log("detailUserFromLoad",this.state.detailUserFromLoad);
-        console.log("tempHole",this.state.tempHole);
-        console.log("holeScoreFromLoadTemp",this.state.holeScoreFromLoadTemp);
-        console.log("detailFieldFromLoad ",this.state.detailFieldFromLoad)
-        console.log("userProfileData",this.props.userProfileData);
-        console.log("loadUserMatchData",this.props.loadUserMatchData);
-        this.setState(this.state)
-        this.modalUserMatchToggle()
-      }
-    },300)
-    localStorage.clear()
+    console.log("autoRefreshData : ",i);
   }
 
   testShow = (d) =>{
@@ -483,7 +759,7 @@ class UserMatch extends React.Component{
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://pds.in.th/phpadmin/showtempacc.php",
+     url: "http://www.thai-pga.com/phpadmin/showtempacc.php",
      dataType: 'json',
      data: {
        "matchid": d.matchid,
@@ -523,7 +799,6 @@ class UserMatch extends React.Component{
     },500)
     localStorage.clear()
   }
-
   clientHistory = () =>{
     console.log("clientHistory :",this.props.loadUserMatchData[0].matchid);
     this.state.clientHistoryData = []
@@ -531,7 +806,7 @@ class UserMatch extends React.Component{
     var geturl2;
     geturl2 = $.ajax({
       type: "POST",
-     url: "http://pds.in.th/phpadmin/matchresultscore.php",
+     url: "http://www.thai-pga.com/phpadmin/matchresultscore.php",
      dataType: 'json',
      data: {
        "matchid": this.props.loadUserMatchData[0].matchid,
@@ -569,20 +844,19 @@ class UserMatch extends React.Component{
     },500)
     localStorage.clear()
   }
-
   fileSelectedHandler = event =>{
-   console.log(event.target.files[0]);
-   console.log(event.target.files[0].name);
-   this.setState({
-     selectedFile: event.target.files[0]
-   })
- }
+     console.log(event.target.files[0]);
+     console.log(event.target.files[0].name);
+     this.setState({
+       selectedFile: event.target.files[0]
+     })
+   }
 
- fileUploadHandler = event =>{
-   console.log(this.state.selectedFile);
-   console.log(this.state.selectedFile.name);
-   const data = new FormData();
- }
+   fileUploadHandler = event => {
+     console.log(this.state.selectedFile);
+     console.log(this.state.selectedFile.name);
+     const data = new FormData();
+   }
 
   render(){
     this.calculateAvgStat()
@@ -691,8 +965,8 @@ class UserMatch extends React.Component{
                     <div className="spacer"></div>
                     <div className="userscore__matchname__grid">
                       {d.matchname}
-                      <button onClick={()=>this.loadMatchUserDetail(parseInt(d.matchid),'1User')}>{"1User"}</button>
-                      <button onClick={()=>this.loadMatchUserDetail(parseInt(d.matchid),'allUser')}>All</button>
+                      <button onClick={()=>this.loadMatchUserDetail(parseInt(d.matchid),'1User',true)}>{"1User"}</button>
+                      <button onClick={()=>this.loadMatchUserDetail(parseInt(d.matchid),'allUser',true)}>All</button>
                       <button onClick={()=>this.modalFillScoreToggle()}>FillScore</button>
                       <button onClick={()=>this.testShow(d)}>Show</button>
                     </div>
@@ -711,8 +985,8 @@ class UserMatch extends React.Component{
                   <div className="spacer"></div>
                   <div className="userscore__matchname__grid">
                     <p>No match</p>
-                    <button onClick={()=>this.loadMatchUserDetail(parseInt(1),'1User')}>{"1User"}</button>
-                    <button onClick={()=>this.loadMatchUserDetail(parseInt(1),'allUser')}>All</button>
+                    <button onClick={()=>this.loadMatchUserDetail(parseInt(1),'1User',true)}>{"1User"}</button>
+                    <button onClick={()=>this.loadMatchUserDetail(parseInt(1),'allUser',true)}>All</button>
                     <button onClick={()=>this.modalFillScoreToggle()}>FillScore</button>
                     <button>Show</button>
                   </div>
@@ -729,6 +1003,8 @@ class UserMatch extends React.Component{
           modalState = {this.state.modalFillScoreState}
           modalClick = {this.modalFillScoreToggle}/>
         <ModalUserMatch
+          autoRefreshData = {this.autoRefreshData}
+          loadMatchUserDetail = {this.loadMatchUserDetail}
           modalType = {this.state.modalUserMatchType}
           matchidUserLoadMatch = {this.state.matchidUserLoadMatch}
           loadUserMatchData = {this.props.loadUserMatchData}

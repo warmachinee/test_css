@@ -69,7 +69,7 @@ class ModalCreateMatch extends React.Component{
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://pds.in.th/phpadmin/loadfielddetail.php",
+     url: "http://www.thai-pga.com/phpadmin/loadfielddetail.php",
      dataType: 'json',
      data: {
        fieldid: value

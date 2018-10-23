@@ -7,6 +7,8 @@ class FillScore extends React.Component{
     super(props)
     this.state = {
       firstRender: true,
+      fillMatchidFirst: true,
+      fillMatchid: '',
       hole: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17],
       holeInput: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17],
       holeIndex: 1,
@@ -24,9 +26,36 @@ class FillScore extends React.Component{
   }
   getScore = (score,i) =>{
     this.state.scoreDataSentAdmin[i] = score
+    this.setState(this.state)
   }
   adminSelectUser = (data) =>{
     this.state.userDataUpdateAdmin = data
+    var geturl;
+    geturl = $.ajax({
+      type: "POST",
+     url: "http://www.thai-pga.com/phpadmin/loadusertoupdatescoreadmin.php",
+     dataType: 'json',
+     data: {
+       "matchid": this.state.fillMatchid,
+       "userid": data
+     },
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+       //console.log(data.score);
+       localStorage['score'] = data.score
+     }
+    });
+    setTimeout(()=>{
+      if(localStorage['score'].length){
+        var score = localStorage['score']
+        score = score.split(",",score.length)
+        for(var i = 0;i < score.length;i++){
+          this.state.scoreDataSentAdmin[i] = parseInt(score[i])
+        }
+      }
+      this.setState(this.state)
+      localStorage.clear()
+    },100)
   }
   listItemClick = (i) =>{
     this.state.listItemIndex = i
@@ -69,7 +98,7 @@ class FillScore extends React.Component{
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://pds.in.th/phpadmin/updateusertoupdatescore.php",
+     url: "http://www.thai-pga.com/phpadmin/updateusertoupdatescore.php",
      dataType: 'json',
      data: {
        "hole": this.state.holeIndex,
@@ -101,10 +130,10 @@ class FillScore extends React.Component{
       var geturl;
       geturl = $.ajax({
         type: "POST",
-       url: "http://pds.in.th/phpadmin/loadusertoupdatescore.php",
+       url: "http://www.thai-pga.com/phpadmin/loadusertoupdatescore.php",
        dataType: 'json',
        data: {
-         "matchid": 45506254,
+         "matchid": this.state.fillMatchid,
          "hole": this.state.holeIndex
        },
        xhrFields: { withCredentials: true },
@@ -171,9 +200,10 @@ class FillScore extends React.Component{
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://pds.in.th/phpadmin/updateusertoupdatescore.php",
+     url: "http://www.thai-pga.com/phpadmin/updateusertoupdatescore.php",
      dataType: 'json',
      data: {
+       "matchid": this.state.fillMatchid,
        "hole": hole,
        "arruserid": arruserid,
        "arrscore": arrscore,
@@ -184,8 +214,8 @@ class FillScore extends React.Component{
      }
     });
   }
-  adminUpdateScore = () =>{
-    for(var i = 0;i < 18;i++){
+  adminUpdateScoreFirst = () =>{
+    for(var i = 0;i < 9;i++){
       this.HandlerAdminUpdateScore(i+1)
     }
     setTimeout(()=>{
@@ -194,6 +224,33 @@ class FillScore extends React.Component{
       }
       localStorage.clear()
     },1000)
+    let outt = 0
+    for(var i = 0;i < 9;i++){
+      outt += this.state.scoreDataSentAdmin[i]
+    }
+    console.log("out : ",outt);
+  }
+  adminUpdateScoreLast = () =>{
+    for(var i = 9;i < 18;i++){
+      this.HandlerAdminUpdateScore(i+1)
+    }
+    setTimeout(()=>{
+      if(localStorage['status'] === 'success '){
+        alert(localStorage['status'])
+      }
+      localStorage.clear()
+    },1000)
+    let outt = 0
+    let inn = 0
+    let gross = 0
+    for(var i = 0;i < 9;i++){
+      outt += this.state.scoreDataSentAdmin[i]
+    }
+    for(var i = 9;i < 18;i++){
+      inn += this.state.scoreDataSentAdmin[i]
+    }
+    gross = outt + inn
+    console.log("out : ",outt," in : ",inn,"gross : ",gross);
   }
   changeHole = (hole) =>{
     this.state.holeIndex = hole
@@ -201,13 +258,24 @@ class FillScore extends React.Component{
     this.HandleLoadusertourupdatescore()
     //this.state.scoreDataSent[i].score[this.state.holeIndex]
   }
+  HandleFillMatchid = () =>{
+    if(this.state.fillMatchidFirst){
+      this.state.fillMatchidFirst = false
+      this.state.fillMatchid =  parseInt(prompt("PLEASE FILL MATCHID"))
+      this.HandleLoadusertourupdatescore()
+    }
+  }
+  HandleChangeMatch = () =>{
+    this.setState(()=>{return {firstRender: true,fillMatchidFirst: true}})
+    this.HandleFillMatchid()
+  }
   render(){
-    this.HandleLoadusertourupdatescore()
+    this.HandleFillMatchid()
     if(this.props.chktype === 2){
       return(
         <div className="fillscore">
           <div className="fillscore__topnav">
-            <div className="fillscore__user">Admin: {this.props.chkName}</div>
+            <div className="fillscore__user">Admin : {this.props.chkName}</div>
             <button onClick={this.props.logout}>Logout</button>
           </div>
           <div className="fillscore__label">
@@ -218,31 +286,60 @@ class FillScore extends React.Component{
               )}
             </select>
             <button onClick={this.ShowDataAdmin}>ShowData</button>
-            <button onClick={this.adminUpdateScore}>Save</button>
+            <button onClick={()=>this.HandleChangeMatch()}>เปลี่ยนแมทช์</button>
           </div>
           <div className="fillscore__label__input__grid">
             {this.state.holeInput.filter((item) => {return item < 9})
             .map((d)=>
               <div className="fillscore__label__input">
                 <div className="fillscore__label__input__text">{d+1}</div>
-                <input type="number" min="0" placeholder={0}
+                <input type="number" min="0"
+                  value = {this.state.scoreDataSentAdmin[d]}
+                  onFocus = {(e)=>e.target.value = ''}
                   onChange={(e)=>this.getScore(parseInt(e.target.value),d)} />
               </div>
             )}
+            <button onClick={this.adminUpdateScoreFirst}>Save</button>
           </div>
           <div className="fillscore__label__input__grid">
             {this.state.holeInput.filter((item) => {return item >= 9})
             .map((d)=>
               <div className="fillscore__label__input">
                 <div className="fillscore__label__input__text">{d+1}</div>
-                <input type="number" min="0" placeholder={0}
+                <input type="number" min="0"
+                  value = {this.state.scoreDataSentAdmin[d]}
+                  onFocus = {(e)=>e.target.value = ''}
                   onChange={(e)=>this.getScore(parseInt(e.target.value),d)} />
               </div>
             )}
+            <button onClick={this.adminUpdateScoreLast}>Save</button>
           </div>
+
         </div>
       );
     }else{
+      return(
+        <div className="fillscore">
+          <div className="fillscore__topnav">
+            <div className="fillscore__user">Admin : {this.state.fillMatchid}</div>
+            <button onClick={this.props.logout}>Logout</button>
+          </div>
+          <div className="fillscore__label">
+            เลือกผู้เล่น
+            <button onClick={this.ShowDataAdmin}>ShowData</button>
+          </div>
+          <div className="fillscore__label__input__grid">
+
+            <button onClick={this.adminUpdateScoreFirst}>Save</button>
+          </div>
+          <div className="fillscore__label__input__grid">
+
+            <button onClick={this.adminUpdateScoreLast}>Save</button>
+          </div>
+
+        </div>
+      )
+      /*
       return(
         <div className="fillscore">
           <div className="fillscore__topnav">
@@ -278,8 +375,9 @@ class FillScore extends React.Component{
             </div>
           </div>
         </div>
-      );
+      );*/
     }
+    return null
   }
 }
 

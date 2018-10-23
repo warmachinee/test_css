@@ -46,7 +46,7 @@ class Card extends React.Component{
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://pds.in.th/phpadmin/loadmatchfielddetail.php",
+     url: "http://www.thai-pga.com/phpadmin/loadmatchfielddetail.php",
      dataType: 'json',
      data: {
        "matchid": this.state.addScoreData.matchid,
@@ -77,7 +77,7 @@ class Card extends React.Component{
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://pds.in.th/phpadmin/loadmatchuserdetail.php",
+     url: "http://www.thai-pga.com/phpadmin/loadmatchuserdetail.php",
      dataType: 'json',
      data: {
        "matchid": value.matchid,
@@ -105,7 +105,7 @@ class Card extends React.Component{
       var geturl;
       geturl = $.ajax({
        type: "POST",
-       url: "http://pds.in.th/phpadmin/matchaccess.php",
+       url: "http://www.thai-pga.com/phpadmin/matchaccess.php",
        dataType: 'json',
        data: {
          "matchid": parseInt(Data.matchid),
