@@ -22,6 +22,20 @@ class FillScore extends React.Component{
       listItemIndex: 0,
       fillScoreUserData:[],
       updateScoreMatchid: 0,
+      playerFilterList: '',
+      initialItems: [
+         "Apples",
+         "Broccoli",
+         "Chicken",
+         "Duck",
+         "Eggs",
+         "Fish",
+         "Granola",
+         "Hash Browns",
+         "Hello",
+         "Test",
+         "CE"
+       ],
     }
   }
   getScore = (score,i) =>{
@@ -29,7 +43,8 @@ class FillScore extends React.Component{
     this.setState(this.state)
   }
   adminSelectUser = (data) =>{
-    this.state.userDataUpdateAdmin = data
+    this.state.userDataUpdateAdmin = parseInt(data.userid)
+    console.log(data.userid," : ",data.fullname,"  ",data.lastname);
     var geturl;
     geturl = $.ajax({
       type: "POST",
@@ -37,7 +52,7 @@ class FillScore extends React.Component{
      dataType: 'json',
      data: {
        "matchid": this.state.fillMatchid,
-       "userid": data
+       "userid": parseInt(data.userid)
      },
      xhrFields: { withCredentials: true },
      success: function(data) {
@@ -173,6 +188,7 @@ class FillScore extends React.Component{
             this.state.fillScoreUserData.push(obj)
           }
           //console.log(this.state.fillScoreUserData.length,":",this.state.fillScoreUserData);
+          //console.log(this.state.fillScoreUserData);
           for(var i = 0;i < this.state.fillScoreUserData.length;i++){
             this.state.listItemClickState[i] = false
             this.state.listItemClass[i] = 'fillscore__listitem'
@@ -269,6 +285,9 @@ class FillScore extends React.Component{
     this.setState(()=>{return {firstRender: true,fillMatchidFirst: true}})
     this.HandleFillMatchid()
   }
+  filterList = (data) =>{
+    this.setState({playerFilterList: data.target.value})
+  }
   render(){
     this.HandleFillMatchid()
     if(this.props.chktype === 2){
@@ -280,13 +299,26 @@ class FillScore extends React.Component{
           </div>
           <div className="fillscore__label">
             เลือกผู้เล่น
-            <select onChange={(e)=>this.adminSelectUser(parseInt(e.target.value))}>
-              {this.state.fillScoreUserData.map((d)=>
-                <option value={parseInt(d.userid)}>{d.fullname} {d.lastname}</option>
-              )}
-            </select>
             <button onClick={this.ShowDataAdmin}>ShowData</button>
             <button onClick={()=>this.HandleChangeMatch()}>เปลี่ยนแมทช์</button>
+          </div>
+          <div className="fillscore__playerlist__input">
+            <input type="text" placeholder="Search" onChange={(e)=>this.filterList(e)}/>
+          </div>
+          <div className="fillscore__playerlist">
+            {this.state.fillScoreUserData.filter((item)=>{
+              return (
+              (item.fullname.search(this.state.playerFilterList) !== -1) ||
+              (item.lastname.search(this.state.playerFilterList) !== -1) ||
+              (item.fullname.toLowerCase().search(this.state.playerFilterList.toLowerCase()) !== -1) ||
+              (item.lastname.toLowerCase().search(this.state.playerFilterList.toLowerCase()) !== -1))
+            }).map((d)=>
+              <button
+                onClick = {()=>this.adminSelectUser(d)}
+                className = "fillscore__playerlist__item">
+                {d.fullname} {d.lastname}
+              </button>
+            )}
           </div>
           <div className="fillscore__label__input__grid">
             {this.state.holeInput.filter((item) => {return item < 9})
@@ -327,6 +359,18 @@ class FillScore extends React.Component{
           <div className="fillscore__label">
             เลือกผู้เล่น
             <button onClick={this.ShowDataAdmin}>ShowData</button>
+          </div>
+          <div className="fillscore__playerlist__input">
+            <input type="text" placeholder="Search" onChange={(e)=>this.filterList(e)}/>
+          </div>
+          <div className="fillscore__playerlist">
+            {this.state.initialItems.filter((item)=>{
+              return item.toLowerCase().search(this.state.playerFilterList.toLowerCase()) !== -1
+            }).map((d)=>
+              <button className="fillscore__playerlist__item">
+                {d}
+              </button>
+            )}
           </div>
           <div className="fillscore__label__input__grid">
 

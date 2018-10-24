@@ -201,6 +201,22 @@ class ModalUserMatch extends React.Component{
       this.state.fullScreenStyle[1] = {maxHeight: '90%',height: '90%'}
     }
   }
+  changeDepartmentSelect = (depart) =>{
+    this.state.departnoBySort = depart
+    for(var i = 0;i < this.props.tempHole.length;i++){
+      this.state.expandClassState[i] = false
+      this.state.expandClassDrawer[i] = 'usermatch__leaderboard__item__detail'
+    }
+    this.setState(this.state)
+  }
+  refreshDataModal = () =>{
+    this.props.loadMatchUserDetail(this.props.matchidUserLoadMatch,'allUser',false)
+    for(var i = 0;i < this.props.tempHole.length;i++){
+      this.state.expandClassState[i] = false
+      this.state.expandClassDrawer[i] = 'usermatch__leaderboard__item__detail'
+    }
+    this.setState(this.state)
+  }
   render(){
     let tempTable = []
     for(var i = 0;i < 35;i++){
@@ -563,22 +579,30 @@ class ModalUserMatch extends React.Component{
                     <div className="modal__usermatch__label__text__alluser">
                       Match detail All User
                     </div>
-                    <select onChange={(e)=>this.setState({departnoBySort: parseInt(e.target.value)})}>
+                    {/*<select onChange={(e)=>this.changeDepartmentSelect(parseInt(e.target.value))}>
                       {this.props.setDepartData.map((d)=>
                         <option value={parseInt(d.departno)}>{d.departname}</option>
                       )}
-                      {/*console.log(this.state.departnoBySort)*/}
-                    </select>
+                    </select>*/}
+                    {this.props.setDepartData.map((d)=>
+                      <button
+                        style={{height: '100%',margin: '2.5%',padding: '.5rem 1rem',
+                          cursor: 'pointer',fontWeight: 'bold',border: 'none',
+                          color: (this.state.departnoBySort === parseInt(d.departno)?'white':'#036ec8'),
+                          background: (this.state.departnoBySort === parseInt(d.departno)?'#036ec8':'#BCE8FA')}}
+                        onClick={()=>this.changeDepartmentSelect(parseInt(d.departno))}>{d.departname}
+                      </button>
+                    )}
                     <div className="modal__usermatch__label__printDocument">
-                      <img onClick={()=>this.props.loadMatchUserDetail(this.props.matchidUserLoadMatch,'allUser',false)} src={ic_refresh}></img>
-                      <p onClick={()=>this.props.loadMatchUserDetail(this.props.matchidUserLoadMatch,'allUser',false)}>Refresh</p>
+                      <img onClick={()=>this.refreshDataModal()} src={ic_refresh}></img>
+                      <p onClick={()=>this.refreshDataModal()}>Refresh</p>
                     </div>
                     <div className="modal__usermatch__label__printDocument">
                       <img onClick={this.printDocument} src={ic_print}></img>
                       <p onClick={this.printDocument}>PDF</p>
                     </div>
                     <div className="spacer"></div>
-                      <div className="modal__usermatch__label__close__alluser" style={{margin: '5% 2.5% 5% 0'}}>
+                      <div className="modal__usermatch__label__close__alluser">
                         {(this.state.fullScreenState)?
                           (<img onClick = {this.setFullScreenStyle} src={ic_fullscreen}></img>):
                           (<img onClick = {this.setFullScreenStyle} src={ic_minimize}></img>)}
@@ -605,6 +629,16 @@ class ModalUserMatch extends React.Component{
                     <div className="leaderboard__label__player">
                       <div className="spacer"></div>
                       PLAYER
+                      <div className="spacer"></div>
+                    </div>
+                    <div className="leaderboard__label__outin">
+                      <div className="spacer"></div>
+                      OUT
+                      <div className="spacer"></div>
+                    </div>
+                    <div className="leaderboard__label__outin">
+                      <div className="spacer"></div>
+                      IN
                       <div className="spacer"></div>
                     </div>
                     <div className="leaderboard__label__overall">
@@ -642,6 +676,16 @@ class ModalUserMatch extends React.Component{
                           <div className="leaderboard__item__player">
                             <div className="spacer"></div>
                             {d.fullname} {d.lastname}
+                            <div className="spacer"></div>
+                          </div>
+                          <div className="leaderboard__item__overall">
+                            <div className="spacer"></div>
+                            {d.in}
+                            <div className="spacer"></div>
+                          </div>
+                          <div className="leaderboard__item__overall">
+                            <div className="spacer"></div>
+                            {d.out}
                             <div className="spacer"></div>
                           </div>
                           <div className="leaderboard__item__overall">

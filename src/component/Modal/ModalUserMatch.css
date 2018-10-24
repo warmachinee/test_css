@@ -89,19 +89,19 @@
   display: flex;
 }
 .modal__usermatch__label__alluser .modal__usermatch__label__text__alluser{
-  margin: 8% 5% 5% 10%;
+  margin: 2.5% 5% 1% 10%;
   font-size: 1.5rem;
   letter-spacing: .1rem;
   color: #2a4d69;
   font-weight: bolder;
 }
 .modal__usermatch__label__alluser select{
-  margin: 8% 5% 5% 0;
+  margin: 2.5% 5% 1% 0;
   height: 2rem;
   width: 10rem;
 }
 .modal__usermatch__label__alluser .modal__usermatch__label__printDocument{
-  margin: 5% 5% 5% 0;
+  margin: 1.5% 5% 1% 0;
   height: 2.5rem;
   width: 2.5rem;
 }
@@ -113,12 +113,12 @@
   cursor: pointer;
 }
 .modal__usermatch__label__alluser .modal__usermatch__label__close__alluser{
-  margin: 5% 5% 5% 0;
+  margin: 2.5% 5% 1% 0;
   height: 2.5rem;
   width: 2.5rem;
 }
 .modal__usermatch__card__alluser .modal__usermatch__alluser__fielddetail{
-  margin: 0% 5% 5% 10%;
+  margin: 2.5% 5% 2% 10%;
   display: -webkit-flex;
   display: -ms-flex;
   display: -moz-flex;
@@ -232,6 +232,23 @@
 
   height: 100%;
   min-width: 6rem;
+  text-align: center;
+  font-weight: bolder;
+  color: white;
+  background: #036ec8;
+}
+.usermatch__leaderboard__label .leaderboard__label__outin{
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -moz-flex;
+  display: flex;
+
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  flex-direction: column;
+
+  height: 100%;
+  min-width: 7rem;
   text-align: center;
   font-weight: bolder;
   color: white;
@@ -430,7 +447,7 @@
   width: 50%;
 }
 .leaderboard__item__detail__detail__left .leaderboard__item__detail__detail__name{
-  margin: 10% 5% 0 5%;
+  margin: 5% 5% 0 5%;
   width: 100%;
   font-size: 1.25rem;
   color: #2a4d69;
