@@ -17,6 +17,7 @@ class UserMatch extends React.Component{
       modalUserMatchState: false,
       modalFillScoreState: false,
       modalUserMatchType: 'allUser',
+      sortType: '',
       testData:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],
       avgStat:{
         in: 0,
@@ -94,7 +95,8 @@ class UserMatch extends React.Component{
     });
   }
 
-  loadMatchUserDetail = (matchid,check,checkFirstTime) =>{
+  loadMatchUserDetail = (matchid,check,checkFirstTime,sort) =>{
+    this.state.sortType = sort
     if(matchid){
       this.state.setTeamData = []
       this.state.setDepartData = []
@@ -174,7 +176,7 @@ class UserMatch extends React.Component{
          dataType: 'json',
          data: {
            "matchid": matchid,
-           "sort": 2
+           "sort": sort
          },
          xhrFields: { withCredentials: true },
          success: function(data) {
@@ -183,6 +185,15 @@ class UserMatch extends React.Component{
            localStorage['gross']=data.gross
            if(data.par){
              localStorage['par']=data.par
+           }
+           if(data.sf){
+             localStorage['sf']=data.sf
+           }
+           if(data.net){
+             localStorage['net']=data.net
+           }
+           if(data.hc){
+             localStorage['hc']=data.hc
            }
            localStorage['holescore']=data.holescore
            localStorage['userid']=data.userid
@@ -267,6 +278,15 @@ class UserMatch extends React.Component{
           if(localStorage['par']){
             var par = localStorage['par'];
           }
+          if(localStorage['sf']){
+            var sf = localStorage['sf'];
+          }
+          if(localStorage['net']){
+            var net = localStorage['net'];
+          }
+          if(localStorage['hc']){
+            var hc = localStorage['hc'];
+          }
           var holescore = localStorage['holescore'];
           var userid = localStorage['userid'];
           var fullname = localStorage['fullname'];
@@ -289,6 +309,15 @@ class UserMatch extends React.Component{
           gross = JSON.parse("["+gross+"]")
           if(localStorage['par']){
             par = JSON.parse("["+par+"]")
+          }
+          if(localStorage['sf']){
+            sf = JSON.parse("["+sf+"]")
+          }
+          if(localStorage['net']){
+            net = JSON.parse("["+net+"]")
+          }
+          if(localStorage['hc']){
+            hc = JSON.parse("["+hc+"]")
           }
           holescore = holescore.split(",",holescore.length)
           userid = userid.split(",",userid.length)
@@ -388,6 +417,26 @@ class UserMatch extends React.Component{
                 }
                 this.state.detailUserFromLoad.push(obj);
               }
+            }else if(localStorage['sf'] && localStorage['net'] && localStorage['hc']){
+              for(var i = 0;i < userid.length;i++){
+                var obj = {
+                  i: i,
+                  in: parseInt(inn[i]),
+                  out: parseInt(outt[i]),
+                  gross: parseInt(gross[i]),
+                  sf: parseInt(sf[i]),
+                  net: parseInt(net[i]),
+                  hc: parseInt(hc[i]),
+                  userid: parseInt(userid[i]),
+                  fullname: fullname[i],
+                  lastname: lastname[i],
+                  teamno: parseInt(teamno[i]),
+                  departno: parseInt(departno[i]),
+                  rank: rank[i],
+                  holescore: this.state.holeScoreFromLoadTemp[i]
+                }
+                this.state.detailUserFromLoad.push(obj);
+              }
             }else{
               for(var i = 0;i < userid.length;i++){
                 var obj = {
@@ -477,9 +526,9 @@ class UserMatch extends React.Component{
           console.log("setDepartData",this.state.setDepartData);
           console.log("detailMatchFromLoad",this.state.detailMatchFromLoad);
           console.log("detailUserFromLoad",this.state.detailUserFromLoad);
+          console.log("detailFieldFromLoad ",this.state.detailFieldFromLoad);
           console.log("tempHole",this.state.tempHole);
           console.log("holeScoreFromLoadTemp",this.state.holeScoreFromLoadTemp);
-          console.log("detailFieldFromLoad ",this.state.detailFieldFromLoad)
           console.log("userProfileData",this.props.userProfileData);
           console.log("loadUserMatchData",this.props.loadUserMatchData);*/
           this.setState(this.state)
@@ -965,9 +1014,10 @@ class UserMatch extends React.Component{
                     <div className="spacer"></div>
                     <div className="userscore__matchname__grid">
                       {d.matchname}
-                      <button onClick={()=>this.loadMatchUserDetail(parseInt(d.matchid),'1User',true)}>{"1User"}</button>
-                      <button onClick={()=>this.loadMatchUserDetail(parseInt(d.matchid),'allUser',true)}>All</button>
-                      <button onClick={()=>this.modalFillScoreToggle()}>FillScore</button>
+                      <button onClick={()=>this.loadMatchUserDetail(parseInt(d.matchid),'1User',true,2)}>{"1User"}</button>
+                      <button onClick={()=>this.loadMatchUserDetail(parseInt(d.matchid),'allUser',true,2)}>NM</button>
+                      <button onClick={()=>this.loadMatchUserDetail(parseInt(d.matchid),'allUser',true,0)}>DM</button>
+                      <button onClick={()=>this.loadMatchUserDetail(parseInt(d.matchid),'allUser',true,3)}>DMsort</button>
                       <button onClick={()=>this.testShow(d)}>Show</button>
                     </div>
                     <div className="spacer"></div>
@@ -985,8 +1035,9 @@ class UserMatch extends React.Component{
                   <div className="spacer"></div>
                   <div className="userscore__matchname__grid">
                     <p>No match</p>
-                    <button onClick={()=>this.loadMatchUserDetail(parseInt(1),'1User',true)}>{"1User"}</button>
-                    <button onClick={()=>this.loadMatchUserDetail(parseInt(1),'allUser',true)}>All</button>
+                    <button onClick={()=>this.loadMatchUserDetail(parseInt(1),'1User',true,2)}>{"1User"}</button>
+                    <button onClick={()=>this.loadMatchUserDetail(parseInt(1),'allUser',true,2)}>All</button>
+                    <button onClick={()=>this.loadMatchUserDetail(parseInt(1),'allUser',true,0)}>AllDM</button>
                     <button onClick={()=>this.modalFillScoreToggle()}>FillScore</button>
                     <button>Show</button>
                   </div>
@@ -1005,6 +1056,7 @@ class UserMatch extends React.Component{
         <ModalUserMatch
           autoRefreshData = {this.autoRefreshData}
           loadMatchUserDetail = {this.loadMatchUserDetail}
+          sortType = {this.state.sortType}
           modalType = {this.state.modalUserMatchType}
           matchidUserLoadMatch = {this.state.matchidUserLoadMatch}
           loadUserMatchData = {this.props.loadUserMatchData}

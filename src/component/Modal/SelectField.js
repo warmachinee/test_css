@@ -24,29 +24,33 @@ class SelectField extends React.Component{
       editCustomHolescore:[],
       editCustomHCP:[],
       scoreSet:[],
-      hole:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18],
+      scoreSetHCP:[],
+      hole:[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17],
+      hcpHole:[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17],
       confirmCancel: false,
     }
   }
   getScore=(score,hole)=>{
-    this.state.scoreSet[hole]=score
+    if(hole>=9){
+      this.state.scoreSet[hole+9] = score
+    }else{
+      this.state.scoreSet[hole] = score
+    }
+    this.setState(this.state)
+  }
+  getScoreHCP=(score,hole)=>{
+    if(hole>=9){
+      this.state.scoreSet[hole+18] = score
+    }else{
+      this.state.scoreSet[hole+9] = score
+    }
+    this.setState(this.state)
   }
   editCustomFieldName =(data)=>{
     this.state.editedCustomFieldName = data
   }
   updateCustomField = ()=>{
-    var editedScoreset = this.state.scoreSet
     var editedFieldName = this.state.editedCustomFieldName
-    for(var i =0;i < 18;i++){
-      if(editedScoreset[i] === -1){
-        editedScoreset[i] = this.state.editCustomHolescore[i]
-      }
-    }
-    for(var j = 18;j < 36;j++){
-      if(editedScoreset[j] === -1){
-        editedScoreset[j] = this.state.editCustomHCP[j-18]
-      }
-    }
     if(this.state.editedCustomFieldName === "" || this.state.editedCustomFieldName === undefined || this.state.editedCustomFieldName === null){
       editedFieldName = this.state.editCustomFieldName
     }
@@ -58,7 +62,7 @@ class SelectField extends React.Component{
      data: {
        fieldid: this.state.editCustomFieldID,
        fieldname: editedFieldName,
-       arrscore: editedScoreset
+       arrscore: this.state.scoreSet
      },
      xhrFields: { withCredentials: true },
      success: function(data) {
@@ -91,7 +95,7 @@ class SelectField extends React.Component{
   editCustomFieldToggle = (data) =>{
     this.state.editCustomHolescore = []
     this.state.editCustomHCP = []
-    this.state.editCustomFieldID = data.fieldid
+    this.state.editCustomFieldID = parseInt(data.fieldid)
     this.state.editCustomFieldName = data.fieldname
     this.state.editCustomHolescore = data.holescore
     this.state.editCustomHCP = data.hcp
@@ -99,6 +103,7 @@ class SelectField extends React.Component{
   }
   toggleSelectUpdate = ()=>{
     this.props.modalClick()
+    this.handleLoadFieldFromSelect(this.state.editCustomFieldID)
     this.setState((state)=>{
       return {
         editCustomField: !state.editCustomField,
@@ -152,6 +157,49 @@ class SelectField extends React.Component{
         this.props.modalClick()
       }
     }
+  }
+  handleLoadFieldFromSelect = (fieldid) =>{
+    this.state.scoreSet = []
+    var geturl;
+    geturl = $.ajax({
+      type: "POST",
+     url: "http://www.thai-pga.com/phpadmin/loadfielddetail.php",
+     dataType: 'json',
+     data: {
+       fieldid: fieldid,
+     },
+     xhrFields: { withCredentials: true },
+     success: function(data) {
+       console.log(data);
+       localStorage['fieldscore'] = data.fieldscore
+       localStorage['fieldHscore'] = data.fieldHscore
+     }
+    });
+    setTimeout(()=>{
+      if(localStorage['fieldscore']){
+        var fieldscore = localStorage['fieldscore']
+        var fieldHscore = localStorage['fieldHscore']
+        fieldscore = JSON.parse("["+fieldscore+"]")
+        fieldHscore = JSON.parse("["+fieldHscore+"]")
+        for(var i = 0;i < 18;i++){
+          if(i>=9){
+            this.state.scoreSet.push(parseInt(fieldHscore[i-9]))
+          }else{
+            this.state.scoreSet.push(parseInt(fieldscore[i]))
+          }
+        }
+        for(var j = 0;j < 18;j++){
+          if(j>=9){
+            this.state.scoreSet.push(parseInt(fieldHscore[j]))
+          }else{
+            this.state.scoreSet.push(parseInt(fieldscore[j+9]))
+          }
+        }
+        console.log(this.state.scoreSet);
+        this.setState(this.state)
+      }
+    },200)
+    localStorage.clear()
   }
   handlerDeleteCustomField = () =>{
     var geturl;
@@ -282,10 +330,6 @@ class SelectField extends React.Component{
         </div>
       );
     }else if(this.state.editCustomField){
-      this.state.scoreSet = []
-      for(var i = 0;i < 36;i++){
-        this.state.scoreSet.push(-1)
-      }
       return(
         <div className="selectfield">
           <ModalBackDrop2 click = {this.toggleSelectUpdate}/>
@@ -313,13 +357,17 @@ class SelectField extends React.Component{
                 <div className="spacer"></div>
                 <div className="createfield__hole__item">
                   <div className="createfield__hole__label">Hole score</div>
-                  {this.state.editCustomHolescore.map((d,i)=>
-                    <input type="number" min="0" placeholder={i}
-                      onChange={(e)=>this.getScore(e.target.value,i)}></input>
+                  {this.state.hole.filter((item) => {return item < 9}).map((d)=>
+                    <input type="number" min="0"
+                      value = {this.state.scoreSet[d]}
+                      onFocus = {(e)=>e.target.value = ''}
+                      onChange = {(e)=>this.getScore(parseInt(e.target.value),d)}></input>
                   )}
-                  {this.state.hole.map((d,i)=>
-                    <input type="number" min="0" placeholder={i}
-                      onChange={(e)=>this.getScore(e.target.value,i)}></input>
+                  {this.state.hole.filter((item) => {return item >= 9}).map((d)=>
+                    <input type="number" min="0"
+                      value = {this.state.scoreSet[d+9]}
+                      onFocus = {(e)=>e.target.value = ''}
+                      onChange = {(e)=>this.getScore(parseInt(e.target.value),d)}></input>
                   )}
                 </div>
                 <div className="spacer"></div>
@@ -329,16 +377,19 @@ class SelectField extends React.Component{
                 <div className="spacer"></div>
                 <div className="createfield__hole__item">
                   <div className="createfield__hole__label">HCP</div>
-                  {this.state.editCustomHCP.map((d,i)=>
-                    <input type="number" min="0" placeholder={i}
-                      onChange={(e)=>this.getScore(e.target.value,i+18)}></input>
+                  {this.state.hcpHole.filter((item) => {return item < 9}).map((d)=>
+                    <input type="number" min="0"
+                      value = {this.state.scoreSet[d+9]}
+                      onFocus = {(e)=>e.target.value = ''}
+                      onChange={(e)=>this.getScoreHCP(parseInt(e.target.value),d)}></input>
                   )}
-                  {this.state.hole.map((d,i)=>
-                    <input type="number" min="0" placeholder={i}
-                      onChange={(e)=>this.getScore(e.target.value,i)}></input>
+                  {this.state.hcpHole.filter((item) => {return item >= 9}).map((d)=>
+                    <input type="number" min="0"
+                      value = {this.state.scoreSet[d+18]}
+                      onFocus = {(e)=>e.target.value = ''}
+                      onChange={(e)=>this.getScoreHCP(parseInt(e.target.value),d)}></input>
                   )}
                 </div>
-
                 <div className="spacer"></div>
               </div>
               <div className="selectfield__edit__card__button">
