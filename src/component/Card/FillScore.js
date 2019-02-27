@@ -48,7 +48,7 @@ class FillScore extends React.Component{
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/loadusertoupdatescoreadmin.php",
+     url: "http://www.pds.in.th/phpadmin/loadusertoupdatescoreadmin.php",
      dataType: 'json',
      data: {
        "matchid": this.state.fillMatchid,
@@ -113,7 +113,7 @@ class FillScore extends React.Component{
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/updateusertoupdatescore.php",
+     url: "http://www.pds.in.th/phpadmin/updateusertoupdatescore.php",
      dataType: 'json',
      data: {
        "hole": this.state.holeIndex,
@@ -145,7 +145,7 @@ class FillScore extends React.Component{
       var geturl;
       geturl = $.ajax({
         type: "POST",
-       url: "http://www.thai-pga.com/phpadmin/loadusertoupdatescore.php",
+       url: "http://www.pds.in.th/phpadmin/loadusertoupdatescore.php",
        dataType: 'json',
        data: {
          "matchid": this.state.fillMatchid,
@@ -216,7 +216,7 @@ class FillScore extends React.Component{
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/updateusertoupdatescore.php",
+     url: "http://www.pds.in.th/phpadmin/updateusertoupdatescore.php",
      dataType: 'json',
      data: {
        "matchid": this.state.fillMatchid,

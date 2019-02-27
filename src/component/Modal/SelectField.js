@@ -57,7 +57,7 @@ class SelectField extends React.Component{
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/updatecustomfield.php",
+     url: "http://www.pds.in.th/phpadmin/updatecustomfield.php",
      dataType: 'json',
      data: {
        fieldid: this.state.editCustomFieldID,
@@ -163,7 +163,7 @@ class SelectField extends React.Component{
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/loadfielddetail.php",
+     url: "http://www.pds.in.th/phpadmin/loadfielddetail.php",
      dataType: 'json',
      data: {
        fieldid: fieldid,
@@ -205,7 +205,7 @@ class SelectField extends React.Component{
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/deletecustomfield.php",
+     url: "http://www.pds.in.th/phpadmin/deletecustomfield.php",
      dataType: 'json',
      data: {
        fieldid: this.state.editCustomFieldID,

@@ -330,7 +330,7 @@ class Dashboard extends Component {
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/resultrequest.php",
+     url: "http://www.pds.in.th/phpadmin/resultrequest.php",
      dataType: 'json',
      data: {
        "matchid": data.matchid,
@@ -360,7 +360,7 @@ class Dashboard extends Component {
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/activityrequest.php",
+     url: "http://www.pds.in.th/phpadmin/activityrequest.php",
      dataType: 'json',
      data: {},
      xhrFields: { withCredentials: true },
@@ -414,7 +414,7 @@ class Dashboard extends Component {
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/loadmatchuserdetail.php",
+     url: "http://www.pds.in.th/phpadmin/loadmatchuserdetail.php",
      dataType: 'json',
      data: {
        "matchid": data.matchid,
@@ -447,7 +447,7 @@ class Dashboard extends Component {
     var geturl2;
     geturl2 = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/setteammatch.php",
+     url: "http://www.pds.in.th/phpadmin/setteammatch.php",
      dataType: 'json',
      data: {
        "matchid": data.matchid,
@@ -462,7 +462,7 @@ class Dashboard extends Component {
     var geturl3;
     geturl3 = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/setdepartmatch.php",
+     url: "http://www.pds.in.th/phpadmin/setdepartmatch.php",
      dataType: 'json',
      data: {
        "matchid": data.matchid,
@@ -625,7 +625,7 @@ class Dashboard extends Component {
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/loadmatchfielddetail.php",
+     url: "http://www.pds.in.th/phpadmin/loadmatchfielddetail.php",
      dataType: 'json',
      data: {
        "matchid": matchid,
@@ -668,7 +668,7 @@ class Dashboard extends Component {
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/userupdatescore.php",
+     url: "http://www.pds.in.th/phpadmin/userupdatescore.php",
      dataType: 'json',
      data: {
        "matchid": this.state.calScoreMatchID.matchid,
@@ -699,7 +699,7 @@ class Dashboard extends Component {
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/sendrequest.php",
+     url: "http://www.pds.in.th/phpadmin/sendrequest.php",
      dataType: 'json',
      data: {
        "matchid": this.state.inviteMatchID,
@@ -734,7 +734,7 @@ class Dashboard extends Component {
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/loadfield.php",
+     url: "http://www.pds.in.th/phpadmin/loadfield.php",
      dataType: 'json',
      data: {},
      xhrFields: { withCredentials: true },
@@ -748,7 +748,7 @@ class Dashboard extends Component {
     var geturl2;
     geturl2 = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/loadcustomfield.php",
+     url: "http://www.pds.in.th/phpadmin/loadcustomfield.php",
      dataType: 'json',
      data: {},
      xhrFields: { withCredentials: true },
@@ -822,7 +822,7 @@ class Dashboard extends Component {
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/matchhistory.php",
+     url: "http://www.pds.in.th/phpadmin/matchhistory.php",
      dataType: 'json',
      data: {},
      xhrFields: { withCredentials: true },
@@ -866,7 +866,7 @@ class Dashboard extends Component {
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/userdetail.php",
+     url: "http://www.pds.in.th/phpadmin/userdetail.php",
      dataType: 'json',
      data: {},
      xhrFields: { withCredentials: true },
@@ -916,7 +916,7 @@ class Dashboard extends Component {
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/loadusermatch.php",
+     url: "http://www.pds.in.th/phpadmin/loadusermatch.php",
      dataType: 'json',
      data: {
        "tourtype": this.state.tourDetail
@@ -1027,7 +1027,7 @@ class Dashboard extends Component {
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/updatematch.php",
+     url: "http://www.pds.in.th/phpadmin/updatematch.php",
      dataType: 'json',
      data: {
 
@@ -1075,7 +1075,7 @@ class Dashboard extends Component {
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/creatematch.php",
+     url: "http://www.pds.in.th/phpadmin/creatematch.php",
      dataType: 'json',
      data: {
        "fieldid": this.state.matchModalData.fieldid,
@@ -1106,7 +1106,7 @@ class Dashboard extends Component {
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/loadmatchpublic.php",
+     url: "http://www.pds.in.th/phpadmin/loadmatchpublic.php",
      dataType: 'json',
      data: {},
      xhrFields: { withCredentials: true },
@@ -1292,7 +1292,7 @@ class Dashboard extends Component {
   checksession = () =>{
     $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/loadsession.php",
+     url: "http://www.pds.in.th/phpadmin/loadsession.php",
      dataType: 'json',
      data: {},
      xhrFields: { withCredentials: true },

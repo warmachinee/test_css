@@ -83,7 +83,7 @@ class UserMatch extends React.Component{
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/loadadmintour.php",
+     url: "http://www.pds.in.th/phpadmin/loadadmintour.php",
      dataType: 'json',
      data: {
        "matchid": matchid
@@ -113,7 +113,7 @@ class UserMatch extends React.Component{
         var geturl;
         geturl = $.ajax({
           type: "POST",
-         url: "http://www.thai-pga.com/phpadmin/loadmatchuserdetailonlyone.php",
+         url: "http://www.pds.in.th/phpadmin/loadmatchuserdetailonlyone.php",
          dataType: 'json',
          data: {
            "matchid": matchid,
@@ -148,7 +148,7 @@ class UserMatch extends React.Component{
         var geturl;
         geturl = $.ajax({
           type: "POST",
-         url: "http://www.thai-pga.com/phpadmin/loadmatchuserdetail.php",
+         url: "http://www.pds.in.th/phpadmin/loadmatchuserdetail.php",
          dataType: 'json',
          data: {
            "matchid": matchid,
@@ -172,7 +172,7 @@ class UserMatch extends React.Component{
         var geturl2;
         geturl2 = $.ajax({
           type: "POST",
-         url: "http://www.thai-pga.com/phpadmin/matchresultscore.php",
+         url: "http://www.pds.in.th/phpadmin/matchresultscore.php",
          dataType: 'json',
          data: {
            "matchid": matchid,
@@ -195,6 +195,9 @@ class UserMatch extends React.Component{
            if(data.hc){
              localStorage['hc']=data.hc
            }
+           if(data.sum){
+             localStorage['sum']=data.sum
+           }
            localStorage['holescore']=data.holescore
            localStorage['userid']=data.userid
            localStorage['fullname']=data.full
@@ -208,7 +211,7 @@ class UserMatch extends React.Component{
       var geturl3;
       geturl3 = $.ajax({
         type: "POST",
-       url: "http://www.thai-pga.com/phpadmin/setteammatch.php",
+       url: "http://www.pds.in.th/phpadmin/setteammatch.php",
        dataType: 'json',
        data: {
          "matchid": matchid,
@@ -223,7 +226,7 @@ class UserMatch extends React.Component{
       var geturl4;
       geturl4 = $.ajax({
         type: "POST",
-       url: "http://www.thai-pga.com/phpadmin/setdepartmatch.php",
+       url: "http://www.pds.in.th/phpadmin/setdepartmatch.php",
        dataType: 'json',
        data: {
          "matchid": matchid,
@@ -287,6 +290,9 @@ class UserMatch extends React.Component{
           if(localStorage['hc']){
             var hc = localStorage['hc'];
           }
+          if(localStorage['sum']){
+            var sum = localStorage['sum'];
+          }
           var holescore = localStorage['holescore'];
           var userid = localStorage['userid'];
           var fullname = localStorage['fullname'];
@@ -318,6 +324,9 @@ class UserMatch extends React.Component{
           }
           if(localStorage['hc']){
             hc = JSON.parse("["+hc+"]")
+          }
+          if(localStorage['sum']){
+            sum = JSON.parse("["+sum+"]")
           }
           holescore = holescore.split(",",holescore.length)
           userid = userid.split(",",userid.length)
@@ -398,6 +407,14 @@ class UserMatch extends React.Component{
               }
               this.state.detailUserFromLoad.push(obj);
             }
+            for(var i=0;i < this.state.detailUserFromLoad.length;i++){
+              this.state.tempHole.push({
+                userid: this.state.detailUserFromLoad[i].userid,
+                teamno: this.state.detailUserFromLoad[i].teamno,
+                departno: this.state.detailUserFromLoad[i].departno,
+                holescore: this.state.holeScoreFromLoad[i]
+              })
+            }
           }else{
             if(localStorage['par']){
               for(var i = 0;i < userid.length;i++){
@@ -416,6 +433,75 @@ class UserMatch extends React.Component{
                   holescore: this.state.holeScoreFromLoadTemp[i]
                 }
                 this.state.detailUserFromLoad.push(obj);
+              }
+              for(var i=0;i < this.state.detailUserFromLoad.length;i++){
+                this.state.tempHole.push({
+                  userid: this.state.detailUserFromLoad[i].userid,
+                  teamno: this.state.detailUserFromLoad[i].teamno,
+                  departno: this.state.detailUserFromLoad[i].departno,
+                  holescore: this.state.holeScoreFromLoad[i]
+                })
+              }
+            }else if(localStorage['sf'] && localStorage['net'] && localStorage['hc'] && localStorage['sum']){
+              var tempD = parseInt(departno[0])
+              var inndex = 0;
+              var hsTemp;
+              for(var i = 0;i < (userid.length+sum.length);i++){
+                if(tempD !== parseInt(departno[i-inndex])){
+                  var obj = {
+                    i: i,
+                    in: '',
+                    out: '',
+                    gross: '',
+                    sf: parseInt(sum[inndex]),
+                    net: '',
+                    hc: '',
+                    userid: '',
+                    fullname: 'Total',
+                    lastname: '',
+                    teamno: '',
+                    departno: '',
+                    rank: '',
+                    holescore: ['','','','','','','','','','','','','','','','','',''],
+                    sum: true
+                  }
+                  this.state.detailUserFromLoad.push(obj);
+                  tempD = parseInt(departno[i-inndex])
+                  inndex += 1;
+                }else{
+                  var obj = {
+                    i: i-inndex,
+                    in: parseInt(inn[i-inndex]),
+                    out: parseInt(outt[i-inndex]),
+                    gross: parseInt(gross[i-inndex]),
+                    sf: parseInt(sf[i-inndex]),
+                    net: parseInt(net[i-inndex]),
+                    hc: parseInt(hc[i-inndex]),
+                    userid: parseInt(userid[i-inndex]),
+                    fullname: fullname[i-inndex],
+                    lastname: lastname[i-inndex],
+                    teamno: parseInt(teamno[i-inndex]),
+                    departno: parseInt(departno[i-inndex]),
+                    rank: rank[i-inndex],
+                    holescore: this.state.holeScoreFromLoadTemp[i-inndex]
+                  }
+                  this.state.detailUserFromLoad.push(obj);
+                }
+              }
+              for(var i=0;i < this.state.detailUserFromLoad.length;i++){
+                var tempH = [];
+                for(var j = 0;j < 18;j++){
+                  tempH.push({
+                    i: j,
+                    holescore: parseInt(this.state.detailUserFromLoad[i].holescore[j])
+                  })
+                }
+                this.state.tempHole.push({
+                  userid: this.state.detailUserFromLoad[i].userid,
+                  teamno: this.state.detailUserFromLoad[i].teamno,
+                  departno: this.state.detailUserFromLoad[i].departno,
+                  holescore: tempH
+                })
               }
             }else if(localStorage['sf'] && localStorage['net'] && localStorage['hc']){
               for(var i = 0;i < userid.length;i++){
@@ -437,6 +523,14 @@ class UserMatch extends React.Component{
                 }
                 this.state.detailUserFromLoad.push(obj);
               }
+              for(var i=0;i < this.state.detailUserFromLoad.length;i++){
+                this.state.tempHole.push({
+                  userid: this.state.detailUserFromLoad[i].userid,
+                  teamno: this.state.detailUserFromLoad[i].teamno,
+                  departno: this.state.detailUserFromLoad[i].departno,
+                  holescore: this.state.holeScoreFromLoad[i]
+                })
+              }
             }else{
               for(var i = 0;i < userid.length;i++){
                 var obj = {
@@ -454,16 +548,15 @@ class UserMatch extends React.Component{
                 }
                 this.state.detailUserFromLoad.push(obj);
               }
+              for(var i=0;i < this.state.detailUserFromLoad.length;i++){
+                this.state.tempHole.push({
+                  userid: this.state.detailUserFromLoad[i].userid,
+                  teamno: this.state.detailUserFromLoad[i].teamno,
+                  departno: this.state.detailUserFromLoad[i].departno,
+                  holescore: this.state.holeScoreFromLoad[i]
+                })
+              }
             }
-          }
-
-          for(var i=0;i < this.state.detailUserFromLoad.length;i++){
-            this.state.tempHole.push({
-              userid: this.state.detailUserFromLoad[i].userid,
-              teamno: this.state.detailUserFromLoad[i].teamno,
-              departno: this.state.detailUserFromLoad[i].departno,
-              holescore: this.state.holeScoreFromLoad[i]
-            })
           }
         }
         localStorage.clear()
@@ -480,7 +573,7 @@ class UserMatch extends React.Component{
       var geturl;
       geturl = $.ajax({
         type: "POST",
-       url: "http://www.thai-pga.com/phpadmin/loadmatchfielddetail.php",
+       url: "http://www.pds.in.th/phpadmin/loadmatchfielddetail.php",
        dataType: 'json',
        data: {
          "matchid": matchid,
@@ -522,12 +615,12 @@ class UserMatch extends React.Component{
             gross: fieldIn+fieldOut
           })
           /*
+          console.log("tempHole",this.state.tempHole);
+          console.log("detailUserFromLoad",this.state.detailUserFromLoad);
           console.log("setTeamData",this.state.setTeamData);
           console.log("setDepartData",this.state.setDepartData);
           console.log("detailMatchFromLoad",this.state.detailMatchFromLoad);
-          console.log("detailUserFromLoad",this.state.detailUserFromLoad);
           console.log("detailFieldFromLoad ",this.state.detailFieldFromLoad);
-          console.log("tempHole",this.state.tempHole);
           console.log("holeScoreFromLoadTemp",this.state.holeScoreFromLoadTemp);
           console.log("userProfileData",this.props.userProfileData);
           console.log("loadUserMatchData",this.props.loadUserMatchData);*/
@@ -555,7 +648,7 @@ class UserMatch extends React.Component{
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/loadmatchuserdetail.php",
+     url: "http://www.pds.in.th/phpadmin/loadmatchuserdetail.php",
      dataType: 'json',
      data: {
        "matchid": this.state.matchidUserLoadMatch,
@@ -579,7 +672,7 @@ class UserMatch extends React.Component{
     var geturl2;
     geturl2 = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/matchresultscore.php",
+     url: "http://www.pds.in.th/phpadmin/matchresultscore.php",
      dataType: 'json',
      data: {
        "matchid": this.state.matchidUserLoadMatch,
@@ -605,7 +698,7 @@ class UserMatch extends React.Component{
     var geturl3;
     geturl3 = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/setteammatch.php",
+     url: "http://www.pds.in.th/phpadmin/setteammatch.php",
      dataType: 'json',
      data: {
        "matchid": this.state.matchidUserLoadMatch,
@@ -620,7 +713,7 @@ class UserMatch extends React.Component{
     var geturl4;
     geturl4 = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/setdepartmatch.php",
+     url: "http://www.pds.in.th/phpadmin/setdepartmatch.php",
      dataType: 'json',
      data: {
        "matchid": this.state.matchidUserLoadMatch,
@@ -808,7 +901,7 @@ class UserMatch extends React.Component{
     var geturl;
     geturl = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/showtempacc.php",
+     url: "http://www.pds.in.th/phpadmin/showtempacc.php",
      dataType: 'json',
      data: {
        "matchid": d.matchid,
@@ -855,7 +948,7 @@ class UserMatch extends React.Component{
     var geturl2;
     geturl2 = $.ajax({
       type: "POST",
-     url: "http://www.thai-pga.com/phpadmin/matchresultscore.php",
+     url: "http://www.pds.in.th/phpadmin/matchresultscore.php",
      dataType: 'json',
      data: {
        "matchid": this.props.loadUserMatchData[0].matchid,

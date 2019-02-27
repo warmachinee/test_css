@@ -206,11 +206,18 @@ class ModalUserMatch extends React.Component{
       {alignment : 'center' ,text: '13'},{alignment : 'center' ,text: '14'},{alignment : 'center' ,text: '15'},
       {alignment : 'center' ,text: '16'},{alignment : 'center' ,text: '17'},{alignment : 'center' ,text: '18'},
       {alignment : 'center', fillColor: '#d6d6d6',text: 'IN'},
-      {alignment : 'center', fillColor: '#8e8e8e',text: 'NET'},
+      {alignment : 'center', fillColor: '#8e8e8e',text: 'SF'},
       {alignment : 'center', fillColor: '#bebebe',text: 'TOTAL'}])
     for(var i = 0;i < this.props.detailUserFromLoad.length;i++){
       let rowPlayerScore = []
-      rowPlayerScore.push({alignment : 'center' ,text: this.props.detailUserFromLoad[i].teamno})
+      let departmentTemp = ''
+      for(var setDepartIndex = 0;setDepartIndex < this.props.setDepartData.length;setDepartIndex++){
+        if(this.props.detailUserFromLoad[i].departno === this.props.setDepartData[setDepartIndex].departno){
+          departmentTemp = this.props.setDepartData[setDepartIndex].departname
+        }
+      }
+
+      rowPlayerScore.push({alignment : 'center' ,text: departmentTemp})
       rowPlayerScore.push({alignment : 'right' ,text: this.props.detailUserFromLoad[i].rank})
       rowPlayerScore.push(
         this.props.detailUserFromLoad[i].fullname + '\t' +
@@ -237,7 +244,7 @@ class ModalUserMatch extends React.Component{
       }
       rowPlayerScore.push(
         {alignment : 'center', fillColor: '#d6d6d6',text: this.props.detailUserFromLoad[i].out},
-        {alignment : 'center', fillColor: '#8e8e8e',text: this.props.detailUserFromLoad[i].net},
+        {alignment : 'center', fillColor: '#8e8e8e',text: this.props.detailUserFromLoad[i].sf},
         {alignment : 'center', fillColor: '#bebebe',text: this.props.detailUserFromLoad[i].gross}
       )
       rowPlayerScoreTemp.push(rowPlayerScore)
@@ -743,12 +750,12 @@ class ModalUserMatch extends React.Component{
                     </div>
                     <div className="leaderboard__label__stroke">
                       <div className="spacer"></div>
-                      SF
+                      NET
                       <div className="spacer"></div>
                     </div>
                     <div className="leaderboard__label__overall">
                       <div className="spacer"></div>
-                      NET
+                      SF
                       <div className="spacer"></div>
                     </div>
                     <div className="leaderboard__label__stroke">
@@ -810,12 +817,12 @@ class ModalUserMatch extends React.Component{
                           </div>
                           <div className="leaderboard__item__stroke">
                             <div className="spacer"></div>
-                            {d.sf}
+                            {d.net}
                             <div className="spacer"></div>
                           </div>
                           <div className="leaderboard__item__overall">
                             <div className="spacer"></div>
-                            {d.net}
+                            {d.sf}
                             <div className="spacer"></div>
                           </div>
                           <div className="leaderboard__item__stroke">

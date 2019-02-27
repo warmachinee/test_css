@@ -31,7 +31,7 @@ class CreateField extends React.Component{
       var geturl;
       geturl = $.ajax({
         type: "POST",
-       url: "http://www.thai-pga.com/phpadmin/createcustomfield.php",
+       url: "http://www.pds.in.th/phpadmin/createcustomfield.php",
        dataType: 'json',
        data: {
          fieldname: this.state.fieldname,
